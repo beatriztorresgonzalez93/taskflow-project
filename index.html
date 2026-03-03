@@ -9,287 +9,343 @@
 
 <body>
 <header class="topbar">
-  <div class="brand">
-    <div class="logo" aria-hidden="true">🐉</div>
-    <div>
-      <strong>Empíreo Archive</strong>
-      <div class="muted">Basgiath • Perfiles y Dragones</div>
+  <div class="topbar-inner">
+    <div class="brand">
+      <div class="logo" aria-hidden="true">🐉</div>
+      <div class="brand-text">
+        <strong>Empíreo Archive</strong>
+        <div class="muted">Navegación • Perfiles / Dragones</div>
+      </div>
     </div>
-  </div>
 
-  <div class="topbar-actions">
-    <input class="search" type="search" placeholder="Buscar jinete, escuadrón o dragón…" aria-label="Buscar" />
-    <button class="btn">+ Nuevo</button>
+    <div class="topbar-actions">
+      <label class="search-wrap">
+        <span class="sr-only">Buscar</span>
+        <input class="search" type="search" placeholder="Buscar jinete, escuadrón o dragón…" />
+      </label>
+      <button class="btn btn-primary">+ Nuevo</button>
+    </div>
   </div>
 </header>
 
-<main class="layout">
-  <aside class="sidebar">
-    <section class="panel">
-      <h2 class="panel-title">Navegación</h2>
-      <nav class="nav">
-        <a class="nav-item active" href="#perfiles">👤 Perfiles</a>
-        <a class="nav-item" href="#dragones">🐲 Dragones</a>
-        <a class="nav-item" href="#misiones">🗺️ Misiones</a>
-        <a class="nav-item" href="#archivo">🗄️ Archivo</a>
-      </nav>
-    </section>
-
-    <section class="panel">
-      <h2 class="panel-title">Filtros</h2>
-
-      <div class="filter-block">
-        <div class="filter-label">Cuadrante</div>
-        <div class="chips">
-          <span class="chip chip-active">Jinetes</span>
-          <span class="chip">Escribas</span>
-          <span class="chip">Curanderos</span>
-          <span class="chip">Infantería</span>
-        </div>
-      </div>
-
-      <div class="filter-block">
-        <div class="filter-label">Estado</div>
-        <div class="chips">
-          <span class="chip chip-active">Activos</span>
-          <span class="chip">En entrenamiento</span>
-          <span class="chip">Archivados</span>
-        </div>
-      </div>
-    </section>
-
-    <section class="panel">
-      <h2 class="panel-title">Resumen</h2>
-      <div class="kpi-stack">
-        <div class="kpi-row"><span class="muted">Perfiles</span><strong>48</strong></div>
-        <div class="kpi-row"><span class="muted">Dragones</span><strong>12</strong></div>
-        <div class="kpi-row"><span class="muted">Escuadrones</span><strong>6</strong></div>
-      </div>
-    </section>
-  </aside>
-
-  <section class="content">
-    <section class="content-head">
-      <div>
-        <h1 id="perfiles">Panel de Basgiath</h1>
-        <p class="muted">Gestión visual de perfiles, asignaciones y estado de vínculo con dragones.</p>
-      </div>
-
-      <div class="filters">
-        <button class="btn btn-ghost">Filtrar</button>
-        <button class="btn btn-ghost">Ordenar</button>
-      </div>
-    </section>
-
-    <!-- KPIs -->
-    <section class="kpis">
-      <article class="kpi-card">
-        <div class="kpi-title">Activos</div>
-        <div class="kpi-value">21</div>
-        <div class="kpi-sub muted">Perfiles en servicio</div>
-      </article>
-      <article class="kpi-card">
-        <div class="kpi-title">Entrenamiento</div>
-        <div class="kpi-value">9</div>
-        <div class="kpi-sub muted">Aún sin graduar</div>
-      </article>
-      <article class="kpi-card">
-        <div class="kpi-title">Riesgo alto</div>
-        <div class="kpi-value">5</div>
-        <div class="kpi-sub muted">Misiones críticas</div>
-      </article>
-      <article class="kpi-card">
-        <div class="kpi-title">Archivados</div>
-        <div class="kpi-value">13</div>
-        <div class="kpi-sub muted">Registros cerrados</div>
-      </article>
-    </section>
-
-    <!-- Tabs (solo visual) -->
-    <section class="tabs">
-      <a class="tab active" href="#perfiles">Perfiles</a>
-      <a class="tab" href="#dragones">Dragones</a>
-      <a class="tab" href="#misiones">Misiones</a>
-    </section>
-
-    <!-- Layout 2 columnas: lista + detalle -->
-    <section class="split">
-      <section class="list">
-        <h2 class="section-title">Perfiles destacados</h2>
-
-        <section class="cards-grid" aria-label="Lista de perfiles">
-          <article class="task-card selected" tabindex="0">
-            <div class="task-left">
-              <h3 class="task-title">Violet Sorrengail</h3>
-              <div class="task-meta">
-                <span class="tag">Jinetes</span>
-                <span class="dot" aria-hidden="true">•</span>
-                <span class="muted">Escuadrón: Fourth Wing</span>
-              </div>
-            </div>
-            <div class="task-right">
-              <span class="badge badge-high">Rango: Alto</span>
-              <span class="category">Activo</span>
-            </div>
-          </article>
-
-          <article class="task-card" tabindex="0">
-            <div class="task-left">
-              <h3 class="task-title">Xaden Riorson</h3>
-              <div class="task-meta">
-                <span class="tag">Jinetes</span>
-                <span class="dot" aria-hidden="true">•</span>
-                <span class="muted">Rol: Líder de escuadrón</span>
-              </div>
-            </div>
-            <div class="task-right">
-              <span class="badge badge-high">Rango: Alto</span>
-              <span class="category">Activo</span>
-            </div>
-          </article>
-
-          <article class="task-card" tabindex="0">
-            <div class="task-left">
-              <h3 class="task-title">Dain Aetos</h3>
-              <div class="task-meta">
-                <span class="tag">Jinetes</span>
-                <span class="dot" aria-hidden="true">•</span>
-                <span class="muted">Estado: Supervisión</span>
-              </div>
-            </div>
-            <div class="task-right">
-              <span class="badge badge-medium">Rango: Medio</span>
-              <span class="category">Activo</span>
-            </div>
-          </article>
-
-          <article class="task-card" tabindex="0">
-            <div class="task-left">
-              <h3 class="task-title">Rhiannon Matthias</h3>
-              <div class="task-meta">
-                <span class="tag">Jinetes</span>
-                <span class="dot" aria-hidden="true">•</span>
-                <span class="muted">Escuadrón: Fourth Wing</span>
-              </div>
-            </div>
-            <div class="task-right">
-              <span class="badge badge-low">Rango: Bajo</span>
-              <span class="category">Entrenamiento</span>
-            </div>
-          </article>
-
-          <article class="task-card done" tabindex="0">
-            <div class="task-left">
-              <h3 class="task-title">Perfil archivado</h3>
-              <div class="task-meta">
-                <span class="tag">Registro</span>
-                <span class="dot" aria-hidden="true">•</span>
-                <span class="muted">Estado: cerrado</span>
-              </div>
-            </div>
-            <div class="task-right">
-              <span class="badge badge-low">Rango: Bajo</span>
-              <span class="category">Archivado</span>
-            </div>
-          </article>
-        </section>
-
-        <h2 class="section-title" id="dragones">Dragones (vista rápida)</h2>
-        <section class="dragon-grid" aria-label="Lista de dragones">
-          <article class="dragon-card">
-            <div class="dragon-name">Tairn</div>
-            <div class="muted">Tipo: Negro • Temperamento: Letal</div>
-            <div class="dragon-tags">
-              <span class="pill">Vínculo fuerte</span>
-              <span class="pill pill-danger">Amenaza alta</span>
-            </div>
-          </article>
-          <article class="dragon-card">
-            <div class="dragon-name">Andarna</div>
-            <div class="muted">Tipo: Dorado • Estado: Joven</div>
-            <div class="dragon-tags">
-              <span class="pill">Protegida</span>
-              <span class="pill pill-warn">Observación</span>
-            </div>
-          </article>
-          <article class="dragon-card">
-            <div class="dragon-name">Sgaeyl</div>
-            <div class="muted">Tipo: Azul • Conducta: Reservada</div>
-            <div class="dragon-tags">
-              <span class="pill">Vínculo fuerte</span>
-              <span class="pill">Élite</span>
-            </div>
-          </article>
-        </section>
+<main class="shell">
+  <div class="layout">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <section class="panel">
+        <h2 class="panel-title">Navegación</h2>
+        <nav class="nav">
+          <a class="nav-item active" href="#perfiles">👤 Perfiles</a>
+          <a class="nav-item" href="#dragones">🐲 Dragones</a>
+          <a class="nav-item" href="#misiones">🗺️ Misiones</a>
+          <a class="nav-item" href="#archivo">🗄️ Archivo</a>
+        </nav>
       </section>
 
-      <!-- Detalle (panel derecho) -->
-      <aside class="detail">
-        <h2 class="section-title">Detalle</h2>
+      <section class="panel">
+        <h2 class="panel-title">Filtros</h2>
 
-        <section class="detail-card">
-          <div class="detail-head">
-            <div>
-              <div class="detail-name">Violet Sorrengail</div>
-              <div class="muted">Cuadrante: Jinetes • Estado: Activo</div>
-            </div>
-            <span class="badge badge-high">Prioridad alta</span>
+        <div class="filter-block">
+          <div class="filter-label">Cuadrante</div>
+          <div class="chips">
+            <button class="chip chip-active" type="button">Jinetes</button>
+            <button class="chip" type="button">Escribas</button>
+            <button class="chip" type="button">Curanderos</button>
+            <button class="chip" type="button">Infantería</button>
+          </div>
+        </div>
+
+        <div class="filter-block">
+          <div class="filter-label">Estado</div>
+          <div class="chips">
+            <button class="chip chip-active" type="button">Activos</button>
+            <button class="chip" type="button">En entrenamiento</button>
+            <button class="chip" type="button">Archivados</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2 class="panel-title">Resumen</h2>
+        <div class="kpi-stack">
+          <div class="kpi-row"><span class="muted">Perfiles</span><strong>48</strong></div>
+          <div class="kpi-row"><span class="muted">Dragones</span><strong>12</strong></div>
+          <div class="kpi-row"><span class="muted">Escuadrones</span><strong>6</strong></div>
+        </div>
+      </section>
+    </aside>
+
+    <!-- CONTENT -->
+    <section class="content">
+      <section class="content-head">
+        <div>
+          <h1 id="perfiles">Basgiath War College</h1>
+          <p class="muted">Archivo visual de perfiles, dragones y misiones.</p>
+        </div>
+
+        <div class="content-actions">
+          <button class="btn btn-ghost" type="button">Filtrar</button>
+          <button class="btn btn-ghost" type="button">Ordenar</button>
+        </div>
+      </section>
+
+      <!-- HERO -->
+      <section class="hero" aria-label="Portada Basgiath">
+        <div class="hero-overlay">
+          <div class="hero-kicker">Empíreo Archive</div>
+          <div class="hero-title">Basgiath War College</div>
+          <div class="hero-sub">Archivo visual de perfiles, dragones y misiones.</div>
+
+          <div class="hero-badges" aria-label="Secciones">
+            <span class="pill pill-soft">Jinetes</span>
+            <span class="pill pill-soft">Dragones</span>
+            <span class="pill pill-warn">Misiones</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- KPIs -->
+      <section class="kpis" aria-label="Estadísticas rápidas">
+        <article class="kpi-card">
+          <div class="kpi-title muted">Perfiles</div>
+          <div class="kpi-value">21</div>
+          <div class="kpi-sub muted">Totales, 16 activos / 5 inactivos</div>
+        </article>
+        <article class="kpi-card">
+          <div class="kpi-title muted">Dragones</div>
+          <div class="kpi-value">9</div>
+          <div class="kpi-sub muted">Vinculados, 7 activos / 2 inactivos</div>
+        </article>
+        <article class="kpi-card">
+          <div class="kpi-title muted">Misiones</div>
+          <div class="kpi-value">13</div>
+          <div class="kpi-sub muted">Asignadas, 2 en curso / 11 completadas</div>
+        </article>
+      </section>
+
+      <!-- Tabs -->
+      <nav class="tabs" aria-label="Pestañas (visual)">
+        <a class="tab active" href="#perfiles">Jinetes</a>
+        <a class="tab" href="#dragones">Dragones</a>
+        <a class="tab" href="#misiones">Misiones</a>
+      </nav>
+
+      <!-- SPLIT -->
+      <section class="split">
+        <!-- LIST -->
+        <section class="list">
+          <h2 class="section-title">Perfiles</h2>
+
+          <section class="cards-grid" aria-label="Lista de perfiles">
+            <article class="task-card selected" tabindex="0">
+              <div class="task-left">
+                <div class="task-person">
+                  <img class="avatar" src="assets/violet.png" alt="Violet Sorrengail" loading="lazy">
+                  <div>
+                    <h3 class="task-title">Violet Sorrengail</h3>
+                    <div class="task-meta">
+                      <span class="tag">Escuadrón: Fourth Wing</span>
+                      <span class="dot" aria-hidden="true">•</span>
+                      <span class="muted">Vínculo: Tairn / Andarna</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="task-right">
+                <span class="badge badge-high">Rango: Alto</span>
+                <span class="category">Activo</span>
+              </div>
+            </article>
+
+            <article class="task-card" tabindex="0">
+              <div class="task-left">
+                <div class="task-person">
+                  <img class="avatar" src="assets/xaden.png" alt="Xaden Riorson" loading="lazy">
+                  <div>
+                    <h3 class="task-title">Xaden Riorson</h3>
+                    <div class="task-meta">
+                      <span class="tag">Escuadrón: Fourth Wing</span>
+                      <span class="dot" aria-hidden="true">•</span>
+                      <span class="muted">Rol: Líder</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="task-right">
+                <span class="badge badge-high">Rango: Alto</span>
+                <span class="category">Activo</span>
+              </div>
+            </article>
+
+            <article class="task-card" tabindex="0">
+              <div class="task-left">
+                <div class="task-person">
+                  <img class="avatar" src="assets/dain.png" alt="Dain Aetos" loading="lazy">
+                  <div>
+                    <h3 class="task-title">Dain Aetos</h3>
+                    <div class="task-meta">
+                      <span class="tag">Escuadrón: Fourth Wing</span>
+                      <span class="dot" aria-hidden="true">•</span>
+                      <span class="muted">Estado: Supervisión</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="task-right">
+                <span class="badge badge-medium">Rango: Medio</span>
+                <span class="category">Activo</span>
+              </div>
+            </article>
+
+            <article class="task-card" tabindex="0">
+              <div class="task-left">
+                <div class="task-person">
+                  <img class="avatar" src="assets/rhiannon.png" alt="Rhiannon Matthias" loading="lazy">
+                  <div>
+                    <h3 class="task-title">Rhiannon Matthias</h3>
+                    <div class="task-meta">
+                      <span class="tag">Escuadrón: Fourth Wing</span>
+                      <span class="dot" aria-hidden="true">•</span>
+                      <span class="muted">Estado: Entrenamiento</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="task-right">
+                <span class="badge badge-low">Rango: Bajo</span>
+                <span class="category">Entrenamiento</span>
+              </div>
+            </article>
+
+            <article class="task-card done" tabindex="0">
+              <div class="task-left">
+                <div>
+                  <h3 class="task-title">Perfil archivado</h3>
+                  <div class="task-meta">
+                    <span class="tag">Registro</span>
+                    <span class="dot" aria-hidden="true">•</span>
+                    <span class="muted">Estado: cerrado</span>
+                  </div>
+                </div>
+              </div>
+              <div class="task-right">
+                <span class="badge badge-low">Rango: Bajo</span>
+                <span class="category">Archivado</span>
+              </div>
+            </article>
+          </section>
+
+          <h2 class="section-title" id="dragones">Dragones</h2>
+
+          <div class="dragon-banner">
+            <img src="assets/dragones.png" alt="Tairn, Sgaeyl y Andarna" loading="lazy">
           </div>
 
-          <div class="detail-grid">
-            <div class="detail-item">
-              <div class="muted">Escuadrón</div>
-              <div>Fourth Wing</div>
-            </div>
-            <div class="detail-item">
-              <div class="muted">Rango</div>
-              <div>Alto</div>
-            </div>
-            <div class="detail-item">
-              <div class="muted">Vínculo</div>
-              <div>Tairn / Andarna</div>
-            </div>
-            <div class="detail-item">
-              <div class="muted">Ubicación</div>
-              <div>Basgiath</div>
-            </div>
-          </div>
-
-          <div class="detail-actions">
-            <button class="btn">Editar perfil</button>
-            <button class="btn btn-ghost">Archivar</button>
-          </div>
+          <section class="dragon-grid" aria-label="Lista de dragones">
+            <article class="dragon-card">
+              <div class="dragon-name">Tairn</div>
+              <div class="muted">Tipo: Negro • Temperamento: Letal</div>
+              <div class="dragon-tags">
+                <span class="pill">Vínculo fuerte</span>
+                <span class="pill pill-danger">Amenaza alta</span>
+              </div>
+            </article>
+            <article class="dragon-card">
+              <div class="dragon-name">Sgaeyl</div>
+              <div class="muted">Tipo: Azul • Conducta: Reservada</div>
+              <div class="dragon-tags">
+                <span class="pill">Vínculo fuerte</span>
+                <span class="pill">Élite</span>
+              </div>
+            </article>
+            <article class="dragon-card">
+              <div class="dragon-name">Andarna</div>
+              <div class="muted">Tipo: Dorado • Estado: Joven</div>
+              <div class="dragon-tags">
+                <span class="pill">Protegida</span>
+                <span class="pill pill-warn">Observación</span>
+              </div>
+            </article>
+          </section>
         </section>
 
-        <section class="detail-card">
-          <h3 class="subhead">Actividad reciente</h3>
-          <ul class="timeline">
-            <li><span class="t-dot"></span> Asignación a misión de reconocimiento (48h)</li>
-            <li><span class="t-dot"></span> Revisión médica completada</li>
-            <li><span class="t-dot"></span> Entrenamiento de vínculo avanzado</li>
-          </ul>
-        </section>
+        <!-- DETAIL -->
+        <aside class="detail">
+          <div class="detail-headline">
+            <h2 class="section-title">Dragones</h2>
+            <div class="muted small">Panorama</div>
+          </div>
 
-        <section class="detail-card" id="misiones">
-          <h3 class="subhead">Misiones</h3>
-          <div class="mission">
-            <div class="mission-title">Patrulla del límite norte</div>
-            <div class="muted">Riesgo: Alto • Duración: 2 días</div>
-            <div class="mission-bar"><span style="width:72%"></span></div>
-          </div>
-          <div class="mission">
-            <div class="mission-title">Informe para escribas</div>
-            <div class="muted">Riesgo: Medio • Duración: 6 horas</div>
-            <div class="mission-bar"><span style="width:40%"></span></div>
-          </div>
-        </section>
-      </aside>
+          <section class="detail-card">
+            <div class="detail-head">
+              <div>
+                <div class="detail-name">Violet Sorrengail</div>
+                <div class="muted">Cuadrante: Jinetes • Estado: Activo</div>
+              </div>
+              <span class="badge badge-high">Prioridad alta</span>
+            </div>
+
+            <div class="detail-grid">
+              <div class="detail-item">
+                <div class="muted">Escuadrón</div>
+                <div>Fourth Wing</div>
+              </div>
+              <div class="detail-item">
+                <div class="muted">Rango</div>
+                <div>Alto</div>
+              </div>
+              <div class="detail-item">
+                <div class="muted">Vínculo</div>
+                <div>Tairn / Andarna</div>
+              </div>
+              <div class="detail-item">
+                <div class="muted">Ubicación</div>
+                <div>Basgiath</div>
+              </div>
+            </div>
+
+            <div class="detail-actions">
+              <button class="btn btn-primary" type="button">Editar perfil</button>
+              <button class="btn btn-ghost" type="button">Archivar</button>
+            </div>
+          </section>
+
+          <section class="detail-card">
+            <h3 class="subhead">Actividad reciente</h3>
+            <ul class="timeline">
+              <li><span class="t-dot"></span> Asignación a misión de reconocimiento (48h)</li>
+              <li><span class="t-dot"></span> Revisión médica completada</li>
+              <li><span class="t-dot"></span> Entrenamiento de vínculo avanzado</li>
+            </ul>
+          </section>
+
+          <section class="detail-card" id="misiones">
+            <h3 class="subhead">Misiones</h3>
+
+            <div class="mission">
+              <div class="mission-title">Patrulla del límite norte</div>
+              <div class="muted">Riesgo: Alto • Duración: 2 días</div>
+              <div class="mission-bar" role="progressbar" aria-label="Progreso misión 1" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100">
+                <span style="width:72%"></span>
+              </div>
+            </div>
+
+            <div class="mission">
+              <div class="mission-title">Informe para escribas</div>
+              <div class="muted">Riesgo: Medio • Duración: 6 horas</div>
+              <div class="mission-bar" role="progressbar" aria-label="Progreso misión 2" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100">
+                <span style="width:40%"></span>
+              </div>
+            </div>
+          </section>
+        </aside>
+      </section>
+
+      <section class="footer-note" id="archivo">
+        <span class="muted">Nota:</span> Esta es una maqueta UI (HTML + CSS). Botones y pestañas son solo visuales para la práctica.
+      </section>
     </section>
-
-    <section class="footer-note" id="archivo">
-      <span class="muted">Nota:</span> Esta es una maqueta UI (HTML+CSS). Los botones y pestañas son solo visuales para la práctica.
-    </section>
-  </section>
+  </div>
 </main>
 </body>
 </html>
