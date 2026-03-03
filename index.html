@@ -26,7 +26,7 @@
         <span class="sr-only">Buscar</span>
         <input class="search" type="search" placeholder="Buscar jinete, escuadrón o dragón…" />
       </label>
-      <button class="btn btn-primary">+ Nuevo</button>
+      <button id="btn-new-task" class="btn btn-primary" type="button">+ Nuevo</button>
     </div>
   </div>
 </header>
@@ -106,6 +106,31 @@
           </div>
         </div>
       </section>
+
+      <section class="task-section">
+
+  <h2>Mis tareas</h2>
+
+  <form id="task-form" class="task-form">
+    <input 
+      id="task-input" 
+      type="text" 
+      placeholder="Añade una tarea..." 
+      required 
+    />
+    <button type="submit">Añadir</button>
+  </form>
+
+  <input 
+    id="task-search" 
+    type="text" 
+    placeholder="Buscar tareas..." 
+    class="task-search"
+  />
+
+  <ul id="task-list" class="task-list"></ul>
+
+</section>
 
       <!-- KPIs -->
       <section class="kpis" aria-label="Estadísticas rápidas">
@@ -350,5 +375,23 @@
     </section>
   </div>
 </main>
+<!-- MODAL NUEVA TAREA -->
+<div id="task-modal" class="modal hidden">
+  <div class="modal-content">
+    <h3>Registrar nueva orden</h3>
+    
+    <input 
+      id="modal-task-input" 
+      type="text" 
+      placeholder="Escribe la tarea administrativa..." 
+    />
+
+    <div class="modal-actions">
+      <button id="modal-cancel" class="btn btn-ghost" type="button">Cancelar</button>
+      <button id="modal-save" class="btn btn-primary" type="button">Añadir</button>
+    </div>
+  </div>
+</div>
+<script src="./app.js"></script>
 </body>
 </html>
