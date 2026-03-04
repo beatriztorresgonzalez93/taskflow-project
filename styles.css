@@ -425,6 +425,7 @@ h1,h2,h3{ margin:0; }
   border-radius: 16px;
   border: 1px solid var(--border);
   background: rgba(255,255,255,.04);
+  flex-wrap: wrap;  
   transition: transform .16s ease, background .16s ease, border-color .16s ease, opacity .16s ease;
 }
 .task-card:hover,
@@ -439,7 +440,7 @@ h1,h2,h3{ margin:0; }
   background: rgba(167,139,250,.08);
 }
 
-.task-left{ display:flex; flex-direction:column; gap: 6px; min-width: 0; }
+.task-left{ display:flex; flex-direction:column; gap: 6px; min-width: 0; flex: 1;  }
 .task-title{ font-size: 16px; font-weight: 750; }
 .task-meta{
   display:flex;
@@ -450,12 +451,19 @@ h1,h2,h3{ margin:0; }
   flex-wrap:wrap;
 }
 
+/* ✅ FIX: chips sin solape */
 .task-right{
   display:flex;
-  align-items:center;
+  flex-wrap: wrap;
   gap: 10px;
   justify-content:flex-end;
+  align-items:center;
+  margin-left: auto;       
+}
+
+.task-right > *{
   flex: 0 0 auto;
+  white-space: nowrap;
 }
 
 .category{
@@ -1090,10 +1098,10 @@ body{
 }
 
 .task-item{
-  display: grid;
-  grid-template-columns: 26px 1fr auto; /* check | texto | eliminar */
-  align-items: center;
-  column-gap: 14px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 12px;
 
   padding: 12px 16px;
   border: 1px solid var(--border);
@@ -1105,7 +1113,11 @@ body{
 }
 
 .task-left{
-  display: contents; 
+  display:flex;
+  align-items:center;
+  gap: 14px;
+  flex: 1;
+  min-width: 0; 
 }
 
 .task-check{
@@ -1123,6 +1135,7 @@ body{
 .task-text{
   text-align: left !important;
   justify-self: start;
+    min-width: 0;       
 
   /* si la tarea es larga */
   overflow: hidden;
@@ -1131,7 +1144,8 @@ body{
 }
 
 .task-delete{
-  justify-self: end;
+  flex-shrink: 0;           
+  white-space: nowrap;
 }
 
 /* Completadas */
@@ -1145,3 +1159,59 @@ body{
   border-color: rgba(52,211,153,.35);
 }
 
+/*NUEVO arreglar tareas en movil*/
+
+.task-section .task-item{
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+}
+
+.task-section .task-left{
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 14px !important;
+  flex: 1 !important;
+  min-width: 0 !important;
+}
+
+.task-section .task-text{
+  flex: 1 !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.task-section .task-delete{
+  flex-shrink: 0 !important;
+  white-space: nowrap !important;
+}
+
+/* Por defecto: una línea con ... (como ahora) */
+.task-text{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Cuando la tarea está expandida: varias líneas */
+.task-item.expanded .task-text{
+  white-space: normal;
+  overflow: visible;
+  text-overflow: initial;
+}
+
+/* ===== EXPANDIR / CONTRAER TEXTO (AL FINAL DEL CSS) ===== */
+.task-item.expanded .task-text{
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+}
+
+.task-text{
+  cursor: pointer; /* opcional: se nota que es clicable */
+}

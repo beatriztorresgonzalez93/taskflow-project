@@ -72,6 +72,10 @@ const ordered = [...filtered].sort((a, b) => a.done - b.done);
   span.className = "task-text";
   span.textContent = task.text;
 
+  span.addEventListener("click", () => {
+  li.classList.toggle("expanded");
+});
+
   left.appendChild(check);
   left.appendChild(span);
 
