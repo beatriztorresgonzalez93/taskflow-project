@@ -1,0 +1,4 @@
+@import "tailwindcss";
+
+/* ✅ Fuerza el variant dark por clase (.dark ...) */
+@custom-variant dark (&:where(.dark, .dark *));
