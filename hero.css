@@ -74,7 +74,7 @@ html:not(.dark) .hero-banner::before{
     linear-gradient(to bottom, transparent 0%, black 22%, black 78%, transparent 100%);
 }
 
-/* en modo claro quitamos la vignette oscura */
+/* en modo claro quito la vignette oscura */
 html:not(.dark) .hero-banner::after{
   background: none;
 }

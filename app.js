@@ -84,7 +84,7 @@ function renderTasks(filterText = "") {
     : "Aún no tienes tareas. Añade la primera 🐉";
   list.appendChild(empty);
 
-  updateStats(); // 👈 importante
+  updateStats(); // 
   return;
 }
   
