@@ -44,6 +44,14 @@ function loadTasks() {
 }
 
 // ===== LÓGICA =====
+function getCurrentFilter() {
+  return search ? search.value : "";
+}
+
+function refreshTasks() {
+  renderTasks(getCurrentFilter());
+}
+
 function addTask(text) {
   const clean = (text || "").trim();
   if (!clean) return;
@@ -56,7 +64,7 @@ function addTask(text) {
 
   tasks.push(task);
   saveTasks();
-  renderTasks(search ? search.value : "");
+  refreshTasks();
 }
 
 // ===== UI =====
@@ -122,7 +130,7 @@ function renderTasks(filterText = "") {
         t.id === task.id ? { ...t, done: !t.done } : t
       );
       saveTasks();
-      renderTasks(search ? search.value : "");
+      refreshTasks();
     });
 
     const textWrap = document.createElement("div");
@@ -156,7 +164,7 @@ function renderTasks(filterText = "") {
     del.addEventListener("click", () => {
       tasks = tasks.filter((t) => t.id !== task.id);
       saveTasks();
-      renderTasks(search ? search.value : "");
+      refreshTasks();
     });
 
     li.appendChild(left);
@@ -170,8 +178,16 @@ function renderTasks(filterText = "") {
 function updateStats() {
   if (!stats) return;
 
-  const pending = tasks.filter(t => !t.done).length;
-  const completed = tasks.filter(t => t.done).length;
+  let pending = 0;
+  let completed = 0;
+
+  for (const t of tasks) {
+    if (t.done) {
+      completed++;
+    } else {
+      pending++;
+    }
+  }
 
   stats.textContent = `${pending} pendientes · ${completed} completadas`;
 }
