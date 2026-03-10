@@ -18,14 +18,26 @@ const STORAGE_KEY = "taskflow_tasks";
 let tasks = [];
 
 // ===== LOCALSTORAGE =====
+/**
+ * Genera un identificador pseudo-único para una tarea.
+ * @returns {string} ID único.
+ */
 function generateId() {
   return crypto.randomUUID ? crypto.randomUUID() : String(Date.now() + Math.random());
 }
 
+/**
+ * Persiste el estado actual de las tareas en localStorage.
+ */
 function saveTasks() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
 }
 
+/**
+ * Lee y parsea los datos crudos de tareas desde localStorage.
+ * Devuelve siempre un array seguro, aunque el JSON esté corrupto.
+ * @returns {unknown[]} Array con los datos almacenados.
+ */
 function readStoredTasks() {
   const raw = localStorage.getItem(STORAGE_KEY);
   if (!raw) return [];
@@ -38,6 +50,11 @@ function readStoredTasks() {
   }
 }
 
+/**
+ * Normaliza cualquier representación almacenada de tarea a un objeto Task estándar.
+ * @param {unknown} item Elemento leído de almacenamiento (string u objeto).
+ * @returns {{id: string, text: string, done: boolean}} Tarea normalizada.
+ */
 function normalizeTask(item) {
   if (typeof item === "string") {
     return {
@@ -65,15 +82,26 @@ function loadTasks() {
 }
 
 // ===== LÓGICA =====
+/**
+ * Obtiene el texto actual del filtro de búsqueda.
+ * @returns {string} Texto del input de búsqueda o cadena vacía.
+ */
 function getCurrentFilter() {
   return taskSearchEl ? taskSearchEl.value : "";
 }
 
+/**
+ * Guarda las tareas y vuelve a renderizar la lista respetando el filtro actual.
+ */
 function commitTasks() {
   saveTasks();
   renderTasks(getCurrentFilter());
 }
 
+/**
+ * Muestra u oculta el mensaje de error del formulario de tareas.
+ * @param {string} message Mensaje de error a mostrar. Si está vacío, se oculta.
+ */
 function showTaskError(message) {
   if (!taskErrorEl) return;
   taskErrorEl.textContent = message || "";
@@ -105,17 +133,31 @@ function addTask(text) {
 }
 
 // ===== UI =====
+/**
+ * Devuelve las tareas filtradas por texto de búsqueda.
+ * @param {string} [filterText=""] Texto introducido por el usuario.
+ * @returns {{ q: string, filtered: Array<{id: string, text: string, done: boolean}> }} Objeto con texto normalizado y lista filtrada.
+ */
 function getFilteredTasks(filterText = "") {
   const q = (filterText || "").trim().toLowerCase();
   const filtered = q ? tasks.filter((t) => t.text.toLowerCase().includes(q)) : tasks;
   return { q, filtered };
 }
 
+/**
+ * Ordena una lista de tareas colocando primero las pendientes.
+ * @param {Array<{id: string, text: string, done: boolean}>} taskList Lista de tareas a ordenar.
+ * @returns {Array<{id: string, text: string, done: boolean}>} Nueva lista ordenada.
+ */
 function orderTasks(taskList) {
   // Ordenar: pendientes primero
   return [...taskList].sort((a, b) => (a.done === b.done ? 0 : a.done ? 1 : -1));
 }
 
+/**
+ * Renderiza un mensaje de estado vacío en la lista de tareas.
+ * @param {string} q Texto de filtro ya normalizado.
+ */
 function renderEmptyState(q) {
   if (!taskListEl) return;
 
@@ -202,17 +244,17 @@ function renderTasks(filterText = "") {
   if (!taskListEl) return;
   taskListEl.innerHTML = "";
 
-  const { q, filtered } = getFilteredTasks(filterText);
-  const ordered = orderTasks(filtered);
+  const { q: query, filtered: filteredTasks } = getFilteredTasks(filterText);
+  const sortedTasks = orderTasks(filteredTasks);
 
-  if (ordered.length === 0) {
-    renderEmptyState(q);
+  if (sortedTasks.length === 0) {
+    renderEmptyState(query);
     return;
   }
 
-  for (const task of ordered) {
+  sortedTasks.forEach((task) => {
     taskListEl.appendChild(createTaskListItem(task));
-  }
+  });
 
   updateStats();
 }
@@ -238,6 +280,9 @@ function updateStats() {
 }
 
 // ===== EVENTOS =====
+/**
+ * Abre el modal de nueva tarea y enfoca el campo de entrada.
+ */
 function openModal() {
   if (!taskModalEl) return;
   taskModalEl.classList.remove("hidden");
@@ -248,6 +293,9 @@ function openModal() {
   }
 }
 
+/**
+ * Cierra el modal de nueva tarea.
+ */
 function closeModal() {
   if (!taskModalEl) return;
   taskModalEl.classList.add("hidden");
@@ -272,25 +320,52 @@ taskSearchEl?.addEventListener("input", (e) => {
   renderTasks(e.target.value);
 });
 
+/**
+ * Obtiene el botón de acción dentro de un evento de click en la lista de tareas.
+ * @param {MouseEvent} e Evento de click disparado sobre la lista.
+ * @returns {HTMLButtonElement | null} Botón con data-action o null si no aplica.
+ */
 function getActionButtonFromEvent(e) {
   const btn = e.target.closest?.("button[data-action]");
   if (!btn || !taskListEl?.contains(btn)) return null;
   return btn;
 }
 
+/**
+ * Recupera el ID de tarea asociado a un botón dentro de su elemento <li>.
+ * @param {HTMLElement} btn Botón contenido dentro de la tarea.
+ * @returns {string | null} Identificador de la tarea o null si no se encuentra.
+ */
 function getTaskIdFromButton(btn) {
   const li = btn.closest?.("li[data-id]");
   return li?.dataset?.id || null;
 }
 
+/**
+ * Alterna el estado de completado de una tarea en una lista dada.
+ * @param {Array<{id: string, text: string, done: boolean}>} taskList Lista actual de tareas.
+ * @param {string} id ID de la tarea a alternar.
+ * @returns {Array<{id: string, text: string, done: boolean}>} Nueva lista con la tarea actualizada.
+ */
 function toggleTaskById(taskList, id) {
   return taskList.map((t) => (t.id === id ? { ...t, done: !t.done } : t));
 }
 
+/**
+ * Elimina una tarea por ID de una lista dada.
+ * @param {Array<{id: string, text: string, done: boolean}>} taskList Lista actual de tareas.
+ * @param {string} id ID de la tarea a eliminar.
+ * @returns {Array<{id: string, text: string, done: boolean}>} Nueva lista sin la tarea indicada.
+ */
 function deleteTaskById(taskList, id) {
   return taskList.filter((t) => t.id !== id);
 }
 
+/**
+ * Aplica la acción correspondiente (toggle o delete) sobre la lista global de tareas.
+ * @param {"toggle" | "delete"} action Acción solicitada.
+ * @param {string} id ID de la tarea objetivo.
+ */
 function handleTaskListAction(action, id) {
   if (action === "toggle") {
     tasks = toggleTaskById(tasks, id);
@@ -340,6 +415,10 @@ document.addEventListener("keydown", (e) => {
 });
 
 // ===== THEME TOGGLE =====
+/**
+ * Inicializa el comportamiento de tema claro/oscuro de la aplicación.
+ * Lee la preferencia almacenada, aplica la clase correspondiente y conecta el botón de cambio de tema.
+ */
 (() => {
   const root = document.documentElement;
   const THEME_KEY = "theme";
