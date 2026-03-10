@@ -55,3 +55,133 @@ for (const t of tasks) {
 }
 
 Esto hace que el código sea más eficiente y más fácil de leer.
+
+
+### 5 refactorizaciones del código - mensajes de Cursor
+
+
+**save+render refactorizada**
+refactorización “segura” (sin cambiar funcionalidad): centralizar save+render, extraer open/close del modal, unificar generación de id, y cambiar los listeners por-tarea a un solo listener en la lista (delegación de eventos).
+
+
+
+**loadTasks refactorizada**
+He dividido la lógica en tres partes más claras:
+
+readStoredTasks(): lee de localStorage, hace JSON.parse con try/catch y garantiza devolver siempre un array válido.
+normalizeTask(item): convierte cada elemento almacenado (string o objeto) a un objeto { id, text, done } consistente, reutilizando generateId().
+loadTasks(): ahora solo orquesta: llama a readStoredTasks() y hace tasks = stored.map(normalizeTask) manteniendo la compatibilidad con datos antiguos.
+
+
+
+**renderTasks() refactorizada**
+La separé en funciones pequeñas para que sea más legible y mantenible, sin cambiar el comportamiento:
+
+getFilteredTasks(filterText): obtiene q (búsqueda normalizada) y la lista filtrada.
+orderTasks(taskList): ordena poniendo pendientes primero.
+renderEmptyState(q): pinta el <li> de “no hay tareas / no coinciden”.
+createTaskListItem(task): construye el <li> de una tarea (con los mismos estilos y data-action para la delegación de eventos).
+Y renderTasks() ahora solo orquesta: limpia la lista, filtra/ordena, renderiza vacío o items, y llama a updateStats().
+
+
+
+**Theme toggle refactorizado**
+He separado el bloque final en funciones con responsabilidades claras (sin cambiar el comportamiento):
+
+getSavedTheme(): lee si el tema guardado es "dark".
+updateThemeButton(isDark): actualiza icono (themeIcon) y texto (themeText).
+setTheme(isDark): aplica/quita la clase dark, guarda en localStorage y actualiza el botón.
+initThemeToggle(): engancha el click del botón btnTheme.
+En DOMContentLoaded ahora hace setTheme(getSavedTheme()), inicializa el toggle y luego carga/renderiza las tareas.
+
+
+
+
+**Click refectorizado**
+Listo: también refactoricé el click de la lista
+Ahora el list?.addEventListener("click", ...) quedó mucho más corto, y moví la lógica a helpers:
+
+getActionButtonFromEvent(e): encuentra el botón con data-action (o null).
+getTaskIdFromButton(btn): obtiene el data-id del <li>.
+toggleTaskById(tasks, id) y deleteTaskById(tasks, id): devuelven el nuevo array.
+handleTaskListAction(action, id): aplica la acción y llama a commitTasks().
+Comportamiento igual, pero más fácil de leer y mantener.
+
+
+
+
+### Mejora de los nombres de las variables - mensajes de cursor
+Apliqué un renombrado consistente (sin cambiar comportamiento):
+
+Elementos DOM con sufijo El: taskFormEl, taskInputEl, taskListEl, taskSearchEl, taskModalEl, taskModalInputEl, taskStatsEl, etc.
+Botón: btnNewTask → btnNewTaskEl
+Actualicé todas las referencias (eventos, render, modal y stats) para usar los nuevos nombres.
+No quedaron errores de lint.
+
+
+
+
+### Reestructuración de archivos - Mensajes de Cursor
+Reorganización de código fuente: moví app.js a src/js/app.js y hero.css a src/css/hero.css, dejando la raíz más limpia.
+HTML actualizado: en index.html ahora:
+El CSS apunta a ./src/css/hero.css?v=1
+El script apunta a ./src/js/app.js
+Separación clara: la raíz queda para HTML, configuración y dist/ (build); y src/ concentra tu código fuente JS/CSS.
+
+
+### Añadir validiciones al formulario - Mensajes de cursor
+
+**Validacón 1**
+Añadí la validación en addTask() para no permitir tareas de más de 100 caracteres (simplemente no se añade si supera el límite).
+
+function addTask(text) {
+  const clean = (text || "").trim();
+  if (!clean) return;
+  if (clean.length > 100) return;
+  const task = {
+    id: generateId(),
+    text: clean,
+    done: false,
+  };
+  tasks.push(task);
+  commitTasks();
+}
+
+
+**Validacón 2**
+Añadí la validación en addTask() para evitar tareas duplicadas (compara ignorando mayúsculas/minúsculas y espacios laterales).
+
+function addTask(text) {
+  const clean = (text || "").trim();
+  if (!clean) return;
+  if (clean.length > 100) return;
+  if (tasks.some((t) => (t.text || "").trim().toLowerCase() === clean.toLowerCase())) return;
+  const task = {
+    id: generateId(),
+    text: clean,
+    done: false,
+  };
+  tasks.push(task);
+  commitTasks();
+}
+
+**Validación 3**
+Feedback al usuario añadido
+En el formulario principal: ahora, si la tarea es inválida (vacía/solo espacios, >100 caracteres o duplicada), se muestra un mensaje en #task-error debajo del input.
+En el modal: si es inválida, se muestra un alert() con el motivo.
+Cambios hechos en:
+
+index.html: añadido <p id="task-error" ...></p> debajo del input.
+src/js/app.js: addTask() ahora devuelve un mensaje de error (o "" si todo OK) y el submit lo muestra.
+
+
+
+### Añadir comentarios JSDoc - Mensajes de Cursor
+He añadido JSDoc en las funciones principales:
+
+loadTasks: qué hace y que mantiene compatibilidad con formatos antiguos.
+addTask: describe la validación y que devuelve un string de error o vacío.
+createTaskListItem: tipos del objeto task y retorno HTMLLIElement.
+renderTasks: explica filtro y orden, con el parámetro filterText.
+updateStats: indica que actualiza el resumen de pendientes/completadas.
+No he cambiado nada de la lógica, solo documentación.
