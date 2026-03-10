@@ -185,3 +185,256 @@ createTaskListItem: tipos del objeto task y retorno HTMLLIElement.
 renderTasks: explica filtro y orden, con el parámetro filterText.
 updateStats: indica que actualiza el resumen de pendientes/completadas.
 No he cambiado nada de la lógica, solo documentación.
+
+### Consultas utilizando el servidor MCP
+
+**consulta 1**
+¿Puedes acceder a GitHub usando el servidor MCP configurado?
+
+Sí.
+
+Puedo acceder a GitHub a través del servidor MCP user-github que tienes configurado.
+Si queremos hacer algo concreto (listar repos, issues, PRs, etc.), usaría las herramientas de ese servidor vía MCP, pero antes tendría que leer sus descriptores en mcps/user-github para ver exactamente qué operaciones expone y con qué parámetros.
+
+**consulta 2**
+
+Analiza el repositorio de GitHub vinculado a este proyecto
+
+Análisis del repositorio vinculado (taskflow-project)
+Repositorio remoto
+
+URL: https://github.com/beatriztorresgonzalez93/taskflow-project
+Remoto configurado como origin (fetch/push).
+Actualmente: 0 estrellas, 0 forks, sin issues ni PR públicos destacados.
+Tipo de proyecto (según tu código local)
+
+Proyecto frontend estático (HTML + CSS + JS) con Tailwind (via dist/output.css) y un tema claro/oscuro.
+Implementa una interfaz rica tipo “dashboard” (index.html) y una mini app de tareas (TaskFlow) controlada por:
+src/js/app.js: lógica de tareas (localStorage, renderizado, validaciones, tema).
+src/css/hero.css: estilos específicos del hero con imágenes en assets/.
+Estructura y organización principal
+
+Raíz: index.html, package.json, tailwind.config.js, postcss.config.js, dist/ (CSS generado), assets/ (imágenes), docs/ y README.md.
+src/:
+src/js/app.js: código JS modularizado y refactorizado (helpers para storage, render, eventos, tema).
+src/css/hero.css: estilos personalizados del hero con fondos en modo claro/oscuro.
+Calidad del código actual (lo que hemos ido mejorando)
+
+Funciones pequeñas y con responsabilidad clara (loadTasks, renderTasks, updateStats, helpers de eventos).
+Se usan validaciones en el formulario:
+Sin tareas vacías o solo espacios.
+Límite de 100 caracteres.
+Sin duplicados (comparación normalizada).
+Feedback de error visible en el formulario y alert en el modal.
+Se ha aplicado delegación de eventos en la lista de tareas y JSDoc en funciones clave.
+Tema claro/oscuro encapsulado en helpers (setTheme, getSavedTheme, updateThemeButton, etc.).
+En resumen, el repositorio de GitHub vinculado es tu proyecto actual de interfaz + gestor de tareas, con una estructura ya bastante ordenada y código JavaScript refactorizado y documentado; a nivel público en GitHub todavía está “limpio” (sin issues ni PRs, ni estrellas).
+
+
+
+
+**consulta 3**
+Lista todos los archivos del proyecto
+Voy a listar solo los archivos propios del proyecto (raíz, src, assets, dist, docs), excluyendo node_modules, para que la lista sea útil y legible.
+
+Archivos del proyecto (excluyendo node_modules)
+Raíz del proyecto
+
+Directorios:
+assets/
+dist/
+docs/
+src/
+node_modules/ (dependencias, lo excluimos del detalle)
+Archivos:
+index.html
+package.json
+package-lock.json
+postcss.config.js
+tailwind.config.js
+README.md
+src/
+
+src/js/app.js
+src/input.css
+src/css/hero.css
+dist/
+
+dist/output.css
+docs/ai/
+
+docs/ai/prompt-engineering.md
+docs/ai/ai-comparison.md
+docs/ai/cursor-workflow.md
+docs/ai/experiments.md
+docs/ai/reflection.md
+
+
+**consulta 4**
+
+Analiza index.html
+Análisis de index.html (resumen)
+Head y estilos
+
+Define página en español, título “Empíreo Archive • TaskFlow”.
+Carga fuentes de Google (Cinzel, Inter).
+Carga Tailwind compilado ./dist/output.css?v=1 y los estilos específicos del hero ./src/css/hero.css?v=1.
+Layout general
+
+body con fondo degradado y soporte dark mode (clases dark:*).
+Estructura principal tipo dashboard:
+Topbar fijo con brand (Empíreo Archive), buscador visual y botones:
+#btn-new-task (abre modal de nueva tarea).
+#btnTheme con #themeIcon y #themeText (toggle de tema que maneja app.js).
+Sidebar (izquierda)
+
+Secciones:
+Navegación: links internos a #perfiles, #dragones, #misiones, #archivo.
+Filtros: chips visuales de cuadrante y estado (solo UI, sin lógica).
+Resumen: KPIs estáticos (Perfiles, Dragones, Escuadrones).
+Contenido principal (derecha)
+
+Hero: sección .hero-banner con texto “Basgiath War College”; el fondo y efectos los controla hero.css.
+Módulo “Mis tareas”:
+#task-stats: texto inicial “0 pendientes · 0 completadas”.
+Formulario #task-form:
+#task-input (nueva tarea).
+<p id="task-error"> para mostrar errores de validación.
+Buscador #task-search.
+Lista <ul id="task-list"> donde app.js inyecta las tareas.
+Secciones estáticas:
+KPIs (“Perfiles”, “Dragones”, “Misiones”).
+Lista de perfiles, dragones, misiones, etc. (maqueta UI con imágenes en assets/...).
+Nota al final (#archivo) indicando que es una maqueta UI y que botones/pestañas son solo visuales.
+Footer con créditos.
+Modal de nueva tarea
+
+#task-modal con input #modal-task-input y botones:
+#modal-cancel (cierra modal).
+#modal-save (crea nueva tarea).
+Toda esta interacción se maneja en src/js/app.js.
+Script
+
+Al final del body se incluye ./src/js/app.js, que:
+Gestiona tareas (localStorage + render).
+Maneja formulario, búsqueda, modal.
+Controla el theme toggle (claro/oscuro).
+
+
+
+
+**consulta 5**
+Muestra los commits recientes del repositorio taskflow-project
+
+Commits recientes de taskflow-project (últimos 10)
+ed669a3 — agregada informacion de Cursor (valiadiones, refactorizacion, comentariosJSDoc), en Cursor-workflow.md
+cc46d30 — refactorizacion de codigo, reestructuración de archivos, validadiones en formulario y comentarios JSDoc
+00925df — Documentación de comparación y uso de Cursor
+955f0b4 — Estructura inicial de documentación
+4ac723b — Backup antes de cambios
+5c3ad86 — Actualización práctica Corner
+dea4730 — Tailwind design system + dark mode + UI improvements
+bc338b4 — Corrección layout móvil, expansión de tareas y solape de chips en perfiles
+d41c359 — Añadir sistema de tareas interactivo con modal y persistencia
+e0c4d2e — Tipografía épica (Cinzel) + ajustes finales UI
+
+
+
+### Instalación y configuración de un servidor MCP en Cursor
+
+**1. Acceso a la configuración de Cursor**
+
+Para comenzar, se abrió el editor Cursor y se accedió al menú de configuración del programa.
+Dentro del panel de ajustes se localizó la sección Tools & MCP, que permite añadir servidores MCP para ampliar las capacidades de la inteligencia artificial.
+
+**2. Creación del archivo de configuración MCP**
+
+Cursor genera automáticamente un archivo de configuración llamado:
+
+.cursor/mcp.json
+
+Este archivo se utiliza para definir los servidores MCP que se conectarán al editor.
+
+Inicialmente el archivo contiene una estructura básica:
+
+{
+  "mcpServers": {}
+}
+**3. Instalación del servidor MCP filesystem**
+
+Para permitir que la IA acceda a los archivos del proyecto se añadió un servidor MCP de tipo filesystem.
+
+Se modificó el archivo mcp.json añadiendo la siguiente configuración:
+
+{
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "."
+      ]
+    }
+  }
+}
+
+Este servidor permite a la inteligencia artificial explorar los archivos del proyecto y analizar su contenido.
+
+**4. Instalación del servidor MCP de GitHub**
+
+Además, se configuró un servidor MCP para conectar la IA con GitHub.
+
+Para ello se generó previamente un token de acceso personal en GitHub desde:
+
+https://github.com/settings/tokens
+
+Después se añadió la configuración correspondiente en el archivo mcp.json:
+
+{
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "."
+      ]
+    },
+    "github": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-github"
+      ],
+      "env": {
+        "GITHUB_TOKEN": "TOKEN_GENERADO_EN_GITHUB"
+      }
+    }
+  }
+}
+
+Este servidor permite a la IA consultar información de repositorios de GitHub.
+
+**5. Reinicio del editor**
+
+Una vez guardado el archivo de configuración, se reinició el editor Cursor para que los nuevos servidores MCP fueran cargados correctamente.
+
+**6. Verificación del funcionamiento**
+
+Para comprobar que la instalación funcionaba correctamente, se realizaron varias consultas a la IA relacionadas con el proyecto y con repositorios de GitHub.
+Gracias a los servidores MCP configurados, la IA pudo acceder a información de los archivos del proyecto y realizar análisis del código.
+
+
+
+### Utilidad de MCP en proyectos reales
+
+El Model Context Protocol (MCP) permite que una inteligencia artificial pueda conectarse con diferentes herramientas externas, como archivos del proyecto, repositorios de GitHub o servicios online. Esto hace que la IA no solo responda preguntas, sino que también pueda acceder a información real del proyecto.
+
+En proyectos reales puede ser útil en varias situaciones. Por ejemplo, permite que la IA pueda leer directamente los archivos del proyecto y analizar el código para detectar posibles mejoras o errores. Esto puede ayudar mucho a los desarrolladores cuando están revisando su propio código o intentando entender partes del proyecto.
+
+También puede servir para conectarse con repositorios de GitHub y consultar información sobre commits, cambios recientes o la estructura de un repositorio. De esta forma la IA puede ayudar a revisar código o entender cómo ha evolucionado un proyecto.
+
+Otra utilidad es automatizar ciertas tareas del desarrollo, como generar documentación, explicar partes del código o sugerir mejoras en la estructura del proyecto.
+
+En general, MCP hace que las herramientas de inteligencia artificial sean más útiles en el trabajo diario de programación, ya que pueden interactuar directamente con el entorno del proyecto en lugar de limitarse solo a responder preguntas.
