@@ -184,7 +184,7 @@ function createTaskListItem(task) {
     "hover:-translate-y-0.5 hover:shadow-md dark:border-slate-800 dark:bg-slate-950/60";
 
   const left = document.createElement("div");
-  left.className = "flex min-w-0 items-center gap-3";
+  left.className = "flex min-w-0 flex-1 items-center gap-3";
 
   const check = document.createElement("button");
   check.type = "button";
@@ -216,6 +216,20 @@ function createTaskListItem(task) {
   left.appendChild(check);
   left.appendChild(textWrap);
 
+  const edit = document.createElement("button");
+  edit.type = "button";
+  edit.dataset.action = "edit";
+  edit.className =
+    "inline-flex shrink-0 items-center gap-2 rounded-xl border border-violet-200 bg-violet-50 px-3 py-2 text-sm font-semibold text-violet-700 transition " +
+    "hover:bg-violet-100 hover:-translate-y-0.5 dark:border-violet-900/40 dark:bg-violet-950/40 dark:text-violet-300 dark:hover:bg-violet-900/40";
+
+  edit.innerHTML = `
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+      <path d="M17.414 2.586a2 2 0 010 2.828l-9.9 9.9-4 1 1-4 9.9-9.9a2 2 0 012.828 0z"/>
+    </svg>
+    <span>Editar</span>
+  `;
+
   const del = document.createElement("button");
   del.type = "button";
   del.dataset.action = "delete";
@@ -230,8 +244,14 @@ function createTaskListItem(task) {
       <span>Eliminar</span>
     `;
 
+  const actions = document.createElement("div");
+  actions.className = "flex shrink-0 items-center gap-2";
+
+  actions.appendChild(edit);
+  actions.appendChild(del);
+
   li.appendChild(left);
-  li.appendChild(del);
+  li.appendChild(actions);
 
   return li;
 }
@@ -351,6 +371,12 @@ function toggleTaskById(taskList, id) {
   return taskList.map((t) => (t.id === id ? { ...t, done: !t.done } : t));
 }
 
+function editTaskById(taskList, id, newText) {
+  return taskList.map((t) =>
+    t.id === id ? { ...t, text: newText } : t
+  );
+}
+
 /**
  * Elimina una tarea por ID de una lista dada.
  * @param {Array<{id: string, text: string, done: boolean}>} taskList Lista actual de tareas.
@@ -369,6 +395,22 @@ function deleteTaskById(taskList, id) {
 function handleTaskListAction(action, id) {
   if (action === "toggle") {
     tasks = toggleTaskById(tasks, id);
+    commitTasks();
+    return;
+  }
+
+  if (action === "edit") {
+    const taskToEdit = tasks.find((t) => t.id === id);
+    if (!taskToEdit) return;
+
+    const newText = prompt("Edita la tarea:", taskToEdit.text);
+
+    if (newText === null) return;
+
+    const trimmedText = newText.trim();
+    if (!trimmedText) return;
+
+    tasks = editTaskById(tasks, id, trimmedText);
     commitTasks();
     return;
   }
