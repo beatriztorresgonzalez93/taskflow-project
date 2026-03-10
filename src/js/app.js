@@ -374,6 +374,10 @@ function handleTaskListAction(action, id) {
   }
 
   if (action === "delete") {
+    if (!confirm("¿Seguro que quieres eliminar esta tarea?")) {
+      return;
+    }
+
     tasks = deleteTaskById(tasks, id);
     commitTasks();
   }
