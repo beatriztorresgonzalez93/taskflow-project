@@ -419,10 +419,6 @@ document.addEventListener("keydown", (e) => {
 });
 
 // ===== THEME TOGGLE =====
-/**
- * Inicializa el comportamiento de tema claro/oscuro de la aplicación.
- * Lee la preferencia almacenada, aplica la clase correspondiente y conecta el botón de cambio de tema.
- */
 (() => {
   const root = document.documentElement;
   const THEME_KEY = "theme";
