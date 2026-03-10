@@ -12,7 +12,7 @@
   inset:0;
   z-index:0;
 
-  background-image: url("./assets/cover.png");
+  background-image: url("../../assets/cover.png");
   background-size: cover;
   background-position: center top;
   background-repeat: no-repeat;
@@ -54,12 +54,12 @@
 
 /* modo claro (por defecto) */
 .hero-banner::before{
-  background-image: url("./assets/cover_light.png");
+  background-image: url("../../assets/cover_light.png");
 }
 
 /* modo oscuro */
 html.dark .hero-banner::before{
-  background-image: url("./assets/cover.png");
+  background-image: url("../../assets/cover.png");
 }
 
 /* bordes más suaves en modo claro */
