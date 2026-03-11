@@ -16,6 +16,7 @@ const taskErrorEl = document.querySelector("#task-error");
 
 const STORAGE_KEY = "taskflow_tasks";
 let tasks = [];
+let currentFilter = "all";
 
 // ===== LOCALSTORAGE =====
 /**
@@ -139,8 +140,18 @@ function addTask(text) {
  * @returns {{ q: string, filtered: Array<{id: string, text: string, done: boolean}> }} Objeto con texto normalizado y lista filtrada.
  */
 function getFilteredTasks(filterText = "") {
-  const q = (filterText || "").trim().toLowerCase();
-  const filtered = q ? tasks.filter((t) => t.text.toLowerCase().includes(q)) : tasks;
+  const q = filterText.trim().toLowerCase();
+
+  let filtered = q
+    ? tasks.filter((task) => task.text.toLowerCase().includes(q))
+    : tasks;
+
+  if (currentFilter === "pending") {
+    filtered = filtered.filter((task) => !task.done);
+  } else if (currentFilter === "completed") {
+    filtered = filtered.filter((task) => task.done);
+  }
+
   return { q, filtered };
 }
 
@@ -216,19 +227,19 @@ function createTaskListItem(task) {
   left.appendChild(check);
   left.appendChild(textWrap);
 
-  const edit = document.createElement("button");
-  edit.type = "button";
-  edit.dataset.action = "edit";
-  edit.className =
-    "inline-flex shrink-0 items-center gap-2 rounded-xl border border-violet-200 bg-violet-50 px-3 py-2 text-sm font-semibold text-violet-700 transition " +
-    "hover:bg-violet-100 hover:-translate-y-0.5 dark:border-violet-900/40 dark:bg-violet-950/40 dark:text-violet-300 dark:hover:bg-violet-900/40";
+ const edit = document.createElement("button");
+edit.type = "button";
+edit.dataset.action = "edit";
+edit.className =
+  "inline-flex shrink-0 items-center gap-2 rounded-xl border border-violet-200 bg-violet-50 px-3 py-2 text-sm font-semibold text-violet-800 shadow-sm transition " +
+  "hover:-translate-y-0.5 hover:bg-violet-100 hover:shadow dark:border-violet-400/20 dark:bg-violet-400/10 dark:text-violet-100 dark:hover:bg-violet-400/20 dark:hover:border-violet-400/30";
 
-  edit.innerHTML = `
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-      <path d="M17.414 2.586a2 2 0 010 2.828l-9.9 9.9-4 1 1-4 9.9-9.9a2 2 0 012.828 0z"/>
-    </svg>
-    <span>Editar</span>
-  `;
+edit.innerHTML = `
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+    <path d="M17.414 2.586a2 2 0 010 2.828l-9.9 9.9-4 1 1-4 9.9-9.9a2 2 0 012.828 0z"/>
+  </svg>
+  <span>Editar</span>
+`;
 
   const del = document.createElement("button");
   del.type = "button";
@@ -254,6 +265,31 @@ function createTaskListItem(task) {
   li.appendChild(actions);
 
   return li;
+}
+
+function initTaskFilters() {
+  const buttons = document.querySelectorAll(".task-filter-btn");
+
+  buttons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      currentFilter = btn.dataset.filter;
+
+      buttons.forEach((b) => {
+        b.classList.remove("ring-2", "ring-violet-300", "shadow-lg", "scale-105");
+        b.classList.add("shadow-sm");
+      });
+
+      btn.classList.remove("shadow-sm");
+      btn.classList.add("ring-2", "ring-violet-300", "shadow-lg", "scale-105");
+
+      renderTasks(taskSearchEl?.value || "");
+    });
+  });
+
+  const defaultButton = document.querySelector('[data-filter="all"]');
+  if (defaultButton) {
+    defaultButton.classList.add("ring-2", "ring-violet-300", "shadow-lg", "scale-105");
+  }
 }
 
 /**
@@ -495,6 +531,8 @@ document.addEventListener("keydown", (e) => {
   window.addEventListener("DOMContentLoaded", () => {
     setTheme(getSavedTheme());
     initThemeToggle();
+    
+    initTaskFilters();
 
     loadTasks();
     renderTasks();
