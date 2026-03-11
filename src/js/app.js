@@ -67,6 +67,34 @@ function normalizeTask(item) {
 
 function loadTasks() {
   const stored = readStoredTasks();
+
+  if (stored.length === 0) {
+    const demoTasks = [
+      normalizeTask({
+        id: crypto.randomUUID(),
+        text: "Entrenamiento de combate con dragón",
+        done: false,
+        priority: "alta",
+      }),
+      normalizeTask({
+        id: crypto.randomUUID(),
+        text: "Estudiar historia del Cuadrante de Jinetes",
+        done: false,
+        priority: "media",
+      }),
+      normalizeTask({
+        id: crypto.randomUUID(),
+        text: "Cuidar el equipo de montar dragón",
+        done: false,
+        priority: "baja",
+      }),
+    ];
+
+    tasks = demoTasks;
+    saveTasks();
+    return;
+  }
+
   tasks = stored.map(normalizeTask);
 }
 
