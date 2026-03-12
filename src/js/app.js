@@ -32,14 +32,26 @@ let currentFilter = "all";
 let currentPriorityFilter = "all";
 
 // ===== LOCALSTORAGE =====
+/**
+ * Genera un identificador único para tareas (UUID o fallback con timestamp + random).
+ * @returns {string}
+ */
 function generateId() {
   return crypto.randomUUID ? crypto.randomUUID() : String(Date.now() + Math.random());
 }
 
+/**
+ * Persiste el array `tasks` en localStorage bajo la clave STORAGE_KEY.
+ * @returns {void}
+ */
 function saveTasks() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
 }
 
+/**
+ * Lee y parsea las tareas guardadas en localStorage.
+ * @returns {unknown[]} array de tareas en crudo (pueden no ser Task válidos)
+ */
 function readStoredTasks() {
   const raw = localStorage.getItem(STORAGE_KEY);
   if (!raw) return [];
@@ -84,6 +96,10 @@ function normalizeTask(item) {
   };
 }
 
+/**
+ * Carga las tareas desde localStorage; si no hay ninguna, inicializa con tareas de demo y las guarda.
+ * @returns {void}
+ */
 function loadTasks() {
   const stored = readStoredTasks();
 
@@ -118,15 +134,28 @@ function loadTasks() {
 }
 
 // ===== LÓGICA =====
+/**
+ * Devuelve el texto actual del campo de búsqueda de tareas.
+ * @returns {string}
+ */
 function getCurrentFilter() {
   return taskSearchEl ? taskSearchEl.value : "";
 }
 
+/**
+ * Guarda las tareas en localStorage y vuelve a renderizar la lista con el filtro de búsqueda actual.
+ * @returns {void}
+ */
 function commitTasks() {
   saveTasks();
   renderTasks(getCurrentFilter());
 }
 
+/**
+ * Muestra u oculta el mensaje de error debajo del formulario de tareas.
+ * @param {string} [message] - Mensaje a mostrar; si está vacío o no se pasa, se oculta el bloque.
+ * @returns {void}
+ */
 function showTaskError(message) {
   if (!taskErrorEl) return;
   taskErrorEl.textContent = message || "";
@@ -208,10 +237,20 @@ function getFilteredTasks(filterText = "") {
   return { q, filtered };
 }
 
+/**
+ * Ordena la lista: primero pendientes, después completadas.
+ * @param {Task[]} taskList
+ * @returns {Task[]}
+ */
 function orderTasks(taskList) {
   return [...taskList].sort((a, b) => (a.done === b.done ? 0 : a.done ? 1 : -1));
 }
 
+/**
+ * Renderiza el estado vacío en la lista de tareas (sin resultados o sin tareas).
+ * @param {string} q - Texto de búsqueda actual (para mensaje contextual).
+ * @returns {void}
+ */
 function renderEmptyState(q) {
   if (!taskListEl) return;
 
@@ -225,6 +264,11 @@ function renderEmptyState(q) {
   updateStats();
 }
 
+/**
+ * Crea el nodo DOM de un ítem de tarea (checkbox, texto, chip de prioridad, botones editar/eliminar).
+ * @param {Task} task
+ * @returns {HTMLLIElement}
+ */
 function createTaskListItem(task) {
   const li = document.createElement("li");
   li.dataset.id = task.id;
@@ -325,6 +369,10 @@ function createTaskListItem(task) {
   return li;
 }
 
+/**
+ * Inicializa los botones de filtro por estado (todas / pendientes / completadas): estilos activos y re-render.
+ * @returns {void}
+ */
 function initTaskFilters() {
   const buttons = document.querySelectorAll(".task-filter-btn");
 
@@ -350,6 +398,10 @@ function initTaskFilters() {
   }
 }
 
+/**
+ * Inicializa los botones de filtro por prioridad (todas / baja / media / alta): estilos activos y re-render.
+ * @returns {void}
+ */
 function initPriorityFilters() {
   const buttons = document.querySelectorAll(".priority-filter-btn");
 
@@ -370,6 +422,11 @@ function initPriorityFilters() {
   });
 }
 
+/**
+ * Vacía la lista, aplica filtros y búsqueda, ordena y pinta las tareas o el estado vacío; actualiza estadísticas.
+ * @param {string} [filterText=""] - Texto de búsqueda.
+ * @returns {void}
+ */
 function renderTasks(filterText = "") {
   if (!taskListEl) return;
   taskListEl.innerHTML = "";
@@ -389,6 +446,10 @@ function renderTasks(filterText = "") {
   updateStats();
 }
 
+/**
+ * Actualiza el texto de estadísticas (pendientes · completadas) en el DOM.
+ * @returns {void}
+ */
 function updateStats() {
   if (!taskStatsEl) return;
 
@@ -407,6 +468,10 @@ function updateStats() {
 }
 
 // ===== EVENTOS =====
+/**
+ * Abre el modal de nueva tarea: lo hace visible, limpia input y prioridad y enfoca el input.
+ * @returns {void}
+ */
 function openModal() {
   if (!taskModalEl) return;
   taskModalEl.classList.remove("hidden");
@@ -420,6 +485,10 @@ function openModal() {
   }
 }
 
+/**
+ * Cierra el modal de nueva tarea (oculta y quita flex).
+ * @returns {void}
+ */
 function closeModal() {
   if (!taskModalEl) return;
   taskModalEl.classList.add("hidden");
@@ -430,29 +499,64 @@ taskSearchEl?.addEventListener("input", (e) => {
   renderTasks(e.target.value);
 });
 
+/**
+ * Obtiene el botón con data-action que originó el click (si el click fue dentro de la lista de tareas).
+ * @param {Event} e - Evento de click.
+ * @returns {HTMLButtonElement | null}
+ */
 function getActionButtonFromEvent(e) {
   const btn = e.target.closest?.("button[data-action]");
   if (!btn || !taskListEl?.contains(btn)) return null;
   return btn;
 }
 
+/**
+ * Obtiene el id de la tarea desde el botón (busca el li padre con data-id).
+ * @param {HTMLButtonElement} btn
+ * @returns {string | null}
+ */
 function getTaskIdFromButton(btn) {
   const li = btn.closest?.("li[data-id]");
   return li?.dataset?.id || null;
 }
 
+/**
+ * Invierte el estado done de la tarea con el id dado.
+ * @param {Task[]} taskList
+ * @param {string} id
+ * @returns {Task[]}
+ */
 function toggleTaskById(taskList, id) {
   return taskList.map((t) => (t.id === id ? { ...t, done: !t.done } : t));
 }
 
+/**
+ * Sustituye el texto de la tarea con el id dado.
+ * @param {Task[]} taskList
+ * @param {string} id
+ * @param {string} newText
+ * @returns {Task[]}
+ */
 function editTaskById(taskList, id, newText) {
   return taskList.map((t) => (t.id === id ? { ...t, text: newText } : t));
 }
 
+/**
+ * Devuelve una copia del array sin la tarea con el id dado.
+ * @param {Task[]} taskList
+ * @param {string} id
+ * @returns {Task[]}
+ */
 function deleteTaskById(taskList, id) {
   return taskList.filter((t) => t.id !== id);
 }
 
+/**
+ * Ejecuta la acción (toggle / edit / delete) sobre la tarea con el id dado y actualiza estado y UI.
+ * @param {string} action - "toggle" | "edit" | "delete"
+ * @param {string} id - id de la tarea
+ * @returns {void}
+ */
 function handleTaskListAction(action, id) {
   if (action === "toggle") {
     tasks = toggleTaskById(tasks, id);
@@ -558,6 +662,11 @@ document.addEventListener("keydown", (e) => {
   const root = document.documentElement;
   const THEME_KEY = "theme";
 
+  /**
+   * Actualiza icono y texto del botón de tema según modo oscuro/claro.
+   * @param {boolean} isDark
+   * @returns {void}
+   */
   function updateThemeButton(isDark) {
     const icon = document.getElementById("themeIcon");
     const text = document.getElementById("themeText");
@@ -566,16 +675,29 @@ document.addEventListener("keydown", (e) => {
     if (text) text.textContent = isDark ? "Modo claro" : "Modo oscuro";
   }
 
+  /**
+   * Aplica el tema (clase dark en root y guarda en localStorage); actualiza el botón.
+   * @param {boolean} isDark
+   * @returns {void}
+   */
   function setTheme(isDark) {
     root.classList.toggle("dark", isDark);
     localStorage.setItem(THEME_KEY, isDark ? "dark" : "light");
     updateThemeButton(isDark);
   }
 
+  /**
+   * Indica si el tema guardado en localStorage es oscuro.
+   * @returns {boolean}
+   */
   function getSavedTheme() {
     return localStorage.getItem(THEME_KEY) === "dark";
   }
 
+  /**
+   * Enlaza el click del botón de tema para alternar dark/light.
+   * @returns {void}
+   */
   function initThemeToggle() {
     const btn = document.getElementById("btnTheme");
     if (!btn) return;
