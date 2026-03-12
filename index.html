@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="es">
+<html lang="es" style="overflow-x: hidden;">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -12,16 +12,16 @@
   <link rel="stylesheet" href="./dist/output.css?v=1">
   <link rel="stylesheet" href="./src/css/hero.css?v=1">
 </head>
-<body class="min-h-screen text-slate-900 dark:text-slate-100
+<body class="min-h-screen overflow-x-hidden text-slate-900 dark:text-slate-100
 bg-gradient-to-b
 from-purple-100 via-violet-100 to-white
 dark:from-slate-950 dark:via-slate-950 dark:to-[#1a1325]">
   
 
   <!-- TOPBAR -->
-<header class="sticky top-0 z-50 border-b border-slate-200/70 bg-white/90 backdrop-blur
+<header class="sticky inset-x-0 top-0 z-50 border-b border-slate-200/70 bg-white/90 backdrop-blur
 dark:border-violet-400/10 dark:bg-slate-950/70">
-  <div class="w-full px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
+  <div class="mx-auto flex max-w-screen-xl items-center justify-between px-3 sm:px-6 lg:px-8 py-3">
     <!-- Brand -->
     <div class="flex items-center gap-3">
       <div class="grid h-10 w-10 place-items-center rounded-2xl text-white shadow-sm bg-gradient-to-br from-violet-600 via-purple-600 to-fuchsia-500 dark:from-violet-500 dark:via-purple-500 dark:to-fuchsia-400" aria-hidden="true">🐉</div>
@@ -66,7 +66,8 @@ dark:border-violet-400/10 dark:bg-slate-950/70">
   </div>
 </header>
 
- <div class="w-full px-4 sm:px-6 lg:px-8">
+<main class="overflow-x-hidden">
+<div class="w-full px-0 sm:px-6 lg:px-8 overflow-x-hidden">
     <div class="grid gap-6 lg:grid-cols-[320px_1fr]">
       <!-- SIDEBAR -->
       <aside class="space-y-4 order-2 lg:order-1 lg:sticky lg:top-24 self-start">
@@ -871,6 +872,7 @@ Editar perfil
           </aside>
         </section>
     </div>
+</div>
 <section class="rounded-2xl border border-slate-200 bg-white p-4 text-sm shadow-sm dark:border-slate-800 dark:bg-slate-900" id="archivo">
           <span class="font-semibold text-slate-700 dark:text-slate-200">Nota:</span>
           <span class="text-slate-600 dark:text-slate-400"> Esta es una maqueta UI (HTML + CSS). Botones y pestañas son solo visuales para la práctica.</span>

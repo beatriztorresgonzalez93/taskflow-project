@@ -3,6 +3,8 @@
   overflow: hidden;
   height: 520px;
   padding: 72px;
+  width: 100%;
+  box-sizing: border-box; /* evita desbordes horizontales en móvil */
 }
 
 /* 1) IMAGEN (abajo) */
