@@ -1,62 +1,76 @@
+html, body{
+  margin:0;
+  padding:0;
+  width:100%;
+  max-width:100%;
+  overflow-x:hidden;
+}
+
+img{
+  max-width:100%;
+  height:auto;
+  display:block;
+}
+
 .hero-banner{
   position: relative;
   overflow: hidden;
-  height: 520px;
-  padding: 72px;
   width: 100%;
-  box-sizing: border-box; /* evita desbordes horizontales en móvil */
+  min-height: 520px;
+  padding: 32px;
+  border-radius: 24px;
+  box-sizing: border-box;
 }
 
-/* 1) IMAGEN (abajo) */
+/* IMAGEN */
 .hero-banner::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  z-index:0;
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
 
-  background-image: url("../../assets/cover.png");
+  background-image: url("../../assets/cover_light.png");
   background-size: cover;
   background-position: center top;
   background-repeat: no-repeat;
 
-  /* bordes que se funden */
+  /* fundido más equilibrado en los lados */
   -webkit-mask-image:
-    linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%),
-    linear-gradient(to bottom, transparent 0%, black 12%, black 88%, transparent 100%);
+    linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%),
+    linear-gradient(to bottom, transparent 0%, black 14%, black 86%, transparent 100%);
   -webkit-mask-composite: source-over;
 
   mask-image:
-    linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%),
-    linear-gradient(to bottom, transparent 0%, black 12%, black 88%, transparent 100%);
+    linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%),
+    linear-gradient(to bottom, transparent 0%, black 14%, black 86%, transparent 100%);
   mask-composite: intersect;
 }
 
-
-/* 2) VIGNETTE (encima de la imagen, pero debajo del texto) */
+/* CAPA OSCURA / VIGNETTE */
 .hero-banner::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  z-index:1;
-  pointer-events:none;
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
 
   background:
-    radial-gradient(circle at 15% 15%, rgba(0,0,0,.0) 0%, rgba(0,0,0,.35) 60%, rgba(0,0,0,.65) 100%);
+    radial-gradient(circle at 20% 20%, rgba(0,0,0,0) 0%, rgba(0,0,0,.28) 58%, rgba(0,0,0,.55) 100%);
 }
 
-/* 3) TEXTO (arriba del todo) */
-.hero-content,
-.hero-bottom-left{
+/* TEXTO */
+.hero-content{
   position: absolute;
-  bottom: 40px;   /* distancia desde abajo */
-  left: 40px;     /* distancia desde la izquierda */
+  left: 32px;
+  right: 32px;
+  bottom: 32px;
   z-index: 2;
   max-width: 680px;
 }
 
-/* modo claro (por defecto) */
-.hero-banner::before{
-  background-image: url("../../assets/cover_light.png");
+.hero-bottom-left{
+  left: 32px;
+  bottom: 32px;
 }
 
 /* modo oscuro */
@@ -64,31 +78,29 @@ html.dark .hero-banner::before{
   background-image: url("../../assets/cover.png");
 }
 
-/* bordes más suaves en modo claro */
+/* claro: máscara un poco más suave */
 html:not(.dark) .hero-banner::before{
-
   -webkit-mask-image:
-    linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%),
-    linear-gradient(to bottom, transparent 0%, black 22%, black 78%, transparent 100%);
+    linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%),
+    linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%);
 
   mask-image:
-    linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%),
-    linear-gradient(to bottom, transparent 0%, black 22%, black 78%, transparent 100%);
+    linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%),
+    linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%);
 }
 
-/* en modo claro quito la vignette oscura */
+/* claro: sin vignette oscura */
 html:not(.dark) .hero-banner::after{
   background: none;
 }
 
-/* texto negro en modo claro */
+/* texto en modo claro */
 html:not(.dark) .hero-content{
-  color: #000000; /* negro suave */
+  color: #000000;
 }
 
-/* subtítulo */
 html:not(.dark) .hero-content .text-slate-200\/90{
-  color: #000000;
+  color: #111827;
 }
 
 html:not(.dark) .hero-content h1,
@@ -97,43 +109,52 @@ html:not(.dark) .hero-content .font-extrabold{
   text-shadow: 0 4px 20px rgba(0,0,0,0.45);
 }
 
-/* chips con texto negro en modo claro */
+/* chips */
 html:not(.dark) .hero-content span{
   color: #000000;
-}
-
-html:not(.dark) .hero-content span{
-  color: #000000;
-  background: rgba(0,0,0,0.08);
+  background: rgba(255,255,255,0.18);
+  backdrop-filter: blur(6px);
 }
 
 html:not(.dark) .hero-content span.bg-amber-400\/20{
   color: #92400e;
+  background: rgba(251, 191, 36, 0.18);
 }
 
-/* ✅ HERO responsive: altura flexible y mejor encuadre en móvil */
-.hero-banner{
-  height: auto;                 /* quita el fijo */
-  min-height: 520px;            /* escritorio */
-}
-
+/* RESPONSIVE */
 @media (max-width: 640px){
   .hero-banner{
-    min-height: 320px;          /* móvil */
-    padding: 24px;              /* menos padding */
+    min-height: 320px;
+    padding: 20px;
+    border-radius: 20px;
   }
 
   .hero-banner::before{
-    background-position: 60% top; /* mueve el foco (ajusta 50-70%) */
+    background-position: 58% top;
   }
 
-  .hero-bottom-left{
-    left: 20px;
-    bottom: 18px;
-    max-width: 92%;
+  .hero-content{
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+.hero-bottom-left{
+  position: absolute;
+  left: 20px;
+  right: 20px;
+  bottom: 20px;
+  z-index: 2;
+
+  max-width: none;
+  width: auto;
+  }
+
+  .hero-banner .font-extrabold{
+    font-size: 2rem !important;
+    line-height: 1.05;
   }
 }
 
+/* fondo dark */
 html.dark body{
   background-color: #020617 !important;
   background-image:

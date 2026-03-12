@@ -1,3 +1,12 @@
+// ===== TIPOS (JSDoc) =====
+/**
+ * @typedef {"baja" | "media" | "alta"} TaskPriority
+ */
+
+/**
+ * @typedef {{ id: string, text: string, done: boolean, priority: TaskPriority }} Task
+ */
+
 // ===== SELECTORES =====
 const taskFormEl = document.querySelector("#task-form");
 const taskInputEl = document.querySelector("#task-input");
@@ -17,6 +26,7 @@ const taskStatsEl = document.querySelector("#task-stats");
 const taskErrorEl = document.querySelector("#task-error");
 
 const STORAGE_KEY = "taskflow_tasks";
+/** @type {Task[]} */
 let tasks = [];
 let currentFilter = "all";
 let currentPriorityFilter = "all";
@@ -42,6 +52,20 @@ function readStoredTasks() {
   }
 }
 
+/**
+ * Normaliza un valor cualquiera a una prioridad válida.
+ * @param {string} value
+ * @returns {TaskPriority}
+ */
+function normalizePriority(value) {
+  return value === "baja" || value === "alta" || value === "media" ? value : "media";
+}
+
+/**
+ * Normaliza cualquier representación almacenada de tarea a un objeto Task estándar.
+ * @param {unknown} item
+ * @returns {Task}
+ */
 function normalizeTask(item) {
   if (typeof item === "string") {
     return {
@@ -52,16 +76,11 @@ function normalizeTask(item) {
     };
   }
 
-  const priority =
-    item?.priority === "baja" || item?.priority === "alta" || item?.priority === "media"
-      ? item.priority
-      : "media";
-
   return {
     id: item?.id ?? generateId(),
     text: item?.text ?? "",
     done: Boolean(item?.done),
-    priority,
+    priority: normalizePriority(item?.priority),
   };
 }
 
@@ -114,6 +133,12 @@ function showTaskError(message) {
   taskErrorEl.classList.toggle("hidden", !message);
 }
 
+/**
+ * Intenta crear una nueva tarea validando texto y prioridad.
+ * @param {string} text
+ * @param {string} [priority="media"]
+ * @returns {string} mensaje de error o cadena vacía
+ */
 function addTask(text, priority = "media") {
   const clean = (text || "").trim();
 
@@ -123,13 +148,7 @@ function addTask(text, priority = "media") {
     return "Esa tarea ya existe.";
   }
 
-  const safePriority =
-    priority === "baja" || priority === "alta" || priority === "media"
-      ? priority
-      : "media";
-
-      console.log("priority recibida:", priority);
-      console.log("safePriority:", safePriority);
+  const safePriority = normalizePriority(priority);
 
   const task = {
     id: generateId(),
@@ -144,6 +163,38 @@ function addTask(text, priority = "media") {
 }
 
 // ===== UI =====
+/**
+ * Aplica el filtro de estado (todas / pendientes / completadas).
+ * @param {Task[]} list
+ * @returns {Task[]}
+ */
+function applyStatusFilter(list) {
+  if (currentFilter === "pending") {
+    return list.filter((task) => !task.done);
+  }
+  if (currentFilter === "completed") {
+    return list.filter((task) => task.done);
+  }
+  return list;
+}
+
+/**
+ * Aplica el filtro de prioridad (todas / baja / media / alta).
+ * @param {Task[]} list
+ * @returns {Task[]}
+ */
+function applyPriorityFilter(list) {
+  if (currentPriorityFilter !== "all") {
+    return list.filter((task) => task.priority === currentPriorityFilter);
+  }
+  return list;
+}
+
+/**
+ * Devuelve las tareas filtradas por texto, estado y prioridad.
+ * @param {string} [filterText=""]
+ * @returns {{ q: string, filtered: Task[] }}
+ */
 function getFilteredTasks(filterText = "") {
   const q = filterText.trim().toLowerCase();
 
@@ -151,15 +202,8 @@ function getFilteredTasks(filterText = "") {
     ? tasks.filter((task) => task.text.toLowerCase().includes(q))
     : tasks;
 
-  if (currentFilter === "pending") {
-    filtered = filtered.filter((task) => !task.done);
-  } else if (currentFilter === "completed") {
-    filtered = filtered.filter((task) => task.done);
-  }
-
-  if (currentPriorityFilter !== "all") {
-    filtered = filtered.filter((task) => task.priority === currentPriorityFilter);
-  }
+  filtered = applyStatusFilter(filtered);
+  filtered = applyPriorityFilter(filtered);
 
   return { q, filtered };
 }
@@ -185,18 +229,21 @@ function createTaskListItem(task) {
   const li = document.createElement("li");
   li.dataset.id = task.id;
   li.className =
-    "flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-slate-50/70 px-4 py-3 shadow-sm transition " +
+    "rounded-2xl border border-slate-200 bg-slate-50/70 px-4 py-3 shadow-sm transition " +
     "hover:-translate-y-0.5 hover:shadow-md dark:border-slate-800 dark:bg-slate-950/60";
 
+  const content = document.createElement("div");
+  content.className = "flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between";
+
   const left = document.createElement("div");
-  left.className = "flex min-w-0 flex-1 items-center gap-3";
+  left.className = "flex min-w-0 flex-1 items-start gap-3";
 
   const check = document.createElement("button");
   check.type = "button";
   check.dataset.action = "toggle";
   check.setAttribute("aria-label", task.done ? "Marcar como pendiente" : "Marcar como completada");
   check.className =
-    "flex h-6 w-6 shrink-0 items-center justify-center rounded-full border transition " +
+    "mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border transition " +
     (task.done
       ? "border-emerald-500 bg-emerald-500 text-white shadow-sm"
       : "border-slate-300 bg-white text-transparent hover:border-emerald-400 dark:border-slate-700 dark:bg-slate-900");
@@ -210,28 +257,26 @@ function createTaskListItem(task) {
   textWrap.className = "min-w-0 flex-1";
 
   const textRow = document.createElement("div");
-  textRow.className = "flex items-center gap-2 w-full min-w-0";
+  textRow.className = "flex w-full min-w-0 items-start gap-2";
 
   const span = document.createElement("span");
   span.className =
-    "block min-w-0 flex-1 text-base transition " +
+    "block min-w-0 flex-1 break-words text-base leading-6 transition " +
     (task.done
       ? "text-slate-400 line-through dark:text-slate-500"
       : "text-slate-900 dark:text-slate-100");
   span.textContent = task.text;
 
   const priorityChip = document.createElement("span");
-priorityChip.className = "inline-block h-4 w-4 rounded-full shrink-0 border border-white/20";
+  priorityChip.className = "mt-1 inline-block h-4 w-4 shrink-0 rounded-full border border-white/20";
 
-
-
-if (task.priority === "baja") {
-  priorityChip.style.backgroundColor = "#38bdf8"; // azul
-} else if (task.priority === "alta") {
-  priorityChip.style.backgroundColor = "#fb7185"; // rojo/rosa
-} else {
-  priorityChip.style.backgroundColor = "#fbbf24"; // naranja
-}
+  if (task.priority === "baja") {
+    priorityChip.style.backgroundColor = "#38bdf8";
+  } else if (task.priority === "alta") {
+    priorityChip.style.backgroundColor = "#fb7185";
+  } else {
+    priorityChip.style.backgroundColor = "#fbbf24";
+  }
 
   textRow.appendChild(span);
   textRow.appendChild(priorityChip);
@@ -244,7 +289,7 @@ if (task.priority === "baja") {
   edit.type = "button";
   edit.dataset.action = "edit";
   edit.className =
-    "inline-flex shrink-0 items-center gap-2 rounded-xl border border-violet-200 bg-violet-50 px-3 py-2 text-sm font-semibold text-violet-800 shadow-sm transition " +
+    "inline-flex items-center gap-2 rounded-xl border border-violet-200 bg-violet-50 px-3 py-2 text-sm font-semibold text-violet-800 shadow-sm transition " +
     "hover:-translate-y-0.5 hover:bg-violet-100 hover:shadow dark:border-violet-400/20 dark:bg-violet-400/10 dark:text-violet-100 dark:hover:bg-violet-400/20 dark:hover:border-violet-400/30";
   edit.innerHTML = `
     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
@@ -257,7 +302,7 @@ if (task.priority === "baja") {
   del.type = "button";
   del.dataset.action = "delete";
   del.className =
-    "inline-flex shrink-0 items-center gap-2 rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-sm font-semibold text-rose-700 transition " +
+    "inline-flex items-center gap-2 rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-sm font-semibold text-rose-700 transition " +
     "hover:bg-rose-100 hover:-translate-y-0.5 dark:border-rose-900/40 dark:bg-rose-950/40 dark:text-rose-300 dark:hover:bg-rose-900/40";
   del.innerHTML = `
     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
@@ -268,13 +313,14 @@ if (task.priority === "baja") {
   `;
 
   const actions = document.createElement("div");
-  actions.className = "flex shrink-0 items-center gap-2";
+  actions.className = "flex flex-wrap items-center gap-2 sm:shrink-0 sm:justify-end";
 
   actions.appendChild(edit);
   actions.appendChild(del);
 
-  li.appendChild(left);
-  li.appendChild(actions);
+  content.appendChild(left);
+  content.appendChild(actions);
+  li.appendChild(content);
 
   return li;
 }
