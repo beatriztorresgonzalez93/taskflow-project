@@ -99,6 +99,41 @@ Ruta base del proyecto:
 
 ---
 
+## 📌 Ejemplos de uso
+
+- **Crear una tarea rápida**
+  1. Haz clic en el botón **`+ Nuevo`** de la barra superior.
+  2. Escribe el texto de la tarea en el modal (por ejemplo: `Revisión del archivo de dragones`).
+  3. Elige una **prioridad** (baja, media, alta).
+  4. Pulsa **Guardar**. La tarea aparecerá al principio de la lista.
+
+- **Marcar una tarea como completada**
+  1. Localiza la tarea en la lista.
+  2. Haz clic en el **círculo de la izquierda** (checkbox estilizado).
+  3. La tarea se mostrará con texto tachado y se moverá debajo de las pendientes.
+
+- **Editar una tarea existente**
+  1. Busca la tarea que quieres cambiar.
+  2. Pulsa el botón **Editar** (botón violeta).
+  3. Modifica el texto en el cuadro de diálogo y confirma.
+
+- **Eliminar una tarea**
+  1. Pulsa el botón **Eliminar** (botón rojo) de la tarea.
+  2. Confirma en el mensaje: `¿Seguro que quieres eliminar esta tarea?`.
+  3. La tarea desaparecerá de la lista y del almacenamiento.
+
+- **Filtrar por estado y prioridad**
+  1. Usa los **botones de filtro de estado** (todas / pendientes / completadas) para centrarte en un tipo.
+  2. Usa los **botones de prioridad** (todas / baja / media / alta) para combinar filtros.
+  3. Opcionalmente, escribe texto en el buscador para filtrar aún más.
+
+- **Cambiar entre modo claro y oscuro**
+  1. Haz clic en el botón de **tema** de la barra superior.
+  2. El icono cambiará (🌙 / ☀️) y se actualizarán los estilos.
+  3. La preferencia se guarda, así que cuando vuelvas a abrir la página se mantendrá el último modo.
+
+---
+
 ## 🧩 Posibles mejoras futuras
 
 - Añadir fechas de vencimiento a las tareas y ordenar por fecha/prioridad.

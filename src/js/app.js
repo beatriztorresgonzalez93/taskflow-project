@@ -495,6 +495,7 @@ function closeModal() {
   taskModalEl.classList.remove("flex");
 }
 
+// Escucha cambios en el buscador de tareas y vuelve a pintar la lista filtrada por texto.
 taskSearchEl?.addEventListener("input", (e) => {
   renderTasks(e.target.value);
 });
@@ -589,6 +590,7 @@ function handleTaskListAction(action, id) {
   }
 }
 
+// Maneja los clics dentro de la lista (toggle, editar o eliminar según el botón pulsado).
 taskListEl?.addEventListener("click", (e) => {
   const btn = getActionButtonFromEvent(e);
   if (!btn) return;
@@ -599,14 +601,17 @@ taskListEl?.addEventListener("click", (e) => {
   handleTaskListAction(btn.dataset.action, id);
 });
 
+// Abre el modal al pulsar el botón "+ Nuevo" de la barra superior.
 btnNewTaskEl?.addEventListener("click", () => {
   openModal();
 });
 
+// Cierra el modal al pulsar el botón "Cancelar".
 taskModalCancelEl?.addEventListener("click", () => {
   closeModal();
 });
 
+// Intenta crear una nueva tarea desde el modal y lo cierra si todo va bien.
 taskModalSaveEl?.addEventListener("click", () => {
   const text = taskModalInputEl ? taskModalInputEl.value : "";
   const priority = taskModalPriorityEl ? taskModalPriorityEl.value : "media";
@@ -625,6 +630,7 @@ taskModalSaveEl?.addEventListener("click", () => {
 
 // Si usas también formulario normal, descomenta esto:
 
+// Gestiona el envío del formulario embebido bajo la lista de tareas.
 taskFormEl?.addEventListener("submit", (e) => {
   e.preventDefault();
 
@@ -651,6 +657,7 @@ taskFormEl?.addEventListener("submit", (e) => {
 });
 
 
+// Cierra el modal si está abierto al pulsar la tecla Escape.
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape" && taskModalEl && !taskModalEl.classList.contains("hidden")) {
     closeModal();
