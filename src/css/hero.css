@@ -188,3 +188,18 @@ html.dark body{
 html.dark body::before{
   background: rgba(86, 2, 110, 0.2);
 }
+
+/* Halos de dragones: en móvil siempre visibles; en escritorio solo al pasar el ratón */
+@media (hover: none) {
+  .dragon-halo {
+    opacity: 1;
+  }
+}
+@media (hover: hover) {
+  .dragon-halo {
+    opacity: 0;
+  }
+  .group:hover .dragon-halo {
+    opacity: 1;
+  }
+}
