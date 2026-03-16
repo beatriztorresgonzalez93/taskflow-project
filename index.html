@@ -17,7 +17,7 @@
 
   <!-- TOPBAR -->
   <header class="sticky inset-x-0 top-0 z-50 border-b border-slate-200/70 bg-white/90 backdrop-blur dark:border-violet-400/10 dark:bg-slate-950/70">
-    <div class="flex w-full items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
+    <div class="flex w-full flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
       <!-- Brand -->
       <div class="flex items-center gap-3">
         <div class="grid h-10 w-10 place-items-center rounded-2xl text-white shadow-sm bg-gradient-to-br from-violet-600 via-purple-600 to-fuchsia-500 dark:from-violet-500 dark:via-purple-500 dark:to-fuchsia-400" aria-hidden="true">🐉</div>
@@ -28,11 +28,12 @@
       </div>
 
       <!-- Actions -->
-      <div class="flex items-center gap-2">
-        <label class="hidden sm:flex items-center gap-2 rounded-xl border border-violet-200/60 bg-white/80 px-3 py-2 text-sm shadow-sm transition focus-within:ring-2 focus-within:ring-violet-300 dark:border-violet-400/20 dark:bg-white/5 dark:focus-within:ring-violet-500">
+      <div class="flex items-center gap-2 sm:justify-end">
+        <label class="flex w-full items-center gap-2 rounded-xl border border-violet-200/60 bg-white/80 px-3 py-2 text-sm shadow-sm transition focus-within:ring-2 focus-within:ring-violet-300 dark:border-violet-400/20 dark:bg-white/5 dark:focus-within:ring-violet-500 sm:w-auto sm:flex-none">
           <span class="sr-only">Buscar</span>
           <input
-            class="w-72 bg-transparent text-sm text-slate-900 outline-none placeholder:text-slate-400 dark:text-slate-100 dark:placeholder:text-slate-500"
+            id="global-search"
+            class="w-full sm:w-72 bg-transparent text-sm text-slate-900 outline-none placeholder:text-slate-400 dark:text-slate-100 dark:placeholder:text-slate-500"
             type="search"
             placeholder="Buscar jinete, escuadrón o dragón…"
           />
@@ -67,9 +68,9 @@
 
             <a class="flex items-center gap-2 rounded-xl px-3 py-2 text-slate-700 transition hover:bg-violet-50 dark:text-slate-200 dark:hover:bg-blue-400/10" href="#dragones">🐲 Dragones</a>
 
-            <a class="flex items-center gap-2 rounded-xl px-3 py-2 text-slate-700 transition hover:bg-violet-50 dark:text-slate-200 dark:hover:bg-blue-400/10" href="#misiones">🗺️ Misiones</a>
+            <a id="nav-misiones" class="flex items-center gap-2 rounded-xl px-3 py-2 text-slate-700 transition hover:bg-violet-50 dark:text-slate-200 dark:hover:bg-blue-400/10" href="#misiones">🗺️ Misiones</a>
 
-            <a class="flex items-center gap-2 rounded-xl px-3 py-2 text-slate-700 transition hover:bg-violet-50 dark:text-slate-200 dark:hover:bg-blue-400/10" href="#archivo">🗄️ Archivo</a>
+            <a id="nav-archivo" class="flex items-center gap-2 rounded-xl px-3 py-2 text-slate-700 transition hover:bg-violet-50 dark:text-slate-200 dark:hover:bg-blue-400/10" href="#archivo">🗄️ Archivo</a>
           </nav>
         </section>
 
@@ -77,24 +78,40 @@
         <section class="rounded-2xl border p-4 shadow-sm border-slate-200 bg-white/90 dark:border-blue-500/10 dark:backdrop-blur-md dark:shadow-lg dark:bg-gradient-to-br dark:from-[#050a1a]/95 dark:via-[#0a1230]/90 dark:to-[#020617]/95">
           <h2 class="text-sm font-semibold text-slate-800 dark:text-slate-100">Filtros</h2>
 
-          <div class="mt-4">
+            <div class="mt-4">
             <div class="text-xs font-semibold text-slate-600 dark:text-slate-400">Cuadrante</div>
 
             <div class="mt-2 flex flex-wrap gap-2">
-              <button class="rounded-full px-3 py-1 text-xs font-semibold text-white bg-gradient-to-r from-violet-600/80 to-fuchsia-500/70 hover:-translate-y-0.5 hover:from-violet-500/90 hover:to-fuchsia-400/80">
+              <button
+                type="button"
+                class="rider-quadrant-filter rounded-full px-3 py-1 text-xs font-semibold text-white bg-gradient-to-r from-violet-600/80 to-fuchsia-500/70 hover:-translate-y-0.5 hover:from-violet-500/90 hover:to-fuchsia-400/80"
+                data-rider-quadrant-filter="all"
+              >
+                Todos
+              </button>
+
+              <button
+                type="button"
+                class="rider-quadrant-filter rounded-full border px-3 py-1 text-xs font-semibold border-violet-200/60 bg-white/80 text-violet-900 hover:bg-violet-50 dark:border-blue-400/20 dark:bg-blue-500/5 dark:text-slate-200 dark:hover:bg-blue-400/10"
+                data-rider-quadrant-filter="jinetes"
+              >
                 Jinetes
               </button>
 
-              <button class="rounded-full border px-3 py-1 text-xs font-semibold border-violet-200/60 bg-white/80 text-violet-900 hover:bg-violet-50 dark:border-blue-400/20 dark:bg-blue-500/5 dark:text-slate-200 dark:hover:bg-blue-400/10">
+              <button
+                type="button"
+                class="rider-quadrant-filter rounded-full border px-3 py-1 text-xs font-semibold border-violet-200/60 bg-white/80 text-violet-900 hover:bg-violet-50 dark:border-blue-400/20 dark:bg-blue-500/5 dark:text-slate-200 dark:hover:bg-blue-400/10"
+                data-rider-quadrant-filter="escribas"
+              >
                 Escribas
               </button>
 
-              <button class="rounded-full border px-3 py-1 text-xs font-semibold border-violet-200/60 bg-white/80 text-violet-900 hover:bg-violet-50 dark:border-blue-400/20 dark:bg-blue-500/5 dark:text-slate-200 dark:hover:bg-blue-400/10">
+              <button
+                type="button"
+                class="rider-quadrant-filter rounded-full border px-3 py-1 text-xs font-semibold border-violet-200/60 bg-white/80 text-violet-900 hover:bg-violet-50 dark:border-blue-400/20 dark:bg-blue-500/5 dark:text-slate-200 dark:hover:bg-blue-400/10"
+                data-rider-quadrant-filter="curanderos"
+              >
                 Curanderos
-              </button>
-
-              <button class="rounded-full border px-3 py-1 text-xs font-semibold border-violet-200/60 bg-white/80 text-violet-900 hover:bg-violet-50 dark:border-blue-400/20 dark:bg-blue-500/5 dark:text-slate-200 dark:hover:bg-blue-400/10">
-                Infantería
               </button>
             </div>
           </div>
@@ -103,15 +120,35 @@
             <div class="text-xs font-semibold text-slate-600 dark:text-slate-400">Estado</div>
 
             <div class="mt-2 flex flex-wrap gap-2">
-              <button class="rounded-full px-3 py-1 text-xs font-semibold text-white bg-gradient-to-r from-violet-600/80 to-fuchsia-500/70 hover:-translate-y-0.5 hover:from-violet-500/90 hover:to-fuchsia-400/80">
+              <button
+                type="button"
+                class="rider-status-filter rounded-full px-3 py-1 text-xs font-semibold text-white bg-gradient-to-r from-violet-600/80 to-fuchsia-500/70 hover:-translate-y-0.5 hover:from-violet-500/90 hover:to-fuchsia-400/80"
+                data-rider-status-filter="all"
+              >
+                Todos
+              </button>
+
+              <button
+                type="button"
+                class="rider-status-filter rounded-full border px-3 py-1 text-xs font-semibold border-violet-200/60 bg-white/80 text-violet-900 hover:bg-violet-50 dark:border-blue-400/20 dark:bg-blue-500/5 dark:text-slate-200 dark:hover:bg-blue-400/10"
+                data-rider-status-filter="active"
+              >
                 Activos
               </button>
 
-              <button class="rounded-full border px-3 py-1 text-xs font-semibold border-violet-200/60 bg-white/80 text-violet-900 hover:bg-violet-50 dark:border-blue-400/20 dark:bg-blue-500/5 dark:text-slate-200 dark:hover:bg-blue-400/10">
+              <button
+                type="button"
+                class="rider-status-filter rounded-full border px-3 py-1 text-xs font-semibold border-violet-200/60 bg-white/80 text-violet-900 hover:bg-violet-50 dark:border-blue-400/20 dark:bg-blue-500/5 dark:text-slate-200 dark:hover:bg-blue-400/10"
+                data-rider-status-filter="training"
+              >
                 En entrenamiento
               </button>
 
-              <button class="rounded-full border px-3 py-1 text-xs font-semibold border-violet-200/60 bg-white/80 text-violet-900 hover:bg-violet-50 dark:border-blue-400/20 dark:bg-blue-500/5 dark:text-slate-200 dark:hover:bg-blue-400/10">
+              <button
+                type="button"
+                class="rider-status-filter rounded-full border px-3 py-1 text-xs font-semibold border-violet-200/60 bg-white/80 text-violet-900 hover:bg-violet-50 dark:border-blue-400/20 dark:bg-blue-500/5 dark:text-slate-200 dark:hover:bg-blue-400/10"
+                data-rider-status-filter="archived"
+              >
                 Archivados
               </button>
             </div>
@@ -125,17 +162,17 @@
           <div class="mt-3 space-y-2 text-sm">
             <div class="flex items-center justify-between rounded-xl bg-slate-50 px-3 py-2 text-slate-900 dark:bg-black/30 dark:text-slate-200">
               <span class="text-slate-600 dark:text-slate-400">Perfiles</span>
-              <strong>48</strong>
+              <strong>11</strong>
             </div>
 
             <div class="flex items-center justify-between rounded-xl bg-slate-50 px-3 py-2 text-slate-900 dark:bg-black/30 dark:text-slate-200">
               <span class="text-slate-600 dark:text-slate-400">Dragones</span>
-              <strong>12</strong>
+              <strong>9</strong>
             </div>
 
             <div class="flex items-center justify-between rounded-xl bg-slate-50 px-3 py-2 text-slate-900 dark:bg-black/30 dark:text-slate-200">
               <span class="text-slate-600 dark:text-slate-400">Escuadrones</span>
-              <strong>6</strong>
+              <strong>4</strong>
             </div>
           </div>
         </section>
@@ -158,11 +195,6 @@
             </div>
             <div class="mt-3 text-base text-slate-200/90 md:text-lg">
               Archivo visual de perfiles, dragones y misiones.
-            </div>
-            <div class="mt-5 flex flex-wrap gap-3">
-              <span class="rounded-full border border-white/10 bg-gradient-to-r from-white/15 to-violet-300/10 px-4 py-1 text-sm font-semibold text-white">Jinetes</span>
-              <span class="rounded-full border border-white/10 bg-gradient-to-r from-white/15 to-violet-300/10 px-4 py-1 text-sm font-semibold text-white">Dragones</span>
-              <span class="rounded-full bg-amber-400/20 px-4 py-1 text-sm font-semibold text-amber-200">Misiones</span>
             </div>
           </div>
         </section>
@@ -275,8 +307,8 @@
         <section class="grid gap-3 sm:grid-cols-3" aria-label="Estadísticas rápidas">
           <article class="rounded-2xl border p-4 shadow-sm border-slate-200 bg-white/90 dark:border-blue-500/10 dark:backdrop-blur-md dark:shadow-[0_10px_40px_rgba(0,0,0,0.6)] dark:bg-gradient-to-br dark:from-[#050a1a]/95 dark:via-[#0a1230]/90 dark:to-[#020617]/95">
             <div class="text-xs font-semibold text-slate-600 dark:text-slate-400">Perfiles</div>
-            <div class="mt-2 text-2xl font-bold">21</div>
-            <div class="mt-1 text-xs text-slate-600 dark:text-slate-400">Totales, 16 activos / 5 inactivos</div>
+            <div class="mt-2 text-2xl font-bold">11</div>
+            <div class="mt-1 text-xs text-slate-600 dark:text-slate-400">Totales, 9 activos / 2 inactivos</div>
           </article>
 
           <article class="rounded-2xl border p-4 shadow-sm border-slate-200 bg-white/90 dark:border-blue-500/10 dark:backdrop-blur-md dark:shadow-[0_10px_40px_rgba(0,0,0,0.6)] dark:bg-gradient-to-br dark:from-[#050a1a]/95 dark:via-[#0a1230]/90 dark:to-[#020617]/95">
@@ -286,26 +318,11 @@
           </article>
 
           <article class="rounded-2xl border p-4 shadow-sm border-slate-200 bg-white/90 dark:border-blue-500/10 dark:backdrop-blur-md dark:shadow-[0_10px_40px_rgba(0,0,0,0.6)] dark:bg-gradient-to-br dark:from-[#050a1a]/95 dark:via-[#0a1230]/90 dark:to-[#020617]/95">
-            <div class="text-xs font-semibold text-slate-600 dark:text-slate-400">Misiones</div>
-            <div class="mt-2 text-2xl font-bold">13</div>
-            <div class="mt-1 text-xs text-slate-600 dark:text-slate-400">Asignadas, 2 en curso / 11 completadas</div>
+            <div class="text-xs font-semibold text-slate-600 dark:text-slate-400">Escuadrones</div>
+            <div class="mt-2 text-2xl font-bold">4</div>
+            <div class="mt-1 text-xs text-slate-600 dark:text-slate-400">Activos en la actualidad</div>
           </article>
         </section>
-
-        <!-- Tabs -->
-        <nav class="flex flex-wrap gap-2" aria-label="Pestañas (visual)">
-          <a class="rounded-full px-4 py-2 text-sm font-semibold text-white bg-gradient-to-r from-violet-600 to-fuchsia-500 hover:-translate-y-0.5 hover:from-violet-500 hover:to-fuchsia-400 shadow-sm hover:shadow-md transition" href="#perfiles">
-            Jinetes
-          </a>
-
-          <a class="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800" href="#dragones">
-            Dragones
-          </a>
-
-          <a class="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800" href="#misiones">
-            Misiones
-          </a>
-        </nav>
 
  <!-- SPLIT -->
 <section class="grid gap-6 lg:grid-cols-[1fr_360px] mb-12">
@@ -319,175 +336,251 @@
         </p>
       </div>
       <span class="rounded-full border border-violet-200 bg-violet-50 px-3 py-1 text-[11px] font-semibold text-violet-700 dark:border-violet-400/20 dark:bg-violet-400/10 dark:text-violet-200">
-        8 perfiles activos
+        11 perfiles activos
       </span>
     </div>
 
     <section class="grid gap-3 md:grid-cols-2" aria-label="Lista de perfiles">
       <!-- Violet -->
-      <article tabindex="0" class="group relative overflow-hidden flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[0_10px_40px_rgba(139,92,246,0.35)] focus:outline-none focus:ring-2 focus:ring-slate-300 dark:border-slate-800 dark:bg-slate-900 dark:focus:ring-slate-700">
+      <article id="jinete-violet" data-search-target="violet violet sorrengail tairn andarna" data-rider-status="active" data-rider-quadrant="jinetes" tabindex="0" class="group relative overflow-hidden flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[0_10px_40px_rgba(139,92,246,0.35)] focus:outline-none focus:ring-2 focus:ring-slate-300 dark:border-slate-800 dark:bg-slate-900 dark:focus:ring-slate-700">
         <div class="pointer-events-none absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition duration-500 bg-gradient-to-r from-violet-500/30 via-blue-400/30 to-fuchsia-500/30 blur-[6px]"></div>
         <div class="flex min-w-0 items-center gap-3">
           <img class="h-11 w-11 rounded-full object-cover transition duration-300 group-hover:scale-110" src="assets/violet.png" alt="Violet Sorrengail" loading="lazy">
           <div class="min-w-0">
             <h3 class="truncate text-sm font-semibold">Violet Sorrengail</h3>
-            <div class="mt-1 flex flex-wrap items-center gap-2 text-xs text-slate-600 dark:text-slate-400">
-              <span class="rounded-full bg-slate-100 px-2 py-1 dark:bg-slate-950">Escuadrón: Fourth Wing</span>
-              <span class="text-slate-400">•</span>
-              <span>Vínculo: Tairn / Andarna</span>
-            </div>
+            <p class="mt-1 text-xs text-slate-600 dark:text-slate-400">Cuadrante: Jinetes</p>
+            <p class="text-xs text-slate-600 dark:text-slate-400">Escuadrón: Fourth Wing</p>
+            <p class="text-xs text-slate-600 dark:text-slate-400">Estado: Activo</p>
           </div>
         </div>
-        <div class="flex flex-col items-end gap-2">
+        <div class="flex flex-col items-end gap-1">
           <span class="rounded-full bg-emerald-500/15 px-3 py-1 text-xs font-semibold text-emerald-700 dark:bg-emerald-400/15 dark:text-emerald-300">Rango: Alto</span>
-          <span class="text-xs font-semibold text-slate-600 dark:text-slate-400">Activo</span>
+          <p class="text-xs text-slate-600 dark:text-slate-400">Vínculo: Tairn / Andarna</p>
         </div>
         <div class="pointer-events-none absolute inset-0 opacity-0 transition duration-500 group-hover:opacity-100 bg-gradient-to-r from-transparent via-white/20 to-transparent dark:via-violet-400/20 -translate-x-full group-hover:translate-x-full"></div>
       </article>
 
       <!-- Xaden -->
-      <article tabindex="0" class="group relative overflow-hidden flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[0_10px_40px_rgba(139,92,246,0.35)] focus:outline-none focus:ring-2 focus:ring-slate-300 dark:border-slate-800 dark:bg-slate-900 dark:focus:ring-slate-700">
+      <article id="jinete-xaden" data-search-target="xaden xaden riorson sgaeyl" data-rider-status="active" data-rider-quadrant="jinetes" tabindex="0" class="group relative overflow-hidden flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[0_10px_40px_rgba(139,92,246,0.35)] focus:outline-none focus:ring-2 focus:ring-slate-300 dark:border-slate-800 dark:bg-slate-900 dark:focus:ring-slate-700">
         <div class="pointer-events-none absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition duration-500 bg-gradient-to-r from-violet-500/30 via-blue-400/30 to-fuchsia-500/30 blur-[6px]"></div>
         <div class="flex min-w-0 items-center gap-3">
           <img class="h-11 w-11 rounded-full object-cover transition duration-300 group-hover:scale-110" src="assets/xaden.png" alt="Xaden Riorson" loading="lazy">
           <div class="min-w-0">
             <h3 class="truncate text-sm font-semibold">Xaden Riorson</h3>
-            <div class="mt-1 flex flex-wrap items-center gap-2 text-xs text-slate-600 dark:text-slate-400">
-              <span class="rounded-full bg-slate-100 px-2 py-1 dark:bg-slate-950">Escuadrón: Fourth Wing</span>
-              <span class="text-slate-400">•</span>
-              <span>Rol: Líder</span>
-            </div>
+            <p class="mt-1 text-xs text-slate-600 dark:text-slate-400">Cuadrante: Jinetes</p>
+            <p class="text-xs text-slate-600 dark:text-slate-400">Escuadrón: Fourth Wing</p>
+            <p class="text-xs text-slate-600 dark:text-slate-400">Estado: Activo</p>
           </div>
         </div>
-        <div class="flex flex-col items-end gap-2">
+        <div class="flex flex-col items-end gap-1">
           <span class="rounded-full bg-emerald-500/15 px-3 py-1 text-xs font-semibold text-emerald-700 dark:text-emerald-300">Rango: Alto</span>
-          <span class="text-xs font-semibold text-slate-600 dark:text-slate-400">Activo</span>
+          <p class="text-xs text-slate-600 dark:text-slate-400">Vínculo: Sgaeyl</p>
         </div>
         <div class="pointer-events-none absolute inset-0 opacity-0 transition duration-500 group-hover:opacity-100 bg-gradient-to-r from-transparent via-white/20 to-transparent dark:via-violet-400/20 -translate-x-full group-hover:translate-x-full"></div>
       </article>
 
       <!-- Liam -->
-      <article tabindex="0" class="group relative overflow-hidden flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[0_10px_40px_rgba(139,92,246,0.35)] focus:outline-none focus:ring-2 focus:ring-slate-300 dark:border-slate-800 dark:bg-slate-900 dark:focus:ring-slate-700">
+      <article id="jinete-liam" data-search-target="liam liam mairi" data-rider-status="training" data-rider-quadrant="jinetes" tabindex="0" class="group relative overflow-hidden flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[0_10px_40px_rgba(139,92,246,0.35)] focus:outline-none focus:ring-2 focus:ring-slate-300 dark:border-slate-800 dark:bg-slate-900 dark:focus:ring-slate-700">
         <div class="pointer-events-none absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition duration-500 bg-gradient-to-r from-violet-500/30 via-blue-400/30 to-fuchsia-500/30 blur-[6px]"></div>
         <div class="flex min-w-0 items-center gap-3">
           <img class="h-11 w-11 rounded-full object-cover transition duration-300 group-hover:scale-110" src="assets/liam.png" alt="Liam Mairi" loading="lazy">
           <div class="min-w-0">
             <h3 class="truncate text-sm font-semibold">Liam Mairi</h3>
-            <div class="mt-1 flex flex-wrap items-center gap-2 text-xs text-slate-600 dark:text-slate-400">
-              <span class="rounded-full bg-slate-100 px-2 py-1 dark:bg-slate-950">Escuadrón: Fourth Wing</span>
-              <span class="text-slate-400">•</span>
-              <span>Vínculo: Deigh</span>
-            </div>
+            <p class="mt-1 text-xs text-slate-600 dark:text-slate-400">Cuadrante: Jinetes</p>
+            <p class="text-xs text-slate-600 dark:text-slate-400">Escuadrón: Fourth Wing</p>
+            <p class="text-xs text-slate-600 dark:text-slate-400">Estado: Entrenamiento</p>
           </div>
         </div>
-        <div class="flex flex-col items-end gap-2">
+        <div class="flex flex-col items-end gap-1">
           <span class="rounded-full bg-emerald-500/15 px-3 py-1 text-xs font-semibold text-emerald-700 dark:text-emerald-300">Rango: Alto</span>
-          <span class="text-xs font-semibold text-slate-600 dark:text-slate-400">Activo</span>
+          <p class="text-xs text-slate-600 dark:text-slate-400">Vínculo: Deigh</p>
         </div>
         <div class="pointer-events-none absolute inset-0 opacity-0 transition duration-500 group-hover:opacity-100 bg-gradient-to-r from-transparent via-white/20 to-transparent dark:via-violet-400/20 -translate-x-full group-hover:translate-x-full"></div>
       </article>
 
       <!-- Imogen -->
-      <article tabindex="0" class="group relative overflow-hidden flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[0_10px_40px_rgba(139,92,246,0.35)] focus:outline-none focus:ring-2 focus:ring-slate-300 dark:border-slate-800 dark:bg-slate-900 dark:focus:ring-slate-700">
+      <article id="jinete-imogen" data-search-target="imogen imogen cardulo glaene" data-rider-status="training" data-rider-quadrant="jinetes" tabindex="0" class="group relative overflow-hidden flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[0_10px_40px_rgba(139,92,246,0.35)] focus:outline-none focus:ring-2 focus:ring-slate-300 dark:border-slate-800 dark:bg-slate-900 dark:focus:ring-slate-700">
         <div class="pointer-events-none absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition duration-500 bg-gradient-to-r from-violet-500/30 via-blue-400/30 to-fuchsia-500/30 blur-[6px]"></div>
         <div class="flex min-w-0 items-center gap-3">
           <img class="h-11 w-11 rounded-full object-cover transition duration-300 group-hover:scale-110" src="assets/imogen.png" alt="Imogen Cardulo" loading="lazy">
           <div class="min-w-0">
             <h3 class="truncate text-sm font-semibold">Imogen Cardulo</h3>
-            <div class="mt-1 flex flex-wrap items-center gap-2 text-xs text-slate-600 dark:text-slate-400">
-              <span class="rounded-full bg-slate-100 px-2 py-1 dark:bg-slate-950">Escuadrón: Fourth Wing</span>
-              <span class="text-slate-400">•</span>
-              <span>Estado: Campo táctico</span>
-            </div>
+            <p class="mt-1 text-xs text-slate-600 dark:text-slate-400">Cuadrante: Jinetes</p>
+            <p class="text-xs text-slate-600 dark:text-slate-400">Escuadrón: Fourth Wing</p>
+            <p class="text-xs text-slate-600 dark:text-slate-400">Estado: Entrenamiento</p>
           </div>
         </div>
-        <div class="flex flex-col items-end gap-2">
+        <div class="flex flex-col items-end gap-1">
           <span class="rounded-full bg-amber-500/15 px-3 py-1 text-xs font-semibold text-amber-700 dark:text-amber-300">Rango: Medio</span>
-          <span class="text-xs font-semibold text-slate-600 dark:text-slate-400">Activo</span>
+          <p class="text-xs text-slate-600 dark:text-slate-400">Vínculo: Glaene</p>
         </div>
         <div class="pointer-events-none absolute inset-0 opacity-0 transition duration-500 group-hover:opacity-100 bg-gradient-to-r from-transparent via-white/20 to-transparent dark:via-violet-400/20 -translate-x-full group-hover:translate-x-full"></div>
       </article>
 
       <!-- Brennan -->
-      <article tabindex="0" class="group relative overflow-hidden flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[0_10px_40px_rgba(139,92,246,0.35)] focus:outline-none focus:ring-2 focus:ring-slate-300 dark:border-slate-800 dark:bg-slate-900 dark:focus:ring-slate-700">
+      <article id="jinete-brennan" data-search-target="brennan brennan sorrengail marbh" data-rider-status="archived" data-rider-quadrant="curanderos" tabindex="0" class="group relative overflow-hidden flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[0_10px_40px_rgba(139,92,246,0.35)] focus:outline-none focus:ring-2 focus:ring-slate-300 dark:border-slate-800 dark:bg-slate-900 dark:focus:ring-slate-700">
         <div class="pointer-events-none absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition duration-500 bg-gradient-to-r from-violet-500/30 via-blue-400/30 to-fuchsia-500/30 blur-[6px]"></div>
         <div class="flex min-w-0 items-center gap-3">
           <img class="h-11 w-11 rounded-full object-cover transition duration-300 group-hover:scale-110" src="assets/brennan.png" alt="Brennan Sorrengail" loading="lazy">
           <div class="min-w-0">
             <h3 class="truncate text-sm font-semibold">Brennan Sorrengail</h3>
-            <div class="mt-1 flex flex-wrap items-center gap-2 text-xs text-slate-600 dark:text-slate-400">
-              <span class="rounded-full bg-slate-100 px-2 py-1 dark:bg-slate-950">Registro: Reservado</span>
-              <span class="text-slate-400">•</span>
-              <span>Estado: Prioridad estratégica</span>
-            </div>
+            <p class="mt-1 text-xs text-slate-600 dark:text-slate-400">Cuadrante: Curanderos</p>
+            <p class="text-xs text-slate-600 dark:text-slate-400">Escuadrón: Fourth Wing</p>
+            <p class="text-xs text-slate-600 dark:text-slate-400">Estado: Archivado</p>
           </div>
         </div>
-        <div class="flex flex-col items-end gap-2">
+        <div class="flex flex-col items-end gap-1">
           <span class="rounded-full bg-emerald-500/15 px-3 py-1 text-xs font-semibold text-emerald-700 dark:text-emerald-300">Rango: Alto</span>
-          <span class="text-xs font-semibold text-slate-600 dark:text-slate-400">Activo</span>
+          <p class="text-xs text-slate-600 dark:text-slate-400">Vínculo: Marbh</p>
         </div>
         <div class="pointer-events-none absolute inset-0 opacity-0 transition duration-500 group-hover:opacity-100 bg-gradient-to-r from-transparent via-white/20 to-transparent dark:via-violet-400/20 -translate-x-full group-hover:translate-x-full"></div>
       </article>
 
       <!-- Mira -->
-      <article tabindex="0" class="group relative overflow-hidden flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[0_10px_40px_rgba(139,92,246,0.35)] focus:outline-none focus:ring-2 focus:ring-slate-300 dark:border-slate-800 dark:bg-slate-900 dark:focus:ring-slate-700">
+      <article id="jinete-mira" data-search-target="mira mira sorrengail" data-rider-status="archived" data-rider-quadrant="jinetes" tabindex="0" class="group relative overflow-hidden flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[0_10px_40px_rgba(139,92,246,0.35)] focus:outline-none focus:ring-2 focus:ring-slate-300 dark:border-slate-800 dark:bg-slate-900 dark:focus:ring-slate-700">
         <div class="pointer-events-none absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition duration-500 bg-gradient-to-r from-violet-500/30 via-blue-400/30 to-fuchsia-500/30 blur-[6px]"></div>
         <div class="flex min-w-0 items-center gap-3">
           <img class="h-11 w-11 rounded-full object-cover transition duration-300 group-hover:scale-110" src="assets/mira.png" alt="Mira Sorrengail" loading="lazy">
           <div class="min-w-0">
             <h3 class="truncate text-sm font-semibold">Mira Sorrengail</h3>
-            <div class="mt-1 flex flex-wrap items-center gap-2 text-xs text-slate-600 dark:text-slate-400">
-              <span class="rounded-full bg-slate-100 px-2 py-1 dark:bg-slate-950">Escuadrón: Frontera</span>
-              <span class="text-slate-400">•</span>
-              <span>Vínculo: Teine</span>
-            </div>
+            <p class="mt-1 text-xs text-slate-600 dark:text-slate-400">Cuadrante: Jinetes</p>
+            <p class="text-xs text-slate-600 dark:text-slate-400">Escuadrón: Frontera</p>
+            <p class="text-xs text-slate-600 dark:text-slate-400">Estado: Archivado</p>
           </div>
         </div>
-        <div class="flex flex-col items-end gap-2">
+        <div class="flex flex-col items-end gap-1">
           <span class="rounded-full bg-emerald-500/15 px-3 py-1 text-xs font-semibold text-emerald-700 dark:text-emerald-300">Rango: Alto</span>
-          <span class="text-xs font-semibold text-slate-600 dark:text-slate-400">Desplegada</span>
+          <p class="text-xs text-slate-600 dark:text-slate-400">Vínculo: Teine</p>
         </div>
         <div class="pointer-events-none absolute inset-0 opacity-0 transition duration-500 group-hover:opacity-100 bg-gradient-to-r from-transparent via-white/20 to-transparent dark:via-violet-400/20 -translate-x-full group-hover:translate-x-full"></div>
       </article>
 
       <!-- Dain -->
-      <article tabindex="0" class="group relative overflow-hidden flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[0_10px_40px_rgba(139,92,246,0.35)] focus:outline-none focus:ring-2 focus:ring-slate-300 dark:border-slate-800 dark:bg-slate-900 dark:focus:ring-slate-700">
+      <article
+        id="jinete-dain"
+        data-search-target="dain aetos jinete fourth wing cath"
+        data-rider-status="active"
+        data-rider-quadrant="jinetes"
+        tabindex="0"
+        class="group relative overflow-hidden flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[0_10px_40px_rgba(139,92,246,0.35)] focus:outline-none focus:ring-2 focus:ring-slate-300 dark:border-slate-800 dark:bg-slate-900 dark:focus:ring-slate-700"
+      >
         <div class="pointer-events-none absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition duration-500 bg-gradient-to-r from-violet-500/30 via-blue-400/30 to-fuchsia-500/30 blur-[6px]"></div>
         <div class="flex min-w-0 items-center gap-3">
           <img class="h-11 w-11 rounded-full object-cover transition duration-300 group-hover:scale-110" src="assets/dain.png" alt="Dain Aetos" loading="lazy">
           <div class="min-w-0">
             <h3 class="truncate text-sm font-semibold">Dain Aetos</h3>
-            <div class="mt-1 flex flex-wrap items-center gap-2 text-xs text-slate-600 dark:text-slate-400">
-              <span class="rounded-full bg-slate-100 px-2 py-1 dark:bg-slate-950">Escuadrón: Fourth Wing</span>
-              <span class="text-slate-400">•</span>
-              <span>Estado: Supervisión</span>
-            </div>
+            <p class="mt-1 text-xs text-slate-600 dark:text-slate-400">Cuadrante: Jinetes</p>
+            <p class="text-xs text-slate-600 dark:text-slate-400">Escuadrón: Fourth Wing</p>
+            <p class="text-xs text-slate-600 dark:text-slate-400">Estado: Activo</p>
           </div>
         </div>
-        <div class="flex flex-col items-end gap-2">
+        <div class="flex flex-col items-end gap-1">
           <span class="rounded-full bg-amber-500/15 px-3 py-1 text-xs font-semibold text-amber-700 dark:text-amber-300">Rango: Medio</span>
-          <span class="text-xs font-semibold text-slate-600 dark:text-slate-400">Activo</span>
+          <p class="text-xs text-slate-600 dark:text-slate-400">Vínculo: Cath</p>
         </div>
         <div class="pointer-events-none absolute inset-0 opacity-0 transition duration-500 group-hover:opacity-100 bg-gradient-to-r from-transparent via-white/20 to-transparent dark:via-violet-400/20 -translate-x-full group-hover:translate-x-full"></div>
       </article>
 
       <!-- Rhiannon -->
-      <article tabindex="0" class="group relative overflow-hidden flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[0_10px_40px_rgba(139,92,246,0.35)] focus:outline-none focus:ring-2 focus:ring-slate-300 dark:border-slate-800 dark:bg-slate-900 dark:focus:ring-slate-700">
+      <article
+        id="jinete-rhiannon"
+        data-search-target="rhiannon matthias jinete fourth wing feirge"
+        data-rider-status="training"
+        data-rider-quadrant="jinetes"
+        tabindex="0"
+        class="group relative overflow-hidden flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[0_10px_40px_rgba(139,92,246,0.35)] focus:outline-none focus:ring-2 focus:ring-slate-300 dark:border-slate-800 dark:bg-slate-900 dark:focus:ring-slate-700"
+      >
         <div class="pointer-events-none absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition duration-500 bg-gradient-to-r from-violet-500/30 via-blue-400/30 to-fuchsia-500/30 blur-[6px]"></div>
         <div class="flex min-w-0 items-center gap-3">
           <img class="h-11 w-11 rounded-full object-cover transition duration-300 group-hover:scale-110" src="assets/rhiannon.png" alt="Rhiannon Matthias" loading="lazy">
           <div class="min-w-0">
             <h3 class="truncate text-sm font-semibold">Rhiannon Matthias</h3>
-            <div class="mt-1 flex flex-wrap items-center gap-2 text-xs text-slate-600 dark:text-slate-400">
-              <span class="rounded-full bg-slate-100 px-2 py-1 dark:bg-slate-950">Escuadrón: Fourth Wing</span>
-              <span class="text-slate-400">•</span>
-              <span>Estado: Entrenamiento</span>
-            </div>
+            <p class="mt-1 text-xs text-slate-600 dark:text-slate-400">Cuadrante: Jinetes</p>
+            <p class="text-xs text-slate-600 dark:text-slate-400">Escuadrón: Fourth Wing</p>
+            <p class="text-xs text-slate-600 dark:text-slate-400">Estado: Entrenamiento</p>
           </div>
         </div>
-        <div class="flex flex-col items-end gap-2">
+        <div class="flex flex-col items-end gap-1">
           <span class="rounded-full bg-sky-500/15 px-3 py-1 text-xs font-semibold text-sky-700 dark:text-sky-300">Rango: Bajo</span>
-          <span class="text-xs font-semibold text-slate-600 dark:text-slate-400">Entrenamiento</span>
+          <p class="text-xs text-slate-600 dark:text-slate-400">Vínculo: Feirge</p>
+        </div>
+        <div class="pointer-events-none absolute inset-0 opacity-0 transition duration-500 group-hover:opacity-100 bg-gradient-to-r from-transparent via-white/20 to-transparent dark:via-violet-400/20 -translate-x-full group-hover:translate-x-full"></div>
+      </article>
+
+      <!-- Nolon -->
+      <article
+        id="jinete-nolon"
+        data-search-target="nolon curandero fourth wing"
+        data-rider-status="active"
+        data-rider-quadrant="curanderos"
+        tabindex="0"
+        class="group relative overflow-hidden flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[0_10px_40px_rgba(139,92,246,0.35)] focus:outline-none focus:ring-2 focus:ring-slate-300 dark:border-slate-800 dark:bg-slate-900 dark:focus:ring-slate-700"
+      >
+        <div class="pointer-events-none absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition duration-500 bg-gradient-to-r from-violet-500/30 via-blue-400/30 to-fuchsia-500/30 blur-[6px]"></div>
+        <div class="flex min-w-0 items-center gap-3">
+          <img class="h-11 w-11 rounded-full object-cover transition duration-300 group-hover:scale-110" src="assets/nolon.png" alt="Nolon" loading="lazy">
+          <div class="min-w-0">
+            <h3 class="truncate text-sm font-semibold">Nolon Colbersy</h3>
+            <p class="mt-1 text-xs text-slate-600 dark:text-slate-400">Cuadrante: Curanderos</p>
+            <p class="text-xs text-slate-600 dark:text-slate-400">Escuadrón: Fourth Wing</p>
+            <p class="text-xs text-slate-600 dark:text-slate-400">Estado: Activo</p>
+          </div>
+        </div>
+        <div class="flex flex-col items-end gap-1">
+          <span class="rounded-full bg-emerald-500/15 px-3 py-1 text-xs font-semibold text-emerald-700 dark:text-emerald-300">Rango: Medio</span>
+          <p class="text-xs text-slate-600 dark:text-slate-400">Vínculo: —</p>
+        </div>
+        <div class="pointer-events-none absolute inset-0 opacity-0 transition duration-500 group-hover:opacity-100 bg-gradient-to-r from-transparent via-white/20 to-transparent dark:via-violet-400/20 -translate-x-full group-hover:translate-x-full"></div>
+      </article>
+
+      <!-- Markham -->
+      <article
+        id="jinete-markham"
+        data-search-target="markham escribas fourth wing"
+        data-rider-status="active"
+        data-rider-quadrant="escribas"
+        tabindex="0"
+        class="group relative overflow-hidden flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[0_10px_40px_rgba(139,92,246,0.35)] focus:outline-none focus:ring-2 focus:ring-slate-300 dark:border-slate-800 dark:bg-slate-900 dark:focus:ring-slate-700"
+      >
+        <div class="pointer-events-none absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition duration-500 bg-gradient-to-r from-violet-500/30 via-blue-400/30 to-fuchsia-500/30 blur-[6px]"></div>
+        <div class="flex min-w-0 items-center gap-3">
+          <img class="h-11 w-11 rounded-full object-cover transition duration-300 group-hover:scale-110" src="assets/markham.png" alt="Markham" loading="lazy">
+          <div class="min-w-0">
+            <h3 class="truncate text-sm font-semibold">Markham</h3>
+            <p class="mt-1 text-xs text-slate-600 dark:text-slate-400">Cuadrante: Escribas</p>
+            <p class="text-xs text-slate-600 dark:text-slate-400">Escuadrón: Fourth Wing</p>
+            <p class="text-xs text-slate-600 dark:text-slate-400">Estado: Activo</p>
+          </div>
+        </div>
+        <div class="flex flex-col items-end gap-1">
+          <span class="rounded-full bg-amber-500/15 px-3 py-1 text-xs font-semibold text-amber-700 dark:text-amber-300">Rango: Medio</span>
+          <p class="text-xs text-slate-600 dark:text-slate-400">Vínculo: —</p>
+        </div>
+        <div class="pointer-events-none absolute inset-0 opacity-0 transition duration-500 group-hover:opacity-100 bg-gradient-to-r from-transparent via-white/20 to-transparent dark:via-violet-400/20 -translate-x-full group-hover:translate-x-full"></div>
+      </article>
+
+      <!-- Jesinia -->
+      <article
+        id="jinete-jesinia"
+        data-search-target="jesinia escribas fourth wing"
+        data-rider-status="active"
+        data-rider-quadrant="escribas"
+        tabindex="0"
+        class="group relative overflow-hidden flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[0_10px_40px_rgba(139,92,246,0.35)] focus:outline-none focus:ring-2 focus:ring-slate-300 dark:border-slate-800 dark:bg-slate-900 dark:focus:ring-slate-700"
+      >
+        <div class="pointer-events-none absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition duration-500 bg-gradient-to-r from-violet-500/30 via-blue-400/30 to-fuchsia-500/30 blur-[6px]"></div>
+        <div class="flex min-w-0 items-center gap-3">
+          <img class="h-11 w-11 rounded-full object-cover transition duration-300 group-hover:scale-110" src="assets/jesinia.png" alt="Jesinia" loading="lazy">
+          <div class="min-w-0">
+            <h3 class="truncate text-sm font-semibold">Jesinia Neilwart</h3>
+            <p class="mt-1 text-xs text-slate-600 dark:text-slate-400">Cuadrante: Escribas</p>
+            <p class="text-xs text-slate-600 dark:text-slate-400">Escuadrón: Fourth Wing</p>
+            <p class="text-xs text-slate-600 dark:text-slate-400">Estado: Activo</p>
+          </div>
+        </div>
+        <div class="flex flex-col items-end gap-1">
+          <span class="rounded-full bg-sky-500/15 px-3 py-1 text-xs font-semibold text-sky-700 dark:text-sky-300">Rango: Bajo</span>
+          <p class="text-xs text-slate-600 dark:text-slate-400">Vínculo: —</p>
         </div>
         <div class="pointer-events-none absolute inset-0 opacity-0 transition duration-500 group-hover:opacity-100 bg-gradient-to-r from-transparent via-white/20 to-transparent dark:via-violet-400/20 -translate-x-full group-hover:translate-x-full"></div>
       </article>
@@ -501,7 +594,7 @@
         </p>
       </div>
       <span class="rounded-full border border-violet-200 bg-violet-50 px-3 py-1 text-[11px] font-semibold text-violet-700 dark:border-violet-400/20 dark:bg-violet-400/10 dark:text-violet-200">
-        7 vínculos verificados
+        9 vínculos verificados
       </span>
     </div>
 
@@ -522,7 +615,7 @@
     <!-- FICHAS PRINCIPALES JUSTO DEBAJO -->
     <section class="grid gap-3 sm:grid-cols-3" aria-label="Lista de dragones principales">
       <!-- Tairn -->
-      <article class="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[0_10px_40px_rgba(244,63,94,0.35)] dark:border-slate-800 dark:bg-slate-900">
+      <article id="dragon-tairn" data-search-target="tairn dragon negro violet" class="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[0_10px_40px_rgba(244,63,94,0.35)] dark:border-slate-800 dark:bg-slate-900">
         <div class="text-sm font-semibold">Tairn</div>
         <div class="mt-1 text-xs text-slate-600 dark:text-slate-400">
           Tipo: Negro • Temperamento: Letal
@@ -536,7 +629,7 @@
       </article>
 
       <!-- Sgaeyl -->
-      <article class="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[0_10px_40px_rgba(59,130,246,0.35)] dark:border-slate-800 dark:bg-slate-900">
+      <article id="dragon-sgaeyl" data-search-target="sgaeyl dragon azul xaden" class="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[0_10px_40px_rgba(59,130,246,0.35)] dark:border-slate-800 dark:bg-slate-900">
         <div class="text-sm font-semibold">Sgaeyl</div>
         <div class="mt-1 text-xs text-slate-600 dark:text-slate-400">
           Tipo: Azul • Conducta: Reservada
@@ -550,7 +643,7 @@
       </article>
 
       <!-- Andarna -->
-      <article class="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[0_10px_40px_rgba(251,191,36,0.35)] dark:border-slate-800 dark:bg-slate-900">
+      <article id="dragon-andarna" data-search-target="andarna dragon dorado violet" class="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[0_10px_40px_rgba(251,191,36,0.35)] dark:border-slate-800 dark:bg-slate-900">
         <div class="text-sm font-semibold">Andarna</div>
         <div class="mt-1 text-xs text-slate-600 dark:text-slate-400">
           Tipo: Dorado • Estado: Joven
@@ -567,6 +660,155 @@
     <!-- NUEVOS DRAGONES -->
 <section aria-label="Galería de dragones nuevos">
   <div class="grid md:grid-cols-2" style="gap: 2rem;">
+
+
+<!-- Feirge -->
+<div class="group space-y-3 relative" id="dragon-feirge" data-search-target="feirge dragon azul rhiannon">
+  <div class="relative overflow-visible">
+    <div
+      class="dragon-halo pointer-events-none absolute -z-10 rounded-[2rem] transition-opacity duration-500"
+      style="inset: -0.35rem; background-color: rgba(56, 189, 248, 0.85); filter: blur(1.25rem);"
+    ></div>
+
+    <div class="relative overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
+      <div class="pointer-events-none absolute inset-0 opacity-0 transition duration-500 group-hover:opacity-100 bg-sky-500/15"></div>
+
+      <img
+        src="assets/cath.png"
+        alt="Feirge"
+        loading="lazy"
+        class="h-44 w-full object-cover object-center transition duration-500 group-hover:scale-105"
+      >
+
+      <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent"></div>
+
+      <div class="absolute inset-0 flex items-end p-4 opacity-0 translate-y-3 transition duration-500 group-hover:opacity-100 group-hover:translate-y-0">
+        <div class="w-full rounded-xl border border-white/10 bg-slate-950/70 p-3 text-white backdrop-blur-md">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] uppercase tracking-widest text-sky-200">Archivo clasificado</span>
+            <span class="rounded-full bg-sky-400/20 px-2 py-0.5 text-[10px] font-semibold text-sky-200">AZUL</span>
+          </div>
+
+          <div class="mt-3 grid grid-cols-2 gap-2 text-[11px]">
+            <div class="rounded-lg bg-white/5 p-2">
+              <div class="text-slate-300">Rareza</div>
+              <div class="font-semibold">Ligera</div>
+            </div>
+            <div class="rounded-lg bg-white/5 p-2">
+              <div class="text-slate-300">Estado</div>
+              <div class="font-semibold">Activo</div>
+            </div>
+            <div class="rounded-lg bg-white/5 p-2">
+              <div class="text-slate-300">Afinidad</div>
+              <div class="font-semibold">Velocidad</div>
+            </div>
+            <div class="rounded-lg bg-white/5 p-2">
+              <div class="text-slate-300">Zona</div>
+              <div class="font-semibold">Patrulla rápida</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <article class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition duration-300 group-hover:-translate-y-1 group-hover:shadow-xl group-hover:shadow-[0_10px_30px_rgba(56,189,248,0.25)] dark:border-slate-800 dark:bg-slate-900">
+    <div class="flex items-start justify-between gap-2">
+      <div>
+        <div class="text-sm font-semibold transition duration-300 group-hover:text-sky-700 dark:group-hover:text-sky-300">
+          Feirge
+        </div>
+        <div class="mt-1 text-xs text-slate-600 dark:text-slate-400">
+          Azul claro • Rol: Apoyo aéreo
+        </div>
+      </div>
+      <span class="text-lg opacity-70 transition duration-300 group-hover:scale-110">💨</span>
+    </div>
+    <div class="mt-3 flex flex-wrap gap-2">
+      <span class="rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-semibold transition duration-300 group-hover:bg-slate-200 dark:bg-slate-950 dark:group-hover:bg-slate-800">
+        Vínculo táctico
+      </span>
+      <span class="rounded-full bg-sky-500/15 px-2.5 py-1 text-[11px] font-semibold text-sky-700 transition duration-300 group-hover:bg-sky-500/25 dark:text-sky-300">
+        Respuesta rápida
+      </span>
+    </div>
+  </article>
+</div>
+
+ <!-- Cath -->
+<div class="group space-y-3 relative" id="dragon-cath" data-search-target="cath dragon bronce exploración ruta exterior">
+  <div class="relative overflow-visible">
+    <div
+      class="dragon-halo pointer-events-none absolute -z-10 rounded-[2rem] transition-opacity duration-500"
+      style="inset: -0.35rem; background-color: rgba(251, 146, 60, 0.85); filter: blur(1.25rem);"
+    ></div>
+
+    <div class="relative overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
+      <div class="pointer-events-none absolute inset-0 opacity-0 transition duration-500 group-hover:opacity-100 bg-amber-500/15"></div>
+
+      <img
+        src="assets/feirge.png"
+        alt="Cath"
+        loading="lazy"
+        class="h-44 w-full object-cover object-center transition duration-500 group-hover:scale-105"
+      >
+
+      <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent"></div>
+
+      <div class="absolute inset-0 flex items-end p-4 opacity-0 translate-y-3 transition duration-500 group-hover:opacity-100 group-hover:translate-y-0">
+        <div class="w-full rounded-xl border border-white/10 bg-slate-950/70 p-3 text-white backdrop-blur-md">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] uppercase tracking-widest text-amber-200">Archivo clasificado</span>
+            <span class="rounded-full bg-amber-400/20 px-2 py-0.5 text-[10px] font-semibold text-amber-200">NARANJA</span>
+          </div>
+
+          <div class="mt-3 grid grid-cols-2 gap-2 text-[11px]">
+            <div class="rounded-lg bg-white/5 p-2">
+              <div class="text-slate-300">Rareza</div>
+              <div class="font-semibold">Alta</div>
+            </div>
+            <div class="rounded-lg bg-white/5 p-2">
+              <div class="text-slate-300">Estado</div>
+              <div class="font-semibold">Activo</div>
+            </div>
+            <div class="rounded-lg bg-white/5 p-2">
+              <div class="text-slate-300">Afinidad</div>
+              <div class="font-semibold">Exploración</div>
+            </div>
+            <div class="rounded-lg bg-white/5 p-2">
+              <div class="text-slate-300">Zona</div>
+              <div class="font-semibold">Ruta exterior</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <article class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition duration-300 group-hover:-translate-y-1 group-hover:shadow-xl group-hover:shadow-[0_10px_30px_rgba(251,146,60,0.25)] dark:border-slate-800 dark:bg-slate-900">
+    <div class="flex items-start justify-between gap-2">
+      <div>
+        <div class="text-sm font-semibold transition duration-300 group-hover:text-amber-700 dark:group-hover:text-amber-300">
+          Cath
+        </div>
+        <div class="mt-1 text-xs text-slate-600 dark:text-slate-400">
+          Bronce • Exploración de largo alcance
+        </div>
+      </div>
+      <span class="text-lg opacity-70 transition duration-300 group-hover:scale-110">🧭</span>
+    </div>
+    <div class="mt-3 flex flex-wrap gap-2">
+      <span class="rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-semibold transition duration-300 group-hover:bg-slate-200 dark:bg-slate-950 dark:group-hover:bg-slate-800">
+        Cartografía
+      </span>
+      <span class="rounded-full bg-amber-500/15 px-2.5 py-1 text-[11px] font-semibold text-amber-700 transition duration-300 group-hover:bg-amber-500/25 dark:text-amber-300">
+        Largo alcance
+      </span>
+    </div>
+  </article>
+</div>
+  
+  
 <!-- Glaene (rojo) -->
 <div class="group space-y-3 relative">
   <div class="relative overflow-visible">
@@ -608,7 +850,6 @@
             <div class="font-semibold">Cordillera</div>
           </div>
         </div>
-    
       </div>
     </div>
   </div>
@@ -636,7 +877,7 @@
 </div>
 
  <!-- Deigh (azul) -->
- <div class="group space-y-3 relative">
+ <div id="dragon-deigh" data-search-target="deigh dragon rojo liam" class="group space-y-3 relative">
   <div class="relative overflow-visible">
     <div class="dragon-halo pointer-events-none absolute -z-10 rounded-[2rem] transition-opacity duration-500" style="inset: -0.35rem; background-color: rgba(14, 165, 233, 0.85); filter: blur(1.25rem);"></div>
     <div class="relative overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
@@ -709,7 +950,7 @@
   
 
   <!-- Teine (verde) -->
-  <div class="group space-y-3 relative">
+  <div id="dragon-teine" data-search-target="teine dragon verde mira" class="group space-y-3 relative">
     <div class="relative overflow-visible">
       <div class="dragon-halo pointer-events-none absolute -z-10 rounded-[2rem] transition-opacity duration-500" style="inset: -0.35rem; background-color: rgba(16, 185, 129, 0.85); filter: blur(1.25rem);"></div>
       <div class="relative overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
@@ -778,7 +1019,7 @@
   </div>
 
   <!-- Marbh -->
-  <div class="group space-y-3 relative">
+  <div class="group space-y-3 relative" id="dragon-marbh" data-search-target="marbh dragon rojo brennan">
     <div class="relative overflow-visible">
       <div class="dragon-halo pointer-events-none absolute -z-10 rounded-[2rem] transition-opacity duration-500" style="inset: -0.35rem; background-color: rgba(244, 63, 94, 0.85); filter: blur(1.25rem);"></div>
       <div class="relative overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
@@ -797,7 +1038,7 @@
           
           <div class="flex items-center justify-between">
             <span class="text-[10px] uppercase tracking-widest text-rose-200">Archivo clasificado</span>
-            <span class="rounded-full bg-rose-400/20 px-2 py-0.5 text-[10px] font-semibold text-rose-200">NEGRO</span>
+            <span class="rounded-full bg-rose-400/20 px-2 py-0.5 text-[10px] font-semibold text-rose-200">ROJO</span>
           </div>
       
           <div class="mt-3 grid grid-cols-2 gap-2 text-[11px]">
@@ -830,7 +1071,7 @@
           <div class="text-sm font-semibold transition duration-300 group-hover:text-rose-700 dark:group-hover:text-rose-300">
             Marbh
           </div>
-          <div class="mt-1 text-xs text-slate-600 dark:text-slate-400">Negro • Jinete: Brennan</div>
+          <div class="mt-1 text-xs text-slate-600 dark:text-slate-400">Rojo • Jinete: Brennan</div>
         </div>
         <span class="text-lg opacity-70 transition duration-300 group-hover:scale-110">🔥</span>
       </div>
@@ -848,7 +1089,7 @@
 
   </div>
   <!-- Archivo clasificado: expediciones (ancho completo, solo visible al pasar el ratón) -->
-  <div class="mt-8">
+  <div id="archivo-clasificado" class="mt-8" style="margin-top: 2rem;">
   <div class="group secret-card relative flex flex-col rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50/80 p-4 transition duration-300 hover:border-violet-400 hover:bg-slate-100 hover:shadow-lg hover:shadow-violet-500/10 dark:border-slate-600 dark:bg-slate-900/80 dark:hover:border-violet-500 dark:hover:bg-slate-800/90 w-full">
     <div class="flex items-start justify-between gap-2">
       <div class="flex items-center gap-2">
@@ -981,52 +1222,12 @@
   </section>
 
   <!-- DETAIL -->
-  <aside class="min-w-0 space-y-4 self-start lg:sticky lg:top-24">
+  <aside class="min-w-0 space-y-4">
     <div class="flex items-end justify-between">
       <div>
-        <h2 class="text-sm font-semibold text-slate-800 dark:text-slate-100">Dragones</h2>
-        <div class="text-xs text-slate-600 dark:text-slate-400">Panorama</div>
+        <h2 class="text-sm font-semibold text-slate-800 dark:text-slate-100">Panorama</h2>
       </div>
     </div>
-
-    <section class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-      <div class="flex items-start justify-between gap-3">
-        <div>
-          <div class="text-sm font-semibold">Violet Sorrengail</div>
-          <div class="mt-1 text-xs text-slate-600 dark:text-slate-400">Cuadrante: Jinetes • Estado: Activo</div>
-        </div>
-        <span class="rounded-full border border-rose-300/40 bg-gradient-to-r from-rose-500/20 to-fuchsia-500/10 px-3 py-1 text-xs font-semibold text-rose-700 dark:border-rose-400/20 dark:text-rose-200">Prioridad alta</span>
-      </div>
-
-      <div class="mt-4 grid grid-cols-2 gap-3 text-sm">
-        <div class="rounded-xl bg-slate-50 p-3 dark:bg-slate-950">
-          <div class="text-xs text-slate-600 dark:text-slate-400">Escuadrón</div>
-          <div class="mt-1 font-semibold">Fourth Wing</div>
-        </div>
-        <div class="rounded-xl bg-slate-50 p-3 dark:bg-slate-950">
-          <div class="text-xs text-slate-600 dark:text-slate-400">Rango</div>
-          <div class="mt-1 font-semibold">Alto</div>
-        </div>
-        <div class="rounded-xl bg-slate-50 p-3 dark:bg-slate-950">
-          <div class="text-xs text-slate-600 dark:text-slate-400">Vínculo</div>
-          <div class="mt-1 font-semibold">Tairn / Andarna</div>
-        </div>
-        <div class="rounded-xl bg-slate-50 p-3 dark:bg-slate-950">
-          <div class="text-xs text-slate-600 dark:text-slate-400">Ubicación</div>
-          <div class="mt-1 font-semibold">Basgiath</div>
-        </div>
-      </div>
-
-      <div class="mt-4 flex gap-2">
-        <button class="rounded-xl border px-4 py-2 text-sm font-semibold shadow-sm transition border-violet-200 bg-violet-50 text-violet-800 hover:-translate-y-0.5 hover:bg-violet-100 hover:border-violet-300 hover:shadow focus:outline-none focus:ring-2 focus:ring-violet-200 focus:ring-offset-2 dark:border-violet-400/20 dark:bg-violet-400/10 dark:text-violet-100 dark:hover:bg-violet-400/20 dark:hover:border-violet-400/30 dark:focus:ring-violet-500" type="button">
-          Editar perfil
-        </button>
-
-        <button class="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:-translate-y-0.5 hover:bg-slate-50 hover:shadow focus:outline-none focus:ring-2 focus:ring-slate-300 focus:ring-offset-2 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-200 dark:hover:bg-slate-800 dark:focus:ring-slate-700" type="button">
-          Archivar
-        </button>
-      </div>
-    </section>
 
     <section class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900">
       <h3 class="text-sm font-semibold">Actividad reciente</h3>

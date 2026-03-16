@@ -13,6 +13,7 @@ const taskInputEl = document.querySelector("#task-input");
 const taskPriorityEl = document.querySelector("#task-priority");
 const taskListEl = document.querySelector("#task-list");
 const taskSearchEl = document.querySelector("#task-search");
+const globalSearchEl = document.querySelector("#global-search");
 
 const btnNewTaskEl = document.querySelector("#btn-new-task");
 
@@ -30,6 +31,37 @@ const STORAGE_KEY = "taskflow_tasks";
 let tasks = [];
 let currentFilter = "all";
 let currentPriorityFilter = "all";
+let currentRiderStatusFilter = "all";
+let currentRiderQuadrantFilter = "all";
+
+// ===== BÚSQUEDA GLOBAL (jinetes / dragones) =====
+/**
+ * Mapa de nombres que se pueden escribir en el buscador global
+ * hacia el id de la sección correspondiente.
+ * Permite varios alias por elemento.
+ */
+const GLOBAL_SEARCH_TARGETS = [
+  { id: "jinete-violet", names: ["violet", "violet sorrengail"] },
+  { id: "jinete-xaden", names: ["xaden", "xaden riorson"] },
+  { id: "jinete-liam", names: ["liam", "liam mairi"] },
+  { id: "jinete-imogen", names: ["imogen", "imogen cardulo"] },
+  { id: "jinete-brennan", names: ["brennan", "brennan sorrengail"] },
+  { id: "jinete-mira", names: ["mira", "mira sorrengail"] },
+  { id: "jinete-dain", names: ["dain", "dain aetos"] },
+  { id: "jinete-rhiannon", names: ["rhiannon", "rhiannon matthias"] },
+  { id: "jinete-nolon", names: ["nolon"] },
+  { id: "jinete-markham", names: ["markham"] },
+  { id: "jinete-jesinia", names: ["jesinia"] },
+  { id: "dragon-tairn", names: ["tairn"] },
+  { id: "dragon-sgaeyl", names: ["sgaeyl"] },
+  { id: "dragon-andarna", names: ["andarna"] },
+  { id: "dragon-deigh", names: ["deigh"] },
+  { id: "dragon-teine", names: ["teine"] },
+  { id: "dragon-glaene", names: ["glaene", "glane"] },
+  { id: "dragon-marbh", names: ["marbh"] },
+  { id: "dragon-feirge", names: ["feirge"] },
+  { id: "dragon-cath", names: ["cath"] },
+];
 
 // ===== LOCALSTORAGE =====
 /**
@@ -131,6 +163,50 @@ function loadTasks() {
   }
 
   tasks = stored.map(normalizeTask);
+}
+
+/**
+ * Busca un elemento de la página (jinete o dragón) a partir del texto
+ * introducido en el buscador global y, si lo encuentra, hace scroll
+ * suave hasta él.
+ * @param {string} rawQuery
+ * @returns {void}
+ */
+function runGlobalSearch(rawQuery) {
+  const query = (rawQuery || "").trim().toLowerCase();
+  if (!query) return;
+
+  // 1) Intentar con el mapa explícito de nombres
+  const directMatch = GLOBAL_SEARCH_TARGETS.find((target) =>
+    target.names.some((name) => query.includes(name)),
+  );
+
+  let targetElement = directMatch ? document.getElementById(directMatch.id) : null;
+
+  // 2) Fallback: buscar en elementos marcados con data-search-target
+  if (!targetElement) {
+    const all = document.querySelectorAll("[data-search-target]");
+    for (const el of all) {
+      const keywords = (el.getAttribute("data-search-target") || "").toLowerCase();
+      if (keywords.includes(query)) {
+        targetElement = /** @type {HTMLElement} */ (el);
+        break;
+      }
+    }
+  }
+
+  if (!targetElement) return;
+
+  targetElement.scrollIntoView({ behavior: "smooth", block: "center" });
+
+  targetElement.classList.add("mission-highlight");
+  window.setTimeout(() => {
+    targetElement.classList.remove("mission-highlight");
+  }, 2200);
+
+  if (typeof targetElement.focus === "function") {
+    targetElement.focus();
+  }
 }
 
 // ===== LÓGICA =====
@@ -381,12 +457,10 @@ function initTaskFilters() {
       currentFilter = btn.dataset.filter;
 
       buttons.forEach((b) => {
-        b.classList.remove("ring-2", "ring-violet-300", "shadow-lg", "scale-105");
-        b.classList.add("shadow-sm");
+        b.classList.remove("task-filter-active");
       });
 
-      btn.classList.remove("shadow-sm");
-      btn.classList.add("ring-2", "ring-violet-300", "shadow-lg", "scale-105");
+      btn.classList.add("task-filter-active");
 
       renderTasks(taskSearchEl?.value || "");
     });
@@ -394,7 +468,7 @@ function initTaskFilters() {
 
   const defaultButton = document.querySelector('[data-filter="all"]');
   if (defaultButton) {
-    defaultButton.classList.add("ring-2", "ring-violet-300", "shadow-lg", "scale-105");
+    defaultButton.classList.add("task-filter-active");
   }
 }
 
@@ -410,12 +484,10 @@ function initPriorityFilters() {
       currentPriorityFilter = btn.dataset.priority || "all";
 
       buttons.forEach((b) => {
-        b.classList.remove("ring-2", "ring-slate-300", "shadow-lg", "scale-105");
-        b.classList.add("shadow-sm");
+        b.classList.remove("priority-filter-active");
       });
 
-      btn.classList.remove("shadow-sm");
-      btn.classList.add("ring-2", "ring-slate-300", "shadow-lg", "scale-105");
+      btn.classList.add("priority-filter-active");
 
       renderTasks(taskSearchEl?.value || "");
     });
@@ -590,15 +662,28 @@ function handleTaskListAction(action, id) {
   }
 }
 
-// Maneja los clics dentro de la lista (toggle, editar o eliminar según el botón pulsado).
+// Maneja los clics dentro de la lista:
+// - Clic en "Editar" o "Eliminar": acción correspondiente
+// - Clic en cualquier otra parte de la tarea (li): marcar / desmarcar como completada
 taskListEl?.addEventListener("click", (e) => {
+  // 1) ¿Se ha hecho clic en alguno de los botones de acción?
   const btn = getActionButtonFromEvent(e);
-  if (!btn) return;
+  if (btn) {
+    const idFromBtn = getTaskIdFromButton(btn);
+    if (!idFromBtn) return;
+    handleTaskListAction(btn.dataset.action, idFromBtn);
+    return;
+  }
 
-  const id = getTaskIdFromButton(btn);
+  // 2) Si no hay botón, pero el clic ha sido dentro de una tarea, alternar completada/pending
+  const li = e.target.closest?.("li[data-id]");
+  if (!li || !taskListEl?.contains(li)) return;
+
+  const id = li.dataset.id;
   if (!id) return;
 
-  handleTaskListAction(btn.dataset.action, id);
+  tasks = toggleTaskById(tasks, id);
+  commitTasks();
 });
 
 // Abre el modal al pulsar el botón "+ Nuevo" de la barra superior.
@@ -714,9 +799,168 @@ document.addEventListener("keydown", (e) => {
     });
   }
 
+  /**
+   * Inicializa el comportamiento especial del enlace "Misiones"
+   * de la navegación lateral: hace scroll suave hasta la sección
+   * y resalta temporalmente su card.
+   * @returns {void}
+   */
+  function initMissionsNavHighlight() {
+    const link = document.getElementById("nav-misiones");
+    const missionsSection = document.getElementById("misiones");
+    if (!link || !missionsSection) return;
+
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+      // Centrar la card de misiones en la ventana para que se vea completa
+      missionsSection.scrollIntoView({ behavior: "smooth", block: "center" });
+
+      missionsSection.classList.add("mission-highlight");
+      window.setTimeout(() => {
+        missionsSection.classList.remove("mission-highlight");
+      }, 2200);
+    });
+  }
+
+  /**
+   * Inicializa el enlace "Archivo" para que lleve al bloque
+   * de archivo clasificado y lo resalte brevemente.
+   * @returns {void}
+   */
+  function initArchiveNavHighlight() {
+    const link = document.getElementById("nav-archivo");
+    const archiveSection = document.getElementById("archivo-clasificado");
+    if (!link || !archiveSection) return;
+
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+      archiveSection.scrollIntoView({ behavior: "smooth", block: "center" });
+      archiveSection.classList.add("mission-highlight");
+      window.setTimeout(() => {
+        archiveSection.classList.remove("mission-highlight");
+      }, 2200);
+    });
+  }
+
+  /**
+   * Inicializa el buscador global de la cabecera para que,
+   * al pulsar Enter, haga scroll hasta el jinete o dragón
+   * cuyo nombre se haya escrito.
+   * @returns {void}
+   */
+  function initGlobalSearch() {
+    if (!globalSearchEl) return;
+
+    globalSearchEl.addEventListener("keydown", (event) => {
+      if (event.key !== "Enter") return;
+      runGlobalSearch(globalSearchEl.value);
+    });
+  }
+
+  /**
+   * Aplica conjuntamente los filtros de estado y cuadrante
+   * sobre las cards de jinetes.
+   * @returns {void}
+   */
+  function applyRiderFilters() {
+    const riderCards = document.querySelectorAll("[data-rider-status]");
+    riderCards.forEach((card) => {
+      const status =
+        /** @type {"active" | "training" | "archived" | null} */ (
+          card.getAttribute("data-rider-status")
+        );
+      const quadrant =
+        /** @type {"jinetes" | "curanderos" | "escribas" | null} */ (
+          card.getAttribute("data-rider-quadrant")
+        );
+
+      const matchesStatus =
+        currentRiderStatusFilter === "all" ||
+        status === currentRiderStatusFilter;
+      const matchesQuadrant =
+        currentRiderQuadrantFilter === "all" ||
+        quadrant === currentRiderQuadrantFilter;
+
+      const shouldShow = matchesStatus && matchesQuadrant;
+      card.classList.toggle("hidden", !shouldShow);
+    });
+  }
+
+  /**
+   * Inicializa los filtros de estado de jinetes (Activos / En entrenamiento / Archivados).
+   * @returns {void}
+   */
+  function initRiderStatusFilters() {
+    const buttons = document.querySelectorAll(".rider-status-filter");
+    if (!buttons.length) return;
+
+    buttons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        currentRiderStatusFilter =
+          /** @type {"all" | "active" | "training" | "archived"} */ (
+            btn.getAttribute("data-rider-status-filter") || "all"
+          );
+
+        buttons.forEach((b) => {
+          b.classList.remove("rider-filter-active");
+        });
+        btn.classList.add("rider-filter-active");
+
+        applyRiderFilters();
+      });
+    });
+
+    // Estado inicial: Todos
+    currentRiderStatusFilter = "all";
+  }
+
+  /**
+   * Inicializa los filtros de cuadrante (Jinetes / Escribas / Curanderos / Todos).
+   * @returns {void}
+   */
+  function initRiderQuadrantFilters() {
+    const buttons = document.querySelectorAll(".rider-quadrant-filter");
+    if (!buttons.length) return;
+
+    buttons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        currentRiderQuadrantFilter =
+          /** @type {"all" | "jinetes" | "escribas" | "curanderos"} */ (
+            btn.getAttribute("data-rider-quadrant-filter") || "all"
+          );
+
+        buttons.forEach((b) => {
+          b.classList.remove("rider-filter-active");
+        });
+        btn.classList.add("rider-filter-active");
+
+        applyRiderFilters();
+      });
+    });
+
+    // Estado inicial: Todos
+    currentRiderQuadrantFilter = "all";
+
+    const defaultBtn =
+      /** @type {HTMLButtonElement | null} */ (
+        document.querySelector(
+          '.rider-quadrant-filter[data-rider-quadrant-filter="all"]',
+        )
+      );
+    if (defaultBtn) {
+      defaultBtn.classList.add("rider-filter-active");
+    }
+  }
+
   window.addEventListener("DOMContentLoaded", () => {
     setTheme(getSavedTheme());
     initThemeToggle();
+    initGlobalSearch();
+    initMissionsNavHighlight();
+    initArchiveNavHighlight();
+    initRiderStatusFilters();
+    initRiderQuadrantFilters();
+    applyRiderFilters();
     initTaskFilters();
     initPriorityFilters();
     loadTasks();
