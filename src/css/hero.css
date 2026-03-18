@@ -283,3 +283,13 @@ html.dark body::before{
   box-shadow: 0 0 0 2px rgba(196, 181, 253, 0.9),
     0 0 22px rgba(129, 140, 248, 0.6);
 }
+
+/* Ocultar scrollbar pero permitir scroll */
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* IE/Edge */
+  scrollbar-width: none;     /* Firefox */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;             /* Chrome/Safari */
+}
