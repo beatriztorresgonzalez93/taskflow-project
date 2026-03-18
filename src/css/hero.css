@@ -210,7 +210,22 @@ html.dark body::before{
   opacity: 0;
   transition: max-height 0.5s ease, opacity 0.5s ease;
 }
+.secret-lock-open {
+  display: none;
+}
+.secret-card:hover .secret-lock-open,
+.secret-card.secret-open .secret-lock-open {
+  display: inline;
+}
+.secret-card:hover .secret-lock-closed,
+.secret-card.secret-open .secret-lock-closed {
+  display: none;
+}
 .secret-card:hover .secret-reveal {
+  max-height: 20rem;
+  opacity: 1;
+}
+.secret-card.secret-open .secret-reveal {
   max-height: 20rem;
   opacity: 1;
 }

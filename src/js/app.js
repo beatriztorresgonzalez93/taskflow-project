@@ -860,7 +860,6 @@ const navItems = [
     href: "#perfiles",
     label: "Perfiles",
     icon: "👤",
-    active: true,
   },
   {
     href: "#dragones",
@@ -873,7 +872,7 @@ const navItems = [
     icon: "🗺️",
   },
   {
-    href: "#archivo",
+    href: "#archivo-clasificado",
     label: "Archivo",
     icon: "🗄️",
   },
@@ -1240,9 +1239,40 @@ const activeClass =
 const normalClass =
   "text-slate-700 hover:bg-violet-50 dark:text-slate-200 dark:hover:bg-blue-400/10";
 
+const ACTIVE_NAV_TOKENS = activeClass.split(/\s+/).filter(Boolean);
+const NORMAL_NAV_TOKENS = normalClass.split(/\s+/).filter(Boolean);
+
+/**
+ * Aplica estilo "activo" a un link del menú y lo quita del resto.
+ * @param {string} linkId
+ * @returns {void}
+ */
+function setActiveNavLink(linkId) {
+  const nav = document.getElementById("nav-menu");
+  if (!nav) return;
+
+  const links = nav.querySelectorAll("a");
+  links.forEach((a) => {
+    a.classList.remove(...ACTIVE_NAV_TOKENS);
+    a.classList.add(...NORMAL_NAV_TOKENS);
+  });
+
+  const activeLink = document.getElementById(linkId);
+  if (!activeLink) return;
+
+  activeLink.classList.remove(...NORMAL_NAV_TOKENS);
+  activeLink.classList.add(...ACTIVE_NAV_TOKENS);
+}
+
 function crearNavItem(item) {
+  const anchorId = (item.href || "").startsWith("#")
+    ? `nav-${item.href.slice(1)}`
+    : "";
+
   return `
-    <a href="${item.href}"
+    <a
+       ${anchorId ? `id="${anchorId}"` : ""}
+       href="${item.href}"
        class="${baseClass} ${item.active ? activeClass : normalClass}">
       ${item.icon} ${item.label}
     </a>
@@ -2124,22 +2154,47 @@ const TaskApp = {
 // ======================================================================
 // ===== NAVEGACIÓN Y FILTROS JINETES =====
 /**
+ * Helper genérico: click en link → scroll suave → highlight (en el contenedor tipo "card").
+ * @param {{linkId: string, targetId: string, afterHighlight?: (target: HTMLElement) => void}} config
+ * @returns {void}
+ */
+function setupNavScrollAndHighlight(config) {
+  const link = document.getElementById(config.linkId);
+  const target = document.getElementById(config.targetId);
+  if (!link || !target) return;
+
+  link.addEventListener("click", (event) => {
+    event.preventDefault();
+
+    setActiveNavLink(config.linkId);
+    target.scrollIntoView({ behavior: "smooth", block: "center" });
+
+    const highlightTarget =
+      config.highlightTarget === "self"
+        ? target
+        : target.closest("section") ||
+          target.closest("article") ||
+          target.closest("div") ||
+          target;
+
+    highlightElementTemporarily(
+      /** @type {HTMLElement} */ (highlightTarget),
+      "mission-highlight",
+      HIGHLIGHT_DURATION_MS,
+    );
+
+    if (typeof config.afterHighlight === "function") config.afterHighlight(target);
+  });
+}
+
+/**
  * Inicializa el enlace "Misiones": scroll suave y resalte temporal de la card.
  * @returns {void}
  */
 function initMissionsNavHighlight() {
-  const link = document.getElementById("nav-misiones");
-  const missionsSection = document.getElementById("misiones");
-  if (!link || !missionsSection) return;
-
-  link.addEventListener("click", (event) => {
-    event.preventDefault();
-    missionsSection.scrollIntoView({ behavior: "smooth", block: "center" });
-    highlightElementTemporarily(
-      missionsSection,
-      "mission-highlight",
-      HIGHLIGHT_DURATION_MS,
-    );
+  setupNavScrollAndHighlight({
+    linkId: "nav-misiones",
+    targetId: "misiones",
   });
 }
 
@@ -2148,18 +2203,32 @@ function initMissionsNavHighlight() {
  * @returns {void}
  */
 function initArchiveNavHighlight() {
-  const link = document.getElementById("nav-archivo");
-  const archiveSection = document.getElementById("archivo-clasificado");
-  if (!link || !archiveSection) return;
+  setupNavScrollAndHighlight({
+    linkId: "nav-archivo-clasificado",
+    targetId: "archivo-clasificado",
+    highlightTarget: "self",
+  });
+}
 
-  link.addEventListener("click", (event) => {
-    event.preventDefault();
-    archiveSection.scrollIntoView({ behavior: "smooth", block: "center" });
-    highlightElementTemporarily(
-      archiveSection,
-      "mission-highlight",
-      HIGHLIGHT_DURATION_MS,
-    );
+/**
+ * Inicializa el enlace "Perfiles": scroll suave y resalte temporal del bloque.
+ * @returns {void}
+ */
+function initProfilesNavHighlight() {
+  setupNavScrollAndHighlight({
+    linkId: "nav-perfiles",
+    targetId: "perfiles",
+  });
+}
+
+/**
+ * Inicializa el enlace "Dragones": scroll suave y resalte temporal del bloque.
+ * @returns {void}
+ */
+function initDragonsNavHighlight() {
+  setupNavScrollAndHighlight({
+    linkId: "nav-dragones",
+    targetId: "dragones",
   });
 }
 
@@ -2307,6 +2376,9 @@ const RidersApp = {
 
     // Navegación principal
     renderNav();
+    setActiveNavLink(
+      (location.hash ? `nav-${location.hash.slice(1)}` : "") || "nav-perfiles",
+    );
 
     // Archivo
     renderArchivosClasificados();
@@ -2322,6 +2394,8 @@ const RidersApp = {
     initStaticSections();
     DragonsApp.init();
     initGlobalSearch();
+    initProfilesNavHighlight();
+    initDragonsNavHighlight();
     initMissionsNavHighlight();
     initArchiveNavHighlight();
     RidersApp.init();
