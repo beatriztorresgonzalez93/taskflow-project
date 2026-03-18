@@ -1,3 +1,4 @@
+import { getTasks, createTask, deleteTask, updateTask } from './api.js';
 // ===== TIPOS (JSDoc) =====
 /**
  * @typedef {"baja" | "media" | "alta"} TaskPriority
@@ -58,7 +59,6 @@ const taskModalSaveEl = document.querySelector("#modal-save");
 const taskStatsEl = document.querySelector("#task-stats");
 const taskErrorEl = document.querySelector("#task-error");
 
-const STORAGE_KEY = "taskflow_tasks";
 const MAX_TASK_LENGTH = 100;
 const HIGHLIGHT_DURATION_MS = 2200;
 
@@ -1390,9 +1390,8 @@ renderDragones();
 
 // ======================================================================
 // TAREAS — MÓDULO COMPLETO
-// Incluye: STORAGE (localStorage), LÓGICA (CRUD), FILTROS, RENDER y EVENTOS.
+// Fuente de verdad: backend (API). Incluye: LÓGICA (CRUD), FILTROS, RENDER y EVENTOS.
 // ======================================================================
-// ===== TAREAS — STORAGE =====
 /**
  * Genera un identificador único para tareas (UUID o fallback con timestamp + random).
  * @returns {string}
@@ -1401,30 +1400,6 @@ function generateId() {
   return crypto.randomUUID
     ? crypto.randomUUID()
     : String(Date.now() + Math.random());
-}
-
-/**
- * Persiste el array `tasks` en localStorage bajo la clave STORAGE_KEY.
- * @returns {void}
- */
-function saveTasks() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
-}
-
-/**
- * Lee y parsea las tareas guardadas en localStorage.
- * @returns {unknown[]} array de tareas en crudo (pueden no ser Task válidos)
- */
-function readStoredTasks() {
-  const raw = localStorage.getItem(STORAGE_KEY);
-  if (!raw) return [];
-
-  try {
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed : [];
-  } catch {
-    return [];
-  }
 }
 
 /**
@@ -1455,7 +1430,8 @@ function normalizeTask(item) {
   }
 
   return {
-    id: item?.id ?? generateId(),
+    // Backend ids suelen venir como number; en la UI el id viaja como string (dataset).
+    id: String(item?.id ?? generateId()),
     text: item?.text ?? "",
     done: Boolean(item?.done),
     priority: normalizePriority(item?.priority),
@@ -1463,41 +1439,19 @@ function normalizeTask(item) {
 }
 
 /**
- * Carga las tareas desde localStorage; si no hay ninguna, inicializa con tareas de demo y las guarda.
- * @returns {void}
+ * Carga las tareas desde el backend.
+ * @returns {Promise<void>}
  */
-// CARGA INICIAL: trae tareas guardadas o crea demo si está vacío.
-function loadTasks() {
-  const stored = readStoredTasks();
-
-  if (stored.length === 0) {
-    const demoTasks = [
-      normalizeTask({
-        id: crypto.randomUUID(),
-        text: "Entrenamiento de combate con dragón",
-        done: false,
-        priority: TASK_PRIORITIES.ALTA,
-      }),
-      normalizeTask({
-        id: crypto.randomUUID(),
-        text: "Estudiar historia del Cuadrante de Jinetes",
-        done: false,
-        priority: TASK_PRIORITIES.MEDIA,
-      }),
-      normalizeTask({
-        id: crypto.randomUUID(),
-        text: "Cuidar el equipo de montar dragón",
-        done: false,
-        priority: TASK_PRIORITIES.BAJA,
-      }),
-    ];
-
-    tasks = demoTasks;
-    saveTasks();
-    return;
+async function loadTasks() {
+  try {
+    const backendTasks = await getTasks();
+    tasks = Array.isArray(backendTasks)
+      ? backendTasks.map(normalizeTask)
+      : [];
+  } catch (error) {
+    console.error("Error al cargar tareas del backend:", error);
+    tasks = [];
   }
-
-  tasks = stored.map(normalizeTask);
 }
 
 // ===== TAREAS — LÓGICA =====
@@ -1507,15 +1461,6 @@ function loadTasks() {
  */
 function getCurrentTaskSearchText() {
   return taskSearchEl ? taskSearchEl.value : "";
-}
-
-/**
- * Guarda las tareas en localStorage y vuelve a renderizar la lista con el filtro de búsqueda actual.
- * @returns {void}
- */
-function saveAndRenderTasks() {
-  saveTasks();
-  renderTasks(getCurrentTaskSearchText());
 }
 
 /**
@@ -1530,12 +1475,12 @@ function showTaskError(message) {
 }
 
 /**
- * Intenta crear una nueva tarea validando texto y prioridad.
+ * Intenta crear una nueva tarea validando texto y prioridad y persistiendo en backend.
  * @param {string} text
  * @param {string} [priority="media"]
- * @returns {string} mensaje de error o cadena vacía
+ * @returns {Promise<string>} mensaje de error o cadena vacía
  */
-function addTask(text, priority = TASK_PRIORITIES.MEDIA) {
+async function addTask(text, priority = TASK_PRIORITIES.MEDIA) {
   const clean = (text || "").trim();
 
   if (!clean) return "La tarea no puede estar vacía.";
@@ -1551,17 +1496,15 @@ function addTask(text, priority = TASK_PRIORITIES.MEDIA) {
   }
 
   const safePriority = normalizePriority(priority);
-
-  const task = {
-    id: generateId(),
-    text: clean,
-    done: false,
-    priority: safePriority,
-  };
-
-  tasks.push(task);
-  saveAndRenderTasks();
-  return "";
+  try {
+    const created = await createTask(clean, safePriority);
+    if (created && created.error) return created.error;
+    await loadTasksFromBackend();
+    return "";
+  } catch (error) {
+    console.error("Error al crear tarea:", error);
+    return "Error al crear la tarea.";
+  }
 }
 
 // ===== TAREAS — FILTROS Y RENDER =====
@@ -1732,6 +1675,12 @@ function createTaskListItem(task) {
     <span>Eliminar</span>
   `;
 
+  del.addEventListener("click", async (e) => {
+    // Evita que el click burbujee y dispare el handler delegado de la lista.
+    e.stopPropagation();
+    await handleTaskListAction("delete", task.id);
+  });
+
   const actions = document.createElement("div");
   actions.className =
     "flex flex-wrap items-center gap-2 sm:shrink-0 sm:justify-end";
@@ -1856,6 +1805,22 @@ function updateStats() {
   taskStatsEl.textContent = `${pending} pendientes · ${completed} completadas`;
 }
 
+/**
+ * Recarga tareas desde el backend y re-renderiza la lista aplicando filtros/búsqueda.
+ * @returns {Promise<void>}
+ */
+async function loadTasksFromBackend() {
+  try {
+    const backendTasks = await getTasks();
+    tasks = Array.isArray(backendTasks)
+      ? backendTasks.map(normalizeTask)
+      : [];
+    renderTasks(taskSearchEl?.value || "");
+  } catch (error) {
+    console.error("Error al cargar tareas del backend:", error);
+  }
+}
+
 // ===== TAREAS — EVENTOS Y HANDLERS =====
 /**
  * Abre el modal de nueva tarea: lo hace visible, limpia input y prioridad y enfoca el input.
@@ -1895,8 +1860,8 @@ function closeModal() {
  * @returns {void}
  */
 // PUNTO ÚNICO DE ENTRADA: crear tarea desde modal o desde el formulario.
-function submitNewTask(text, priority, { onError, onSuccess } = {}) {
-  const error = addTask(text, priority);
+async function submitNewTask(text, priority, { onError, onSuccess } = {}) {
+  const error = await addTask(text, priority);
   if (error) {
     if (typeof onError === "function") onError(error);
     return;
@@ -1926,72 +1891,46 @@ function getTaskIdFromButton(btn) {
 }
 
 /**
- * Invierte el estado done de la tarea con el id dado.
- * @param {Task[]} taskList
- * @param {string} id
- * @returns {Task[]}
- */
-// CRUD (INMUTABLE): helpers puros que devuelven un nuevo array de tareas.
-function toggleTaskById(taskList, id) {
-  return taskList.map((t) => (t.id === id ? { ...t, done: !t.done } : t));
-}
-
-/**
- * Sustituye el texto de la tarea con el id dado.
- * @param {Task[]} taskList
- * @param {string} id
- * @param {string} newText
- * @returns {Task[]}
- */
-function editTaskById(taskList, id, newText) {
-  return taskList.map((t) => (t.id === id ? { ...t, text: newText } : t));
-}
-
-/**
- * Devuelve una copia del array sin la tarea con el id dado.
- * @param {Task[]} taskList
- * @param {string} id
- * @returns {Task[]}
- */
-function deleteTaskById(taskList, id) {
-  return taskList.filter((t) => t.id !== id);
-}
-
-/**
  * Ejecuta la acción (toggle / edit / delete) sobre la tarea con el id dado y actualiza estado y UI.
  * @param {string} action - "toggle" | "edit" | "delete"
  * @param {string} id - id de la tarea
  * @returns {void}
  */
-function handleTaskListAction(action, id) {
-  if (action === "toggle") {
-    tasks = toggleTaskById(tasks, id);
-    saveAndRenderTasks();
-    return;
-  }
-
-  if (action === "edit") {
-    const taskToEdit = tasks.find((t) => t.id === id);
-    if (!taskToEdit) return;
-
-    const newText = prompt("Edita la tarea:", taskToEdit.text);
-    if (newText === null) return;
-
-    const trimmedText = newText.trim();
-    if (!trimmedText) return;
-
-    tasks = editTaskById(tasks, id, trimmedText);
-    saveAndRenderTasks();
-    return;
-  }
-
-  if (action === "delete") {
-    if (!confirm("¿Seguro que quieres eliminar esta tarea?")) {
+async function handleTaskListAction(action, id) {
+  try {
+    if (action === "toggle") {
+      const taskToToggle = tasks.find((t) => t.id === id);
+      if (!taskToToggle) return;
+      await updateTask(id, { done: !taskToToggle.done });
+      await loadTasksFromBackend();
       return;
     }
 
-    tasks = deleteTaskById(tasks, id);
-    saveAndRenderTasks();
+    if (action === "edit") {
+      const taskToEdit = tasks.find((t) => t.id === id);
+      if (!taskToEdit) return;
+
+      const newText = prompt("Edita la tarea:", taskToEdit.text);
+      if (newText === null) return;
+
+      const trimmedText = newText.trim();
+      if (!trimmedText) return;
+
+      await updateTask(id, { text: trimmedText });
+      await loadTasksFromBackend();
+      return;
+    }
+
+    if (action === "delete") {
+      if (!confirm("¿Seguro que quieres eliminar esta tarea?")) {
+        return;
+      }
+      await deleteTask(id);
+      await loadTasksFromBackend();
+    }
+  } catch (error) {
+    console.error("Error en acción de tarea:", error);
+    alert("No se pudo completar la acción. Revisa la consola.");
   }
 }
 
@@ -2012,7 +1951,7 @@ function initTasksUI() {
     if (btn) {
       const idFromBtn = getTaskIdFromButton(btn);
       if (!idFromBtn) return;
-      handleTaskListAction(btn.dataset.action, idFromBtn);
+      void handleTaskListAction(btn.dataset.action, idFromBtn);
       return;
     }
 
@@ -2022,8 +1961,7 @@ function initTasksUI() {
     const id = li.dataset.id;
     if (!id) return;
 
-    tasks = toggleTaskById(tasks, id);
-    saveAndRenderTasks();
+    void handleTaskListAction("toggle", id);
   });
 
   // Botón "+ Nuevo" abre el modal
@@ -2037,12 +1975,12 @@ function initTasksUI() {
   });
 
   // Guardar desde el modal
-  taskModalSaveEl?.addEventListener("click", () => {
+  taskModalSaveEl?.addEventListener("click", async () => {
     const text = taskModalInputEl ? taskModalInputEl.value : "";
     const priority = taskModalPriorityEl
       ? taskModalPriorityEl.value
       : TASK_PRIORITIES.MEDIA;
-    submitNewTask(text, priority, {
+    await submitNewTask(text, priority, {
       onError: (msg) => alert(msg),
       onSuccess: () => {
         if (taskModalInputEl) taskModalInputEl.value = "";
@@ -2054,13 +1992,13 @@ function initTasksUI() {
   });
 
   // Formulario embebido bajo la lista
-  taskFormEl?.addEventListener("submit", (e) => {
+  taskFormEl?.addEventListener("submit", async (e) => {
     e.preventDefault();
     const text = taskInputEl ? taskInputEl.value : "";
     const priority = taskPriorityEl
       ? taskPriorityEl.value
       : TASK_PRIORITIES.MEDIA;
-    submitNewTask(text, priority, {
+    await submitNewTask(text, priority, {
       onError: (msg) => showTaskError(msg),
       onSuccess: () => {
         showTaskError("");
@@ -2109,13 +2047,10 @@ const TaskApp = {
     currentPriorityFilter = value;
   },
   generateId,
-  saveTasks,
-  readStoredTasks,
   normalizePriority,
   normalizeTask,
   loadTasks,
   getCurrentTaskSearchText,
-  saveAndRenderTasks,
   showTaskError,
   addTask,
   applyStatusFilter,
@@ -2125,9 +2060,6 @@ const TaskApp = {
   renderEmptyState,
   createTaskListItem,
   updateStats,
-  toggleTaskById,
-  editTaskById,
-  deleteTaskById,
   handleTaskListAction,
   openModal,
   closeModal,
@@ -2136,13 +2068,13 @@ const TaskApp = {
   initPriorityFilters,
   initTasksUI,
   renderTasks,
-  init() {
-    // Orden recomendado: pintar filtros/UI → cargar storage → render final.
+  async init() {
+    // Orden recomendado: filtros/UI → cargar backend → render final.
     this.initTaskFilters();
     this.initPriorityFilters();
     this.initTasksUI();
-    this.loadTasks();
-    this.renderTasks();
+    await this.loadTasks();
+    this.renderTasks(taskSearchEl?.value || "");
   },
 };
 
@@ -2443,4 +2375,5 @@ const RidersApp = {
     window.addEventListener("scroll", updateInfoVisibility, { passive: true });
     window.addEventListener("resize", updateInfoVisibility);
   });
+
 })();
