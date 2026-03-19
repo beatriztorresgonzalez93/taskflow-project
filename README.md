@@ -2,7 +2,7 @@
 
 Aplicación web interactiva desarrollada como proyecto de prácticas en **Corner Estudios**.
 
-Combina una maqueta temática inspirada en *Basgiath War College* con un **gestor de tareas completo**, usando solo **HTML + Tailwind CSS + JavaScript** y **LocalStorage** para la persistencia.
+Combina una maqueta temática inspirada en _Basgiath War College_ con un gestor de tareas con frontend y backend separados.
 
 ---
 
@@ -14,7 +14,7 @@ Combina una maqueta temática inspirada en *Basgiath War College* con un **gesto
   - Editar el texto de una tarea existente
   - Eliminar tareas con **diálogo de confirmación**
   - Orden automático: tareas pendientes arriba, completadas abajo
-  - Persistencia en el navegador mediante `localStorage`
+  - Persistencia vía API backend (no en `localStorage`)
 
 - **Prioridades con chips de color**
   - Tres niveles: **baja (azul)**, **media (amarillo)** y **alta (rojo/rosa)**
@@ -31,7 +31,7 @@ Combina una maqueta temática inspirada en *Basgiath War College* con un **gesto
 - **Interfaz y UX**
   - Diseño responsive basado en **Tailwind CSS**
   - Tema claro / oscuro con **toggle persistente** (se guarda la elección)
-  - Sidebar con **navegación, filtros y resumen** usando posición *sticky* para acompañar el scroll
+  - Sidebar con **navegación, filtros y resumen** con posicionamiento `fixed` en escritorio (`md:fixed`)
   - Hero ilustrado coherente con la temática de archivo de dragones
 
 ---
@@ -45,26 +45,16 @@ Combina una maqueta temática inspirada en *Basgiath War College* con un **gesto
   - Manipulación del DOM
   - Gestión de eventos (click, submit, input, keydown)
   - Organización del código con funciones puras y tipos JSDoc
-- **LocalStorage API** – persistencia de tareas en el navegador
+- **Node.js + Express** – API REST de tareas
+- **LocalStorage API** – persistencia del tema (claro/oscuro)
 
 ---
 
 ## 💾 Persistencia de datos
 
-Las tareas se guardan en el navegador usando `localStorage` bajo la clave `taskflow_tasks`:
-
-```js
-localStorage.setItem("taskflow_tasks", JSON.stringify(tasks));
-```
-
-En la carga de la página:
-
-- Si hay datos guardados, se **normalizan** para asegurar que todas las tareas tienen:
-  - `id` único
-  - `text`
-  - `done` (boolean)
-  - `priority` (`"baja" | "media" | "alta"`)
-- Si no hay datos, se crean **tareas de ejemplo** para que la interfaz no aparezca vacía.
+- Las tareas se guardan en el backend (`server/src/services/task.service.js`), en memoria del proceso.
+- En despliegue serverless esto **no es persistencia definitiva**: puede resetearse.
+- `localStorage` se usa solo para guardar la preferencia de tema (modo claro/oscuro).
 
 ---
 
@@ -73,9 +63,14 @@ En la carga de la página:
 Ruta base del proyecto:
 
 - `index.html` – estructura principal de la interfaz
-- `src/css/hero.css` – estilos personalizados del hero y correcciones de ancho/overflow
-- `src/js/app.js` – lógica de la aplicación (tareas, filtros, tema, DOM)
-- `dist/output.css` – CSS generado por Tailwind
+- `src/js/app.js` – lógica de UI y render
+- `src/js/api.js` – cliente HTTP para la API
+- `server/src/index.js` – app Express
+- `server/src/routes/task.routes.js` – rutas REST
+- `server/src/controllers/task.controller.js` – validación y respuestas HTTP
+- `server/src/services/task.service.js` – lógica de tareas en memoria
+- `server/api/index.js` – entrypoint serverless para Vercel
+- `server/vercel.json` – rewrites para backend en Vercel
 
 ---
 
@@ -83,16 +78,22 @@ Ruta base del proyecto:
 
 1. Clona o descarga este repositorio.
 2. Abre la carpeta del proyecto en tu editor (VS Code / Cursor).
-3. Lanza un servidor estático en la raíz, por ejemplo:
+3. Arranca backend:
 
    ```bash
-   npx serve . -p 3000
+   npm run dev
    ```
 
-4. Abre en el navegador:
+4. En otra terminal, sirve el frontend:
+
+   ```bash
+   npx serve . -p 5500
+   ```
+
+5. Abre en el navegador:
 
    ```text
-   http://localhost:3000
+   http://localhost:5500
    ```
 
 > También puedes usar extensiones tipo **Live Server** para tener recarga automática al guardar.
@@ -141,3 +142,46 @@ Ruta base del proyecto:
 - Exportar/Importar tareas (JSON) para moverlas entre navegadores.
 - Añadir tests básicos de la lógica de filtrado y prioridades.
 
+
+## 📝 Resumen para entenderlo yo
+
+Esta app tiene dos partes:
+
+- Una parte bonita que veo en pantalla (frontend).
+- Una parte que recibe y gestiona las tareas (backend).
+
+Ahora mismo estan en dos proyectos de Vercel distintos, pero conectados entre si.
+O sea, frontend y backend son dos proyectos separados, pero “se hablan” por HTTP usando la URL del backend.
+
+Cuando creo una tarea:
+
+1. La escribo en la web.
+2. La web se la envia al backend.
+3. El backend la guarda y responde.
+4. La web vuelve a pedir la lista y la muestra actualizada.
+
+Como esta organizado el backend (capas):
+
+**env.js**
+Guarda/centraliza variables de entorno (PORT, claves, URLs...).
+Sirve para no escribir process.env... por todo el código.
+
+**router.js**
+Define las rutas HTTP (qué URL existe y a qué función va).
+Ejemplo mental: “si llega POST /tasks, llámame a X”.
+
+**controller.js**
+Recibe la petición, valida datos, decide respuesta HTTP (200, 400, etc.).
+Es el “jefe” de cada endpoint.
+
+**service.js**
+Tiene la lógica de negocio y acceso a datos (crear, editar, borrar tareas).
+Es donde realmente “pasan cosas” con las tareas.
+Además, aquí se guardan las tareas en memoria con un array: `let tasks = []`.
+
+
+Importante:
+
+- Las tareas no usan `localStorage`.
+- El modo claro/oscuro si usa `localStorage`.
+- Las tareas ahora se guardan en memoria del backend, asi que si se reinicia, se pueden perder.
