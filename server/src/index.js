@@ -1,6 +1,5 @@
 const express = require('express');
 const cors = require('cors');
-const { PORT } = require('./config/env');
 const taskRoutes = require('./routes/task.routes');
 
 const app = express();
@@ -21,6 +20,10 @@ const loggerAcademico = (req, res, next) => {
 
 app.use(loggerAcademico);
 
+app.get('/', (req, res) => {
+  res.json({ message: 'Backend TaskFlow funcionando' });
+});
+
 app.use('/api/v1/tasks', taskRoutes);
 
 app.use((err, req, res, next) => {
@@ -32,16 +35,4 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Error interno del servidor' });
 });
 
-app.listen(PORT, () => {
-  console.log(`Servidor escuchando en http://localhost:${PORT}`);
-});
-
-app.get('/crear-prueba', (req, res) => {
-    const nueva = {
-      id: Date.now(),
-      text: 'Tarea de prueba',
-      done: false
-    };
-  
-    res.json(nueva);
-  });
+module.exports = app;

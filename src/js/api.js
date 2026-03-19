@@ -1,4 +1,9 @@
-const API_URL = 'http://localhost:3000/api/v1/tasks';
+// Usa el host actual (IP o dominio) para que funcione también desde móvil.
+// Se puede sobrescribir con window.__TASKFLOW_API_BASE__ si hace falta.
+const API_BASE =
+  window.__TASKFLOW_API_BASE__ ||
+  `${window.location.protocol}//${window.location.hostname}:3000`;
+const API_URL = `${API_BASE}/api/v1/tasks`;
 
 export async function getTasks() {
   const response = await fetch(API_URL);
