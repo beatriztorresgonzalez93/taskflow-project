@@ -35,4 +35,8 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Error interno del servidor' });
 });
 
+app.get('/', (req, res) => {
+    res.send('API TaskFlow funcionando 🚀');
+  });
+  
 module.exports = app;
