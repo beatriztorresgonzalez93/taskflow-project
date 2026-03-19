@@ -1,8 +1,12 @@
-// Usa el host actual (IP o dominio) para que funcione también desde móvil.
+// Usa localhost:3000 en local y el mismo dominio en producción.
 // Se puede sobrescribir con window.__TASKFLOW_API_BASE__ si hace falta.
-const API_BASE =
-  window.__TASKFLOW_API_BASE__ ||
-  `${window.location.protocol}//${window.location.hostname}:3000`;
+const isLocalHost =
+  window.location.hostname === 'localhost' ||
+  window.location.hostname === '127.0.0.1';
+const defaultApiBase = isLocalHost
+  ? `${window.location.protocol}//${window.location.hostname}:3000`
+  : window.location.origin;
+const API_BASE = window.__TASKFLOW_API_BASE__ || defaultApiBase;
 const API_URL = `${API_BASE}/api/v1/tasks`;
 
 export async function getTasks() {
