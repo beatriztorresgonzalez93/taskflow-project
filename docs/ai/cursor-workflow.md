@@ -256,7 +256,7 @@ README.md
 src/
 
 src/js/app.js
-src/input.css
+src/app.css
 src/css/hero.css
 dist/
 

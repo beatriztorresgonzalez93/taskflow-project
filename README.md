@@ -162,9 +162,9 @@ Cuando creo una tarea:
 
 Como esta organizado el backend (capas):
 
-**env.js**
-Guarda/centraliza variables de entorno (PORT, claves, URLs...).
-Sirve para no escribir process.env... por todo el código.
+**server.js**
+Es el archivo que arranca el backend en local.
+Define el puerto con `process.env.PORT || 3000` y hace `app.listen(...)`.
 
 **router.js**
 Define las rutas HTTP (qué URL existe y a qué función va).

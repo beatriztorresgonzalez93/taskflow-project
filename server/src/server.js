@@ -1,5 +1,5 @@
 const app = require('./index');
-const { PORT } = require('./config/env');
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
   console.log(`Backend TaskFlow escuchando en http://localhost:${PORT}`);
