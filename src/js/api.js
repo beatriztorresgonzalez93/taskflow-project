@@ -1,12 +1,12 @@
 // Usa localhost:3000 en local.
-// En producción, por defecto apunta al backend desplegado en Vercel.
-// Se puede sobrescribir con window.__TASKFLOW_API_BASE__ si hace falta.
+// En producción se espera window.__TASKFLOW_API_BASE__ definido en index.html.
+// Si no existe en producción, usa el mismo origin como último fallback.
 const isLocalHost =
   window.location.hostname === 'localhost' ||
   window.location.hostname === '127.0.0.1';
 const defaultApiBase = isLocalHost
   ? `${window.location.protocol}//${window.location.hostname}:3000`
-  : 'https://taskflow-project-rzeo.vercel.app';
+  : window.location.origin;
 const configuredApiBase = window.__TASKFLOW_API_BASE__ || defaultApiBase;
 const API_BASE = configuredApiBase.replace(/\/+$/, '');
 const API_URL = `${API_BASE}/api/v1/tasks`;
