@@ -68,7 +68,7 @@ refactorización “segura” (sin cambiar funcionalidad): centralizar save+rend
 **loadTasks refactorizada**
 He dividido la lógica en tres partes más claras:
 
-readStoredTasks(): lee de localStorage, hace JSON.parse con try/catch y garantiza devolver siempre un array válido.
+readStoredTasks(): lee de almacenamiento del navegador, hace JSON.parse con try/catch y garantiza devolver siempre un array válido.
 normalizeTask(item): convierte cada elemento almacenado (string o objeto) a un objeto { id, text, done } consistente, reutilizando generateId().
 loadTasks(): ahora solo orquesta: llama a readStoredTasks() y hace tasks = stored.map(normalizeTask) manteniendo la compatibilidad con datos antiguos.
 
@@ -90,7 +90,7 @@ He separado el bloque final en funciones con responsabilidades claras (sin cambi
 
 getSavedTheme(): lee si el tema guardado es "dark".
 updateThemeButton(isDark): actualiza icono (themeIcon) y texto (themeText).
-setTheme(isDark): aplica/quita la clase dark, guarda en localStorage y actualiza el botón.
+setTheme(isDark): aplica/quita la clase dark, actualiza el botón y mantiene coherencia de UI.
 initThemeToggle(): engancha el click del botón btnTheme.
 En DOMContentLoaded ahora hace setTheme(getSavedTheme()), inicializa el toggle y luego carga/renderiza las tareas.
 
@@ -210,7 +210,7 @@ Tipo de proyecto (según tu código local)
 
 Proyecto frontend estático (HTML + CSS + JS) con Tailwind (via dist/output.css) y un tema claro/oscuro.
 Implementa una interfaz rica tipo “dashboard” (index.html) y una mini app de tareas (TaskFlow) controlada por:
-src/js/app.js: lógica de tareas (localStorage, renderizado, validaciones, tema).
+src/js/app.js: lógica de tareas (renderizado, validaciones, tema).
 src/css/hero.css: estilos específicos del hero con imágenes en assets/.
 Estructura y organización principal
 
@@ -256,7 +256,7 @@ README.md
 src/
 
 src/js/app.js
-src/input.css
+src/css/app.css
 src/css/hero.css
 dist/
 
@@ -316,7 +316,7 @@ Toda esta interacción se maneja en src/js/app.js.
 Script
 
 Al final del body se incluye ./src/js/app.js, que:
-Gestiona tareas (localStorage + render).
+Gestiona tareas (render + validaciones).
 Maneja formulario, búsqueda, modal.
 Controla el theme toggle (claro/oscuro).
 
@@ -407,9 +407,7 @@ Después se añadió la configuración correspondiente en el archivo mcp.json:
         "-y",
         "@modelcontextprotocol/server-github"
       ],
-      "env": {
-        "GITHUB_TOKEN": "TOKEN_GENERADO_EN_GITHUB"
-      }
+      "env": {}
     }
   }
 }

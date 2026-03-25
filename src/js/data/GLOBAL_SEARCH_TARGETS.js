@@ -1,0 +1,23 @@
+window.GLOBAL_SEARCH_TARGETS = [
+  { id: "jinete-violet", names: ["violet", "violet sorrengail"] },
+  { id: "jinete-xaden", names: ["xaden", "xaden riorson"] },
+  { id: "jinete-liam", names: ["liam", "liam mairi"] },
+  { id: "jinete-imogen", names: ["imogen", "imogen cardulo"] },
+  { id: "jinete-brennan", names: ["brennan", "brennan sorrengail"] },
+  { id: "jinete-mira", names: ["mira", "mira sorrengail"] },
+  { id: "jinete-dain", names: ["dain", "dain aetos"] },
+  { id: "jinete-rhiannon", names: ["rhiannon", "rhiannon matthias"] },
+  { id: "jinete-nolon", names: ["nolon"] },
+  { id: "jinete-markham", names: ["markham"] },
+  { id: "jinete-jesinia", names: ["jesinia"] },
+  { id: "dragon-tairn", names: ["tairn"] },
+  { id: "dragon-sgaeyl", names: ["sgaeyl"] },
+  { id: "dragon-andarna", names: ["andarna"] },
+  { id: "dragon-deigh", names: ["deigh"] },
+  { id: "dragon-teine", names: ["teine"] },
+  { id: "dragon-glaene", names: ["glaene", "glane"] },
+  { id: "dragon-marbh", names: ["marbh"] },
+  
+  { id: "dragon-feirge", names: ["feirge"] },
+  { id: "dragon-cath", names: ["cath"] },
+];

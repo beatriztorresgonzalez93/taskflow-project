@@ -213,15 +213,15 @@ html.dark body::before{
 .secret-lock-open {
   display: none;
 }
-.secret-card:hover .secret-lock-open,
+.secret-files:hover .secret-lock-open,
 .secret-card.secret-open .secret-lock-open {
   display: inline;
 }
-.secret-card:hover .secret-lock-closed,
+.secret-files:hover .secret-lock-closed,
 .secret-card.secret-open .secret-lock-closed {
   display: none;
 }
-.secret-card:hover .secret-reveal {
+.secret-files:hover .secret-reveal {
   max-height: 20rem;
   opacity: 1;
 }

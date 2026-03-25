@@ -4,3 +4,4 @@
 
 /* Fuerza dark mode por clase .dark */
 @custom-variant dark (&:where(.dark, .dark *));
+
