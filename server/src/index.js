@@ -96,6 +96,15 @@ async function probeTasksTable() {
   return { ok: true, skipped: false };
 }
 
+// Ruta raíz amigable para verificar que la API está viva.
+app.get("/", (req, res) => {
+  return res.status(200).json({
+    ok: true,
+    message: "TaskFlow API running",
+    endpoints: ["/api/v1/health", "/api/v1/tasks"],
+  });
+});
+
 app.get("/api/v1/health", async (req, res) => {
   const payload = {
     ok: true,

@@ -20,13 +20,10 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
-    // URL base del backend para frontend desplegado.
-    window._TASKFLOW_API_BASE_URL = "https://taskflow-project-rzeo.vercel.app";
+    window.TASKFLOW_API_BASE_URL = "https://taskflow-project-rzeo.vercel.app";
+  </script>
 
-    // Compatibilidad entre ramas/versiones:
-    // - nueva: window.TASKFLOW_API_BASE_URL
-    // - antigua: window._TASKFLOW_API_BASE_URL
-    // Si no hay ninguna, usa localhost en desarrollo local.
+  <script>
     window.TASKFLOW_API_BASE_URL =
       window.TASKFLOW_API_BASE_URL ||
       window._TASKFLOW_API_BASE_URL ||

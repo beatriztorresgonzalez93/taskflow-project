@@ -70,6 +70,41 @@ npm run dev:server
 
 ---
 
+## ☁️ Deploy en Vercel (Frontend + Backend)
+
+Configuracion recomendada para tener 2 proyectos separados en Vercel.
+
+### 1) Proyecto Backend (API)
+
+- **Repositorio**: este mismo repo.
+- **Root Directory**: `.`
+- **Framework Preset**: `Other`
+- **Variables de entorno** (en Vercel, no en `.env` local):
+  - `SUPABASE_URL`
+  - `SUPABASE_ANON_KEY`
+
+Archivos clave ya preparados:
+- `vercel.json` (ruteo a `server/src/index.js`)
+- `server/src/index.js` exporta `app` para serverless
+
+Comprobacion:
+- `https://TU-BACKEND.vercel.app/api/v1/tasks`
+- `https://TU-BACKEND.vercel.app/api/v1/health`
+
+### 2) Proyecto Frontend
+
+- Puede desplegarse con el mismo repo (proyecto separado en Vercel).
+- Debe apuntar al backend publico configurando en `index.html`:
+  - `window.TASKFLOW_API_BASE_URL = "https://TU-BACKEND.vercel.app"`
+
+### 3) Checklist post-deploy
+
+- Backend responde `health` con `ok: true`.
+- Si Supabase esta bien configurado: `supabase: true` y `database: "ok"`.
+- Crear/editar/borrar tareas desde la UI persiste tras recargar.
+
+---
+
 ## 🔌 Backend y API
 
 Archivo principal: `server/src/index.js`.
