@@ -20,14 +20,10 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
-    window.TASKFLOW_API_BASE_URL = "https://taskflow-project-rzeo.vercel.app";
-  </script>
-
-  <script>
     window.TASKFLOW_API_BASE_URL =
-      window.TASKFLOW_API_BASE_URL ||
-      window._TASKFLOW_API_BASE_URL ||
-      "http://localhost:3000";
+      (window.location.protocol.startsWith("http")
+        ? window.location.origin
+        : "http://localhost:3000");
   </script>
 
   <link rel="stylesheet" href="./dist/app.css?v=1">

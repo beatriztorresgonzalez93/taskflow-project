@@ -65,16 +65,16 @@ npm run dev:server
    - **Local**: con Live Server (o servidor estatico) sobre `index.html`.
    - **Desplegado**: usando la URL de Vercel del frontend.
 
-> Nota importante: si abres el frontend en Vercel, no puede llamar a `http://localhost:3000` (ese localhost no es tu PC).  
-> En ese caso, el frontend debe apuntar a una URL publica de backend.
+> Nota importante: en deploy Vercel, `localhost` no aplica.  
+> La app usa el mismo dominio desplegado para llamar a `/api/v1/*`.
 
 ---
 
 ## ☁️ Deploy en Vercel (Frontend + Backend)
 
-Configuracion recomendada para tener 2 proyectos separados en Vercel.
+Configuracion recomendada: **1 solo proyecto Vercel (fullstack)**.
 
-### 1) Proyecto Backend (API)
+### 1) Proyecto unico (frontend + API)
 
 - **Repositorio**: este mismo repo.
 - **Root Directory**: `.`
@@ -84,20 +84,15 @@ Configuracion recomendada para tener 2 proyectos separados en Vercel.
   - `SUPABASE_ANON_KEY`
 
 Archivos clave ya preparados:
-- `vercel.json` (ruteo a `server/src/index.js`)
+- `vercel.json` (sirve frontend y enruta `/api/*` al backend)
 - `server/src/index.js` exporta `app` para serverless
 
 Comprobacion:
-- `https://TU-BACKEND.vercel.app/api/v1/tasks`
-- `https://TU-BACKEND.vercel.app/api/v1/health`
+- `https://TU-DOMINIO.vercel.app/` (frontend)
+- `https://TU-DOMINIO.vercel.app/api/v1/tasks` (API)
+- `https://TU-DOMINIO.vercel.app/api/v1/health` (salud + BD)
 
-### 2) Proyecto Frontend
-
-- Puede desplegarse con el mismo repo (proyecto separado en Vercel).
-- Debe apuntar al backend publico configurando en `index.html`:
-  - `window.TASKFLOW_API_BASE_URL = "https://TU-BACKEND.vercel.app"`
-
-### 3) Checklist post-deploy
+### 2) Checklist post-deploy
 
 - Backend responde `health` con `ok: true`.
 - Si Supabase esta bien configurado: `supabase: true` y `database: "ok"`.
