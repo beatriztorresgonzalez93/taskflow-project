@@ -128,7 +128,18 @@
           h == null ? null : typeof h.database === "string" || h.database === null ? h.database : null,
         dbMessage: typeof h?.dbMessage === "string" ? h.dbMessage : null,
       };
-    } catch {
+    } catch (err) {
+      // Compatibilidad con despliegues antiguos: si no existe /health (404),
+      // no marcamos API caída; simplemente omitimos el detalle de health.
+      if (err && typeof err === "object" && err.status === 404) {
+        apiHealth = {
+          supabase: false,
+          database: null,
+          dbMessage: null,
+        };
+        updateStats();
+        return;
+      }
       apiHealth = {
         supabase: false,
         database: "unreachable",

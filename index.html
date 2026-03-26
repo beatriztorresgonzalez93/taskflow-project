@@ -19,6 +19,20 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+  <script>
+    // URL base del backend para frontend desplegado.
+    window._TASKFLOW_API_BASE_URL = "https://taskflow-project-rzeo.vercel.app";
+
+    // Compatibilidad entre ramas/versiones:
+    // - nueva: window.TASKFLOW_API_BASE_URL
+    // - antigua: window._TASKFLOW_API_BASE_URL
+    // Si no hay ninguna, usa localhost en desarrollo local.
+    window.TASKFLOW_API_BASE_URL =
+      window.TASKFLOW_API_BASE_URL ||
+      window._TASKFLOW_API_BASE_URL ||
+      "http://localhost:3000";
+  </script>
+
   <link rel="stylesheet" href="./dist/app.css?v=1">
   <link rel="stylesheet" href="./src/css/hero.css?v=1">
 </head>
@@ -273,8 +287,7 @@
 
             <!-- ARCHIVOS SECRETOS -->
             <div id="archivo-clasificado" class="secret-files mt-3">
-              <div
-                class="secret-teaser flex items-center justify-between gap-3 px-1 py-1 text-sm">
+              <div class="secret-teaser flex items-center justify-between gap-3 px-1 py-1 text-sm">
                 <div class="flex items-center gap-2">
                   <span class="font-semibold text-slate-800 dark:text-slate-100">Archivos secretos</span>
                   <span class="secret-lock-closed text-base leading-none">🔒</span>
@@ -410,7 +423,7 @@
 
   <script src="./src/js/data/dragones.js"></script>
   <script src="./src/js/data/perfiles.js"></script>
-    <script src="./src/js/data/GLOBAL_SEARCH_TARGETS.js"></script>
+  <script src="./src/js/data/GLOBAL_SEARCH_TARGETS.js"></script>
   <script src="./src/js/data/misiones.js"></script>
   <script src="./src/js/data/rutasPrioritarias.js"></script>
   <script src="./src/js/data/actividadReciente.js"></script>

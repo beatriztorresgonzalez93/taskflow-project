@@ -3,6 +3,7 @@
 Aplicacion web interactiva con estetica de archivo draconico y gestion de tareas.
 
 En esta version:
+
 - **Frontend**: HTML + CSS + JavaScript.
 - **Backend**: Node.js + Express.
 - **Persistencia**: Supabase (tabla `tasks`) con fallback a memoria si no hay configuracion.
@@ -41,11 +42,13 @@ En esta version:
 ## ▶️ Puesta en marcha
 
 1. Instala dependencias:
+
 ```bash
 npm install
 ```
 
 2. Crea o rellena `.env` en la raiz:
+
 ```env
 SUPABASE_URL=
 SUPABASE_ANON_KEY=
@@ -53,6 +56,7 @@ PORT=3000
 ```
 
 3. Arranca backend:
+
 ```bash
 npm run dev:server
 ```
@@ -94,12 +98,14 @@ Base local: `http://localhost:3000`
 ## 🗄️ Base de datos (Supabase)
 
 La API espera `public.tasks` con columnas equivalentes a:
+
 - `id`
 - `text`
 - `done`
 - `priority`
 
 Puntos importantes:
+
 - Si la tabla no existe o no hay permisos para `anon`, la API falla.
 - Si faltan variables de entorno, el backend sigue funcionando en **modo memoria**.
 - En modo memoria, al reiniciar servidor se pierden los datos.
@@ -163,16 +169,19 @@ Puntos importantes:
 Con backend encendido:
 
 1. Salud del sistema:
+
 ```bash
 curl http://localhost:3000/api/v1/health
 ```
 
 2. Listar tareas:
+
 ```bash
 curl http://localhost:3000/api/v1/tasks
 ```
 
 3. Crear tarea (PowerShell):
+
 ```bash
 curl -X POST http://localhost:3000/api/v1/tasks ^
   -H "Content-Type: application/json" ^
@@ -183,25 +192,25 @@ curl -X POST http://localhost:3000/api/v1/tasks ^
 
 ## 📝 Resumen para entederlo yo
 
-
-
 - El **frontend** es el escaparate: lo que ves y donde haces click.
 - El **backend** es la persona de almacen: recibe peticiones y guarda/lee tareas.
 - **Supabase** es el almacen real donde se guardan las tareas para que no se pierdan.
 
 Cuando creas una tarea:
+
 1. La escribes en pantalla.
 2. La web se la envia al backend.
 3. El backend la guarda en Supabase.
 4. La web vuelve a pedir la lista y ya aparece actualizada.
 
 Si Supabase no esta configurado:
+
 - La app no se rompe.
 - Guarda temporalmente en memoria para que puedas seguir probando.
 - Pero al reiniciar servidor, esas tareas se borran.
 
 En una frase:
+
 - **Frontend** = lo visual.
 - **Backend** = la logica y la API.
 - **Supabase** = donde viven los datos de verdad.
-

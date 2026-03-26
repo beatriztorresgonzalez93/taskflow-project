@@ -19,7 +19,6 @@ window.GLOBAL_SEARCH_TARGETS = [
   { id: "dragon-teine", names: ["teine"] },
   { id: "dragon-glaene", names: ["glaene", "glane"] },
   { id: "dragon-marbh", names: ["marbh"] },
-  
   { id: "dragon-feirge", names: ["feirge"] },
   { id: "dragon-cath", names: ["cath"] },
 ];
