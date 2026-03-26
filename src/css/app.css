@@ -1,3 +1,15 @@
+/* ==========================================================================
+   CSS base de la aplicacion (pipeline Tailwind)
+   --------------------------------------------------------------------------
+   Este archivo:
+   - Importa Tailwind.
+   - Define los paths (@source) para escanear clases en HTML/JS.
+   - Configura variantes globales (como dark mode por clase).
+
+   Resultado:
+   Se compila a `dist/app.css`, que es el CSS final que carga `index.html`.
+   ========================================================================== */
+
 @import "tailwindcss";
 @source "../*.html";
 @source "../src/**/*.{html,js}";

@@ -1,85 +1,207 @@
-## Empíreo Archive – TaskFlow (Frontend + Backend REST)
+## 🐉 Empireo Archive - TaskFlow
 
-Proyecto de prácticas en **Corner Estudios**. El frontend consume un backend Express REST con `fetch` y las tareas ya no usan `localStorage`.
+Aplicacion web interactiva con estetica de archivo draconico y gestion de tareas.
 
----
-
-## Backend Express (simple y en memoria)
-
-El backend vive en `server/` y está centralizado en `server/src/index.js`.
-Usa un array en memoria (`tasks`) y expone un REST API bajo `/api/v1/tasks`.
-El puerto se toma de `server/.env` (por defecto `3000`).
+En esta version:
+- **Frontend**: HTML + CSS + JavaScript.
+- **Backend**: Node.js + Express.
+- **Persistencia**: Supabase (tabla `tasks`) con fallback a memoria si no hay configuracion.
 
 ---
 
-## Endpoints REST
+## 🚀 Funcionalidades principales
 
-Prefijo: `http://localhost:3000/api/v1/tasks`
+- **Tareas con API REST**
+  - Crear, listar, editar, marcar completadas y eliminar tareas.
+  - Validaciones basicas (`text` obligatorio, prioridad valida).
+  - Estado de conexion visible en la UI.
+
+- **Dashboard visual**
+  - Secciones de perfiles, dragones, misiones y resumen.
+  - Filtros y busquedas en diferentes bloques.
+
+- **Tema y estilos**
+  - CSS compilado de Tailwind en `dist/app.css`.
+  - Estilos manuales de hero en `src/css/hero.css`.
+
+---
+
+## 🧠 Como funciona (arquitectura simple)
+
+1. El navegador carga `index.html`.
+2. `index.html` carga:
+   - `dist/app.css` (estilos compilados),
+   - `src/css/hero.css` (estilos visuales del hero),
+   - scripts de `src/js/*`.
+3. El frontend de tareas (`src/js/logic/tasks.rest.logic.js`) llama al backend.
+4. El backend (`server/src/index.js`) usa Supabase si hay variables; si no, usa memoria local.
+
+---
+
+## ▶️ Puesta en marcha
+
+1. Instala dependencias:
+```bash
+npm install
+```
+
+2. Crea o rellena `.env` en la raiz:
+```env
+SUPABASE_URL=
+SUPABASE_ANON_KEY=
+PORT=3000
+```
+
+3. Arranca backend:
+```bash
+npm run dev:server
+```
+
+4. Abre el frontend de una de estas formas:
+   - **Local**: con Live Server (o servidor estatico) sobre `index.html`.
+   - **Desplegado**: usando la URL de Vercel del frontend.
+
+> Nota importante: si abres el frontend en Vercel, no puede llamar a `http://localhost:3000` (ese localhost no es tu PC).  
+> En ese caso, el frontend debe apuntar a una URL publica de backend.
+
+---
+
+## 🔌 Backend y API
+
+Archivo principal: `server/src/index.js`.
+
+Base local: `http://localhost:3000`
+
+- `GET /api/v1/health`
+  - Estado del backend.
+  - Indica si hay Supabase configurado.
+  - Hace prueba real contra `tasks` para confirmar conectividad/permiso.
 
 - `GET /api/v1/tasks`
-  - `200`: lista de tareas.
+  - Devuelve lista de tareas.
 
 - `POST /api/v1/tasks`
-  - `201`: crea una tarea.
-  - Body esperado:
-    - `text` (string, obligatorio)
-    - `priority` (baja|media|alta, opcional)
-    - `done` (boolean, opcional)
-    - `id` (string, opcional; permite UI optimista)
+  - Crea tarea (`text` obligatorio).
 
 - `PATCH /api/v1/tasks/:id`
-  - `200`: actualiza `text`, `done` y/o `priority`.
+  - Actualiza `text`, `done` y/o `priority`.
 
 - `DELETE /api/v1/tasks/:id`
-  - `204`: elimina una tarea.
+  - Borra tarea por `id`.
 
 ---
 
-## Refactor frontend (sin persistencia local para tareas)
+## 🗄️ Base de datos (Supabase)
 
-Las llamadas HTTP y el renderizado viven en `src/js/logic/tasks.rest.logic.js` usando `fetch`:
-- carga tareas con `GET /api/v1/tasks`
-- crea con `POST /api/v1/tasks`
-- toggle/editar con `PATCH /api/v1/tasks/:id`
-- eliminar con `DELETE /api/v1/tasks/:id`
+La API espera `public.tasks` con columnas equivalentes a:
+- `id`
+- `text`
+- `done`
+- `priority`
 
----
-
-## Ejecución
-
-1. Backend:
-   ```bash
-   cd server
-   npm run dev
-   ```
-   (usa `server/.env` con `PORT=3000`)
-
-2. Frontend:
-   - Sirve `index.html` desde la raíz del proyecto (por ejemplo con Live Server).
-   - Abre en `http://localhost:<PUERTO_ESTATICO>`
+Puntos importantes:
+- Si la tabla no existe o no hay permisos para `anon`, la API falla.
+- Si faltan variables de entorno, el backend sigue funcionando en **modo memoria**.
+- En modo memoria, al reiniciar servidor se pierden los datos.
 
 ---
 
-## Pruebas rápidas (Postman / Thunder Client)
+## 📂 Para que sirve cada archivo de raiz
 
-1. POST sin `text`:
-   - `POST /api/v1/tasks`
-   - Body: `{ "priority": "media" }`
-   - Esperado: `400` con `{"message":"El título es obligatorio"}`
+- `index.html`  
+  Estructura principal de la web; punto de entrada del frontend.
 
-2. DELETE con id inexistente:
-   - `DELETE /api/v1/tasks/NO_EXISTE`
-   - Esperado: `404` con `{"message":"Tarea no encontrada"}`
+- `package.json`  
+  Scripts y dependencias del proyecto (`dev:server`, `start:server`, etc.).
 
-3. Flujo feliz:
-   - `POST` => `201`
-   - `PATCH` => `200`
-   - `DELETE` => `204`
+- `package-lock.json`  
+  Versiones exactas del arbol de dependencias instaladas por npm.
+
+- `postcss.config.js`  
+  Configuracion de PostCSS (Tailwind + Autoprefixer).
+
+- `tailwind.config.js`  
+  Configuracion de Tailwind (rutas `content`, tema y plugins).
+
+- `.env`  
+  Variables locales de entorno (credenciales y puerto). No se sube a Git.
+
+- `README.md`  
+  Documentacion general y guia rapida de uso.
 
 ---
 
-## Documentación de herramientas
+## 🗂️ Para que sirve cada carpeta principal
 
-Consulta `docs/backend-api.md`.
-Incluye: Axios, Postman, Sentry y Swagger (OpenAPI).
+- `server/src/`  
+  Backend Express y endpoints REST.
+
+- `src/css/`  
+  CSS fuente del frontend:
+  - `app.css` (entrada Tailwind para compilar),
+  - `hero.css` (estilos visuales personalizados).
+
+- `dist/`  
+  Salida CSS compilada (`app.css`) usada por `index.html`.
+
+- `src/js/data/`  
+  Datasets estaticos (perfiles, dragones, filtros, KPIs, etc.).
+
+- `src/js/logic/`  
+  Logica de comportamiento de UI (tareas, riders, helpers).
+
+- `src/js/modules/`  
+  Modulos reutilizables para inicializar bloques concretos.
+
+- `docs/`  
+  Documentacion de apoyo y notas del proyecto.
+
+---
+
+## 🧪 Pruebas rapidas
+
+Con backend encendido:
+
+1. Salud del sistema:
+```bash
+curl http://localhost:3000/api/v1/health
+```
+
+2. Listar tareas:
+```bash
+curl http://localhost:3000/api/v1/tasks
+```
+
+3. Crear tarea (PowerShell):
+```bash
+curl -X POST http://localhost:3000/api/v1/tasks ^
+  -H "Content-Type: application/json" ^
+  -d "{\"text\":\"Probar API\",\"priority\":\"media\"}"
+```
+
+---
+
+## 📝 Resumen para entederlo yo
+
+
+
+- El **frontend** es el escaparate: lo que ves y donde haces click.
+- El **backend** es la persona de almacen: recibe peticiones y guarda/lee tareas.
+- **Supabase** es el almacen real donde se guardan las tareas para que no se pierdan.
+
+Cuando creas una tarea:
+1. La escribes en pantalla.
+2. La web se la envia al backend.
+3. El backend la guarda en Supabase.
+4. La web vuelve a pedir la lista y ya aparece actualizada.
+
+Si Supabase no esta configurado:
+- La app no se rompe.
+- Guarda temporalmente en memoria para que puedas seguir probando.
+- Pero al reiniciar servidor, esas tareas se borran.
+
+En una frase:
+- **Frontend** = lo visual.
+- **Backend** = la logica y la API.
+- **Supabase** = donde viven los datos de verdad.
 

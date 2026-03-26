@@ -1,4 +1,15 @@
 
+/* ==========================================================================
+   Estilos especificos del Hero y bloques visuales decorativos
+   --------------------------------------------------------------------------
+   Este archivo contiene CSS manual (no utilidades Tailwind) para:
+   - Banner principal (hero): layout, fondos, overlays y mascaras.
+   - Efectos visuales (brillos, sombras, transiciones y modo oscuro).
+   - Ajustes responsive de secciones visuales.
+
+   Se carga de forma directa desde `index.html` como hoja complementaria.
+   ========================================================================== */
+
 
 img{
   max-width:100%;
