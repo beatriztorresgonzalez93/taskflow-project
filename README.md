@@ -86,11 +86,12 @@ Configuracion recomendada: **1 solo proyecto Vercel (fullstack)**.
 Archivos clave ya preparados:
 - `vercel.json` (sirve frontend y enruta `/api/*` al backend)
 - `server/src/index.js` exporta `app` para serverless
+- `index.html` usa `window.location.origin` como base API en deploy (sin hardcode de dominio)
 
 Comprobacion:
-- `https://TU-DOMINIO.vercel.app/` (frontend)
-- `https://TU-DOMINIO.vercel.app/api/v1/tasks` (API)
-- `https://TU-DOMINIO.vercel.app/api/v1/health` (salud + BD)
+- `https://taskflow-project-rzeo.vercel.app/` (frontend)
+- `https://taskflow-project-rzeo.vercel.app/api/v1/tasks` (API)
+- `https://taskflow-project-rzeo.vercel.app/api/v1/health` (salud + BD)
 
 ### 2) Checklist post-deploy
 
@@ -220,7 +221,7 @@ curl -X POST http://localhost:3000/api/v1/tasks ^
 
 ---
 
-## 📝 Resumen para entederlo yo
+## 📝 Resumen para entenderlo yo
 
 - El **frontend** es el escaparate: lo que ves y donde haces click.
 - El **backend** es la persona de almacen: recibe peticiones y guarda/lee tareas.
