@@ -267,29 +267,33 @@ app.use((err, req, res, next) => {
   return res.status(500).json({ message: "Error interno del servidor" });
 });
 
-app.listen(PORT, () => {
-  if (isSupabaseEnabled()) {
-    console.log("Supabase mode enabled (variables cargadas)");
-    void probeTasksTable().then((probe) => {
-      if (probe.skipped) return;
-      if (probe.ok) {
-        console.log(`[Supabase] Tabla "${SUPABASE_TABLE}" accesible.`);
-      } else {
-        console.error(
-          `[Supabase] No se puede usar la tabla "${SUPABASE_TABLE}": ${probe.message}`,
-          probe.code ? `(código ${probe.code})` : "",
-        );
-        if (probe.hint) console.error("Sugerencia:", probe.hint);
-        console.error(
-          "Revisa en Supabase: existe la tabla public.tasks (columnas id, text, done, priority), UUID en id, y políticas RLS que permitan anon (SELECT/INSERT/UPDATE/DELETE) o desactiva RLS para pruebas.",
-        );
-      }
-    });
-  } else {
-    console.warn(
-      "Supabase no configurado: la API usa memoria. La web no lee ni escribe la tabla `tasks` de Supabase hasta definir SUPABASE_URL y SUPABASE_ANON_KEY (.env en server/ o en la raíz del repo).",
-    );
-  }
-  console.log(`TaskFlow backend escuchando en http://localhost:${PORT}`);
-});
+if (require.main === module) {
+  app.listen(PORT, () => {
+    if (isSupabaseEnabled()) {
+      console.log("Supabase mode enabled (variables cargadas)");
+      void probeTasksTable().then((probe) => {
+        if (probe.skipped) return;
+        if (probe.ok) {
+          console.log(`[Supabase] Tabla "${SUPABASE_TABLE}" accesible.`);
+        } else {
+          console.error(
+            `[Supabase] No se puede usar la tabla "${SUPABASE_TABLE}": ${probe.message}`,
+            probe.code ? `(código ${probe.code})` : "",
+          );
+          if (probe.hint) console.error("Sugerencia:", probe.hint);
+          console.error(
+            "Revisa en Supabase: existe la tabla public.tasks (columnas id, text, done, priority), UUID en id, y políticas RLS que permitan anon (SELECT/INSERT/UPDATE/DELETE) o desactiva RLS para pruebas.",
+          );
+        }
+      });
+    } else {
+      console.warn(
+        "Supabase no configurado: la API usa memoria. La web no lee ni escribe la tabla `tasks` de Supabase hasta definir SUPABASE_URL y SUPABASE_ANON_KEY (.env en server/ o en la raíz del repo).",
+      );
+    }
+    console.log(`TaskFlow backend escuchando en http://localhost:${PORT}`);
+  });
+}
+
+module.exports = app;
 
