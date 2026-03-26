@@ -1,3 +1,16 @@
+// ======================================================================
+// HELPERS UI COMPARTIDOS
+// ======================================================================
+// Utilidades pequeñas y reutilizables para scripts de la carpeta `logic/`.
+// Incluye:
+// - `highlightElementTemporarily`: resalta temporalmente un elemento.
+// - `renderList`: renderiza una lista usando una función `createHTML`.
+// - Clases/estilos del menú (nav) basados en `window.navItems`.
+//
+// Este archivo depende de que existan ciertas variables globales
+// definidas por la página (por ejemplo `window.navItems`).
+// ======================================================================
+
 // Helpers UI compartidos entre `app.js` y scripts extraídos (logic/*).
 
 function highlightElementTemporarily(el, className, durationMs) {

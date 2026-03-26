@@ -1,3 +1,5 @@
+// Estructura del menu de navegacion principal (sidebar/topbar).
+// Cada item define ancla, etiqueta e icono.
 window.navItems = [
   {
     href: "#perfiles",

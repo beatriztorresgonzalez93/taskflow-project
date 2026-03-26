@@ -1,3 +1,5 @@
+// Datos de KPIs de cabecera (metricas rapidas del dashboard).
+// Cada item contiene label, valor y descripcion.
 window.kpisData = [
   {
     label: "Perfiles",

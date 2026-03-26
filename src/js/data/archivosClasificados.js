@@ -1,3 +1,5 @@
+// Datos para la sección "Archivo clasificado".
+// Cada objeto representa una ficha con titulo y descripcion.
 window.archivosClasificados = [
   {
     titulo: "Expedición Áridis I",

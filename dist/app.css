@@ -1,4 +1,7 @@
 /*! tailwindcss v4.2.1 | MIT License | https://tailwindcss.com */
+/* Archivo CSS compilado (build) consumido por index.html.
+   Se regenera desde src/css con Tailwind/PostCSS.
+   No borrar: si falta, la UI se queda sin estilos en produccion/local. */
 @layer properties;
 @layer theme, base, components, utilities;
 @layer theme {

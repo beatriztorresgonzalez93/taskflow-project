@@ -1,8 +1,14 @@
 // ======================================================================
 // JINETES / PERFILES — NAVEGACIÓN + FILTROS
-// - Links de navegación: scroll suave + highlight
-// - Filtros: estado (active/training/archived) y cuadrante
-// - RidersApp: orquestación de render + filtros
+// ======================================================================
+// Encargado de:
+// - Manejar el scroll suave y highlight al navegar por secciones del UI.
+// - Orquestar la renderización de la vista de "jinetes/perfiles"
+//   (cards), aplicando filtros (estado / cuadrante).
+// - Actualizar el estado del menú activo según la sección visitada.
+//
+// Este módulo no habla con la BD: opera sobre el DOM y datos ya
+// disponibles en la página.
 // ======================================================================
 // ===== NAVEGACIÓN Y FILTROS JINETES =====
 /**

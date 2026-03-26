@@ -1,6 +1,18 @@
 // ======================================================================
 // TAREAS — REST (fetch) SIN API CLIENT + SIN LOCALSTORAGE
 // ======================================================================
+// Encargado de:
+// - Obtener tareas desde el backend: `GET /api/v1/tasks`
+// - Crear tareas: `POST /api/v1/tasks`
+// - Actualizar estado: `PATCH /api/v1/tasks/:id`
+// - Borrar tareas: `DELETE /api/v1/tasks/:id`
+// - Mostrar también el estado de conexión a la BD llamando
+//   `GET /api/v1/health` (para confirmar si Supabase + tabla `tasks`
+//   están accesibles con las claves configuradas).
+//
+// Todo usa `fetch` contra `window.TASKFLOW_API_BASE_URL` o
+// `http://localhost:3000`.
+// ======================================================================
 
 (function () {
   // Nota: encapsulamos en IIFE para evitar redeclaraciones durante live-reload.

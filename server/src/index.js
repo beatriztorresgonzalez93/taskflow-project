@@ -1,3 +1,20 @@
+// ======================================================================
+// TaskFlow backend (Express)
+// ======================================================================
+// Provee una API REST para la app web:
+// - `GET  /api/v1/tasks`: lista tareas desde Supabase (`public.tasks`) o
+//   desde memoria si no hay configuración.
+// - `POST /api/v1/tasks`: crea una tarea.
+// - `PATCH/DELETE /api/v1/tasks/:id`: actualiza / borra una tarea.
+// - `GET /api/v1/health`: prueba real de conexión y acceso a la tabla
+//   `tasks` (para saber si Supabase está accesible por la key configurada).
+//
+// Config mediante variables de entorno (no versionar):
+// - `SUPABASE_URL`
+// - `SUPABASE_ANON_KEY`
+// - `PORT` (opcional)
+// ======================================================================
+
 const express = require("express");
 const cors = require("cors");
 const path = require("path");

@@ -1,4 +1,15 @@
-// Módulo independiente de riders: render + filtros (estado/cuadrante).
+// ======================================================================
+// MODULO RIDERS (PERFILES)
+// ======================================================================
+// Este archivo inicializa la seccion de perfiles/jinetes.
+// Se encarga de:
+// - Renderizar tarjetas de perfiles en `#perfiles-grid`.
+// - Activar filtros por estado y cuadrante.
+// - Mostrar/ocultar cards segun los filtros seleccionados.
+//
+// API publica:
+// - `initRiders({ perfiles, crearPerfilHTML })`
+// ======================================================================
 
 function initToggleFilterGroup(options) {
   const { selector, activeClass, getValue, onSelect, defaultSelector } = options;

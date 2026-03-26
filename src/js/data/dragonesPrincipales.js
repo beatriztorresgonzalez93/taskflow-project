@@ -1,3 +1,5 @@
+// Datos de "dragones principales" para cards destacadas.
+// Version reducida frente a `dragones.js`, enfocada en el bloque principal.
 window.dragonesPrincipales = [
   {
     id: "dragon-tairn",

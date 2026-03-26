@@ -1,3 +1,5 @@
+// Dataset principal de perfiles/jinetes.
+// Cada objeto contiene datos funcionales (estado/filtros/busqueda) y de presentacion.
 window.perfiles = [
   {
     id: "jinete-violet",

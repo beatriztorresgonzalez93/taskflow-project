@@ -1,3 +1,5 @@
+// Datos para el bloque de "Vinculos destacados".
+// Define estilo visual y contenido de cada card prioritaria.
 window.vinculosDestacados = [
   {
     glowClass: "link-card-glow-violet",
