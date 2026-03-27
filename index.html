@@ -17,13 +17,10 @@
     href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Inter:wght@400;500;600;700&display=swap"
     rel="stylesheet">
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
   <script>
     // Base URL del backend para que el frontend llame siempre a la API correcta.
     // - En Vercel (dominios .vercel.app) usamos el mismo dominio (origin) para /api/v1/*.
     // - En local (Live Server) llamamos SIEMPRE al backend local en :3000.
-    // - Si existe una variable legacy `_TASKFLOW_API_BASE_URL`, se respeta como override.
     const hostname = window.location.hostname;
     const isVercelDomain = hostname.endsWith("vercel.app") || hostname.includes("vercel.app");
     const isLocalHost =
@@ -32,8 +29,7 @@
       hostname === "0.0.0.0";
 
     window.TASKFLOW_API_BASE_URL =
-      window._TASKFLOW_API_BASE_URL ||
-      (isVercelDomain || !isLocalHost ? window.location.origin : "http://localhost:3000");
+      isVercelDomain || !isLocalHost ? window.location.origin : "http://localhost:3000";
   </script>
 
   <link rel="stylesheet" href="./dist/app.css?v=1">

@@ -1,32 +1,9 @@
 // ===== TIPOS (JSDoc) =====
 /**
- * @typedef {"baja" | "media" | "alta"} TaskPriority
- */
-/**
- * @typedef {{ id: string, text: string, done: boolean, priority: TaskPriority }} Task
- */
-/**
  * @typedef {{ id: string, names: string[] }} GlobalSearchTarget
  */
 
-// ===== CONSTANTES Y SELECTORES =====
-const TASK_PRIORITIES = {
-  BAJA: "baja",
-  MEDIA: "media",
-  ALTA: "alta",
-};
-
-const PRIORITY_COLORS = {
-  [TASK_PRIORITIES.BAJA]: "#38bdf8", // azul
-  [TASK_PRIORITIES.MEDIA]: "#fbbf24", // amarillo
-  [TASK_PRIORITIES.ALTA]: "#fb7185", // rosa
-};
-
-const TASK_STATUS_FILTERS = {
-  ALL: "all",
-  PENDING: "pending",
-  COMPLETED: "completed",
-};
+// ===== SELECTORES =====
 
 const globalSearchEl = document.querySelector("#global-search");
 

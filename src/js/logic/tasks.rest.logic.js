@@ -83,10 +83,6 @@
     return TASK_PRIORITIES.MEDIA;
   }
 
-  function generateId() {
-    return crypto.randomUUID ? crypto.randomUUID() : String(Date.now() + Math.random());
-  }
-
   function getApiBase() {
     return window.TASKFLOW_API_BASE_URL || "http://localhost:3000";
   }
