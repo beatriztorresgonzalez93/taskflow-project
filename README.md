@@ -84,11 +84,13 @@ Configuracion recomendada: **1 solo proyecto Vercel (fullstack)**.
   - `SUPABASE_ANON_KEY`
 
 Archivos clave ya preparados:
+
 - `vercel.json` (sirve frontend y enruta `/api/*` al backend)
 - `server/src/index.js` exporta `app` para serverless
 - `index.html` usa `window.location.origin` como base API en deploy (sin hardcode de dominio)
 
 Comprobacion:
+
 - `https://taskflow-project-rzeo.vercel.app/` (frontend)
 - `https://taskflow-project-rzeo.vercel.app/api/v1/tasks` (API)
 - `https://taskflow-project-rzeo.vercel.app/api/v1/health` (salud + BD)
