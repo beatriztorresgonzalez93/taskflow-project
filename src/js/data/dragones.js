@@ -189,4 +189,6 @@ window.dragones = [
         "rounded-full bg-rose-500/15 px-2.5 py-1 text-[11px] font-semibold text-rose-700 transition duration-300 group-hover:bg-rose-500/25 dark:text-rose-300",
     },
   },
+
+
 ];

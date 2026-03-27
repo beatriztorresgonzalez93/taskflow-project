@@ -18,11 +18,12 @@
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
-// Credenciales: crea UN archivo `.env` en la raíz del repo o en `server/`
-// (está en .gitignore; no las escribas en código versionado).
-//   SUPABASE_URL — Supabase → Project Settings → API → Project URL
-//   SUPABASE_ANON_KEY — misma pantalla → anon public key
-//   PORT — opcional (por defecto 3000)
+// Variables de entorno:
+// - Local (opcional): crea `.env` en la raíz o en `server/` (está en .gitignore).
+// - Vercel (producción): configúralas en Project Settings -> Environment Variables.
+//   SUPABASE_URL — Supabase -> Project Settings -> API -> Project URL
+//   SUPABASE_ANON_KEY — misma pantalla -> anon public key
+//   PORT — opcional (por defecto 3000; en Vercel no suele ser necesario)
 require("dotenv").config({ path: path.join(__dirname, "..", ".env") });
 require("dotenv").config({ path: path.join(__dirname, "..", "..", ".env") });
 const { randomUUID } = require("crypto");
@@ -30,7 +31,32 @@ const { createClient } = require("@supabase/supabase-js");
 
 const app = express();
 
-app.use(cors());
+const isProduction = process.env.NODE_ENV === "production";
+const corsOrigins = (process.env.CORS_ORIGINS || "")
+  .split(",")
+  .map((value) => value.trim())
+  .filter(Boolean);
+
+const defaultDevOrigins = [
+  "http://localhost:5500",
+  "http://127.0.0.1:5500",
+  "http://localhost:3000",
+  "http://127.0.0.1:3000",
+];
+
+app.use(
+  cors({
+    origin(origin, callback) {
+      // Permite herramientas sin header Origin (curl, Postman, health checks).
+      if (!origin) return callback(null, true);
+
+      const allowedOrigins = isProduction ? corsOrigins : [...defaultDevOrigins, ...corsOrigins];
+      if (allowedOrigins.includes(origin)) return callback(null, true);
+
+      return callback(new Error("CORS no permitido"));
+    },
+  }),
+);
 app.use(express.json());
 
 const PORT = Number(process.env.PORT || 3000);

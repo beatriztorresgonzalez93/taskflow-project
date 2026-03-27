@@ -91,9 +91,11 @@ Archivos clave ya preparados:
 
 Comprobacion:
 
-- `https://taskflow-project-rzeo.vercel.app/` (frontend)
-- `https://taskflow-project-rzeo.vercel.app/api/v1/tasks` (API)
-- `https://taskflow-project-rzeo.vercel.app/api/v1/health` (salud + BD)
+- `https://TU-DOMINIO.vercel.app/` (frontend)
+- `https://TU-DOMINIO.vercel.app/api/v1/tasks` (API)
+- `https://TU-DOMINIO.vercel.app/api/v1/health` (salud + BD)
+
+> Ejemplo real de este proyecto: `https://taskflow-project-rzeo.vercel.app`
 
 ### 2) Checklist post-deploy
 

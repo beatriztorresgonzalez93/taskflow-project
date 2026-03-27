@@ -3,6 +3,7 @@
 
 (function () {
   const root = document.documentElement;
+  const THEME_STORAGE_KEY = "taskflow-theme";
 
   function updateThemeButton(isDark) {
     const icon = document.getElementById("themeIcon");
@@ -14,13 +15,24 @@
   function setTheme(isDark) {
     root.classList.toggle("dark", isDark);
     updateThemeButton(isDark);
+    try {
+      localStorage.setItem(THEME_STORAGE_KEY, isDark ? "dark" : "light");
+    } catch {
+      // Si localStorage no está disponible, seguimos sin persistencia.
+    }
   }
 
   function getPreferredTheme() {
-    return (
-      window.matchMedia &&
-      window.matchMedia("(prefers-color-scheme: dark)").matches
-    );
+    try {
+      const saved = localStorage.getItem(THEME_STORAGE_KEY);
+      if (saved === "dark") return true;
+      if (saved === "light") return false;
+    } catch {
+      // Ignoramos errores de acceso a localStorage.
+    }
+
+    // Por defecto, la app arranca en modo oscuro.
+    return true;
   }
 
   function initThemeToggle() {
