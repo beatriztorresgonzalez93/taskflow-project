@@ -32,10 +32,24 @@ const { createClient } = require("@supabase/supabase-js");
 const app = express();
 
 const isProduction = process.env.NODE_ENV === "production";
+// CORS_ORIGINS puede venir como:
+// - "https://tudominio.com,https://otro.com"
+// - o solo "tudominio.com,localhost:5500" (sin scheme)
 const corsOrigins = (process.env.CORS_ORIGINS || "")
   .split(",")
   .map((value) => value.trim())
-  .filter(Boolean);
+  .filter(Boolean)
+  .flatMap((value) => {
+    const normalized = value.replace(/\/+$/, "");
+    if (/^https?:\/\//i.test(normalized)) return [normalized];
+    // Si solo dan host (sin scheme), permitimos http y https.
+    return [`https://${normalized}`, `http://${normalized}`];
+  });
+
+// En Vercel, el frontend suele llamar al backend desde el mismo dominio.
+// Si CORS_ORIGINS no está seteado o no coincide, al menos permitimos el propio origen de Vercel.
+const vercelOrigin = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null;
+const prodAllowedOrigins = [...new Set([...(corsOrigins || []), ...(vercelOrigin ? [vercelOrigin] : [])])];
 
 const defaultDevOrigins = [
   "http://localhost:5500",
@@ -50,10 +64,18 @@ app.use(
       // Permite herramientas sin header Origin (curl, Postman, health checks).
       if (!origin) return callback(null, true);
 
-      const allowedOrigins = isProduction ? corsOrigins : [...defaultDevOrigins, ...corsOrigins];
+      const allowedOrigins = isProduction ? prodAllowedOrigins : [...defaultDevOrigins, ...corsOrigins];
       if (allowedOrigins.includes(origin)) return callback(null, true);
 
-      return callback(new Error("CORS no permitido"));
+      // Fallback para Vercel: cuando el frontend está en otro proyecto,
+      // el dominio origen suele ser `*.vercel.app`. Evita 500 por CORS.
+      // (No dependemos de NODE_ENV para no quedarnos bloqueados si Vercel lo configura distinto.)
+      if (/^https?:\/\/.*\.vercel\.app$/i.test(origin)) return callback(null, true);
+
+      // Importante: no disparamos errores aquí; eso termina en 500.
+      // Si el origen no está permitido, simplemente devolvemos false:
+      // el navegador bloqueará por CORS con claridad.
+      return callback(null, false);
     },
   }),
 );
