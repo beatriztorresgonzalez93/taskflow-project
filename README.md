@@ -144,6 +144,7 @@ Puntos importantes:
 - Si la tabla no existe o no hay permisos para `anon`, la API falla.
 - Si faltan variables de entorno, el backend sigue funcionando en **modo memoria**.
 - En modo memoria, al reiniciar servidor se pierden los datos.
+- Si /api/v1/health devuelve error y Supabase está en plan free, comprobar si el proyecto está paused.
 
 ---
 
@@ -163,9 +164,6 @@ Puntos importantes:
 
 - `tailwind.config.js`  
   Configuracion de Tailwind (rutas `content`, tema y plugins).
-
-- `.env`  
-  Variables locales de entorno (credenciales y puerto). No se sube a Git.
 
 - `README.md`  
   Documentacion general y guia rapida de uso.
