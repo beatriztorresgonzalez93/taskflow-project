@@ -22,12 +22,12 @@
     // - En local (Live Server): usa SIEMPRE backend local en :3000.
     // - En deploy: usa el mismo dominio actual.
     const isLocalHost = ["localhost", "127.0.0.1", "0.0.0.0"].includes(
-      window.location.hostname,
+      location.hostname,
     );
 
-    window.TASKFLOW_API_BASE_URL = isLocalHost
+    const TASKFLOW_API_BASE_URL = isLocalHost
       ? "http://localhost:3000"
-      : window.location.origin;
+      : location.origin;
   </script>
 
   <link rel="stylesheet" href="./dist/app.css?v=1">

@@ -1,6 +1,6 @@
 // Filtros por cuadrante para perfiles (jinetes/escribas/curanderos).
 // Controla la segmentacion de tarjetas por tipo de rol.
-window.quadrantFilters = [
+const quadrantFiltersData = [
   { label: "Todos", value: "all", active: true },
   { label: "Jinetes", value: "jinetes" },
   { label: "Escribas", value: "escribas" },

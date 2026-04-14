@@ -11,13 +11,13 @@ const globalSearchEl = document.querySelector("#global-search");
 // DRAGONES — DATA
 // Lista para la galería principal de dragones (cards grandes con imagen).
 // ======================================================================
-const dragones = window.dragones;
+const dragones = dragonesData;
 
 // ======================================================================
 // PERFILES — DATA
 // Cards de jinetes (sección "Perfiles").
 // ======================================================================
-const perfiles = window.perfiles;
+const perfiles = perfilesData;
 
 function crearPerfilHTML(perfil) {
   return `
@@ -75,7 +75,7 @@ function renderPerfiles() {
  * Permite varios alias por elemento.
  * @type {GlobalSearchTarget[]}
  */
-const GLOBAL_SEARCH_TARGETS = window.GLOBAL_SEARCH_TARGETS;
+const GLOBAL_SEARCH_TARGETS = globalSearchTargetsData;
 
 function crearDragonHTML(dragon) {
   return `
@@ -150,7 +150,7 @@ function crearDragonHTML(dragon) {
     </div>
   `;
 }
-const misiones = window.misiones;
+const misiones = misionesData;
 
 function crearMisionHTML(mision, index) {
   return `
@@ -175,9 +175,9 @@ function crearMisionHTML(mision, index) {
   `;
 }
 
-const rutasPrioritarias = window.rutasPrioritarias;
+const rutasPrioritarias = rutasPrioritariasData;
 
-const actividadReciente = window.actividadReciente;
+const actividadReciente = actividadRecienteData;
 
 function crearActividadHTML(texto) {
   return `
@@ -209,7 +209,7 @@ function renderRutasPrioritarias() {
   );
 }
 
-const resumenData = window.resumenData;
+const resumenData = resumenDataItems;
 
 function crearResumenHTML(item) {
   return `
@@ -226,7 +226,7 @@ function renderResumen() {
   renderList("resumen-lista", resumenData, (item) => crearResumenHTML(item));
 }
 
-const estadoGeneral = window.estadoGeneral;
+const estadoGeneral = estadoGeneralData;
 
 function crearEstadoHTML(item) {
   return `
@@ -250,7 +250,7 @@ function crearEstadoHTML(item) {
   `;
 }
 
-const kpisData = window.kpisData;
+const kpisData = kpisDataItems;
 
 function crearKPIHTML(item) {
   return `
@@ -272,7 +272,7 @@ function crearKPIHTML(item) {
   `;
 }
 
-const dragonesPrincipales = window.dragonesPrincipales;
+const dragonesPrincipales = dragonesPrincipalesData;
 
 function crearDragonPrincipalHTML(dragon) {
   return `
@@ -303,7 +303,7 @@ function crearDragonPrincipalHTML(dragon) {
   `;
 }
 
-const vinculosDestacados = window.vinculosDestacados;
+const vinculosDestacados = vinculosDestacadosData;
 
 function crearVinculoDestacadoHTML(item) {
   return `
@@ -335,7 +335,7 @@ function crearVinculoDestacadoHTML(item) {
 // ======================================================================
 // ARCHIVOS CLASIFICADOS — DATA + RENDER (SECCIÓN "ARCHIVOS SECRETOS")
 // ======================================================================
-const archivosClasificados = window.archivosClasificados;
+const archivosClasificados = archivosClasificadosData;
 
 function crearArchivoHTML(item) {
   return `

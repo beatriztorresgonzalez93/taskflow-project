@@ -1,6 +1,6 @@
 // Dataset principal de dragones para tarjetas detalladas en la vista.
 // Incluye metadatos visuales (clases/colores) y datos funcionales (estado, afinidad, busqueda).
-window.dragones = [
+const dragonesData = [
   {
     id: "dragon-feirge",
     searchTarget: "feirge dragon azul rhiannon",

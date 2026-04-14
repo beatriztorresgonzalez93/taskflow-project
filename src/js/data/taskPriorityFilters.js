@@ -1,6 +1,6 @@
 // Configuracion de filtros por prioridad de tareas (all/baja/media/alta).
 // Define texto y clases CSS de cada boton.
-window.taskPriorityFilters = [
+const taskPriorityFiltersData = [
   {
     value: "all",
     label: "Todas",

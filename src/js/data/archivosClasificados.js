@@ -1,6 +1,6 @@
 // Datos para la sección "Archivo clasificado".
 // Cada objeto representa una ficha con titulo y descripcion.
-window.archivosClasificados = [
+const archivosClasificadosData = [
   {
     titulo: "Expedición Áridis I",
     descripcion:

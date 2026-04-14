@@ -1,6 +1,6 @@
 // Datos de misiones para la seccion "Misiones" (titulo, riesgo, duracion y progreso).
 // Se usa para renderizar tarjetas y barras de avance.
-window.misiones = [
+const misionesData = [
   {
     titulo: "Patrulla del límite norte",
     riesgo: "Alto",

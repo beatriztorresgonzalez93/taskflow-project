@@ -1,6 +1,6 @@
 // Configuracion de botones de filtro por estado de tareas (all/pending/completed).
 // Incluye etiqueta y clases CSS para render dinamico.
-window.taskStatusFilters = [
+const taskStatusFiltersData = [
   {
     value: "all",
     label: "Todas",

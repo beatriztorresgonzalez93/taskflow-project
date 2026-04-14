@@ -10,7 +10,7 @@
 //   `GET /api/v1/health` (para confirmar si Supabase + tabla `tasks`
 //   están accesibles con las claves configuradas).
 //
-// Todo usa `fetch` contra `window.TASKFLOW_API_BASE_URL` o
+// Todo usa `fetch` contra `TASKFLOW_API_BASE_URL` o
 // `http://localhost:3000`.
 // ======================================================================
 
@@ -84,7 +84,7 @@
   }
 
   function getApiBase() {
-    return window.TASKFLOW_API_BASE_URL || "http://localhost:3000";
+    return TASKFLOW_API_BASE_URL || "http://localhost:3000";
   }
 
   async function apiRequest(path, { method = "GET", body } = {}) {
@@ -538,6 +538,5 @@
     },
   };
 
-  window.TaskApp = TaskApp;
 })();
 

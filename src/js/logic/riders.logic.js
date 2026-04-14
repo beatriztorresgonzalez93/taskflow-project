@@ -207,6 +207,5 @@ const RidersApp = {
   },
 };
 
-// Garantiza accesibilidad desde `app.js` aunque el cargado ocurra en distintos scripts.
-window.RidersApp = RidersApp;
+// `RidersApp` queda disponible como binding global léxico al cargarse este script.
 

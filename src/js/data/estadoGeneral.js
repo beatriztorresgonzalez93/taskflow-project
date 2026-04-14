@@ -1,6 +1,6 @@
 // Estado general del sistema (numeros y badges).
 // Se muestra en tarjetas de resumen/estado operativo.
-window.estadoGeneral = [
+const estadoGeneralData = [
   {
     label: "Vínculos activos",
     value: 7,

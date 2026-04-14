@@ -87,7 +87,7 @@ Archivos clave ya preparados:
 
 - `vercel.json` (sirve frontend y enruta `/api/*` al backend)
 - `server/src/index.js` exporta `app` para serverless
-- `index.html` usa `window.location.origin` como base API en deploy (sin hardcode de dominio)
+- `index.html` usa `location.origin` como base API en deploy (sin hardcode de dominio)
 
 Comprobacion:
 

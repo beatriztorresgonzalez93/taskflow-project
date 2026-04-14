@@ -1,6 +1,6 @@
 // Datos de KPIs de cabecera (metricas rapidas del dashboard).
 // Cada item contiene label, valor y descripcion.
-window.kpisData = [
+const kpisDataItems = [
   {
     label: "Perfiles",
     value: 11,

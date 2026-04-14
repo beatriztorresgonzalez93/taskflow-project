@@ -1,6 +1,6 @@
 // Datos para el bloque "Actividad reciente" del panel lateral/resumen.
 // Lista de eventos recientes mostrados como texto.
-window.actividadReciente = [
+const actividadRecienteData = [
   "Asignación a misión de reconocimiento (48h)",
   "Revisión médica completada",
   "Entrenamiento de vínculo avanzado",

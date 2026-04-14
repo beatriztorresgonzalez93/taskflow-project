@@ -1,6 +1,6 @@
 // Datos para el bloque de "Vinculos destacados".
 // Define estilo visual y contenido de cada card prioritaria.
-window.vinculosDestacados = [
+const vinculosDestacadosData = [
   {
     glowClass: "link-card-glow-violet",
     borderClass: "border-violet-500 dark:border-violet-400/70",

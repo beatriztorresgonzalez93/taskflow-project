@@ -1,6 +1,6 @@
 // Datos para el widget de "Rutas prioritarias".
 // Cada ruta incluye nombre, estado y estilos de badge.
-window.rutasPrioritarias = [
+const rutasPrioritariasData = [
   {
     nombre: "Basgiath → Samara",
     estado: "Estable",

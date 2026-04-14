@@ -5,10 +5,10 @@
 // Incluye:
 // - `highlightElementTemporarily`: resalta temporalmente un elemento.
 // - `renderList`: renderiza una lista usando una función `createHTML`.
-// - Clases/estilos del menú (nav) basados en `window.navItems`.
+// - Clases/estilos del menú (nav) basados en `navItemsData`.
 //
-// Este archivo depende de que existan ciertas variables globales
-// definidas por la página (por ejemplo `window.navItems`).
+// Este archivo depende de que existan ciertas constantes globales léxicas
+// definidas por la página (por ejemplo `navItemsData`).
 // ======================================================================
 
 // Helpers UI compartidos entre `app.js` y scripts extraídos (logic/*).
@@ -16,7 +16,7 @@
 function highlightElementTemporarily(el, className, durationMs) {
   if (!el) return;
   el.classList.add(className);
-  window.setTimeout(() => el.classList.remove(className), durationMs);
+  setTimeout(() => el.classList.remove(className), durationMs);
 }
 
 function renderList(containerId, items, createHTML) {
@@ -27,7 +27,7 @@ function renderList(containerId, items, createHTML) {
 
 const HIGHLIGHT_DURATION_MS = 2200;
 
-const navItems = window.navItems;
+const navItems = navItemsData;
 
 const baseClass = "flex items-center gap-2 rounded-xl px-3 py-2 transition";
 

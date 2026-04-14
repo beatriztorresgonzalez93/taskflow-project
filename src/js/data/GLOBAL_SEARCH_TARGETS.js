@@ -1,6 +1,6 @@
 // Mapa global de busqueda: relaciona terminos/nombres con IDs de elementos del DOM.
 // Se usa para saltar o enfocar resultados desde el buscador general.
-window.GLOBAL_SEARCH_TARGETS = [
+const globalSearchTargetsData = [
   { id: "jinete-violet", names: ["violet", "violet sorrengail"] },
   { id: "jinete-xaden", names: ["xaden", "xaden riorson"] },
   { id: "jinete-liam", names: ["liam", "liam mairi"] },

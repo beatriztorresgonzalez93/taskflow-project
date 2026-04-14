@@ -46,8 +46,8 @@
   // ==============================================================
   // FILTROS (tareas y jinetes): render de botones
   // ==============================================================
-  const taskStatusFilters = window.taskStatusFilters;
-  const taskPriorityFilters = window.taskPriorityFilters;
+  const taskStatusFilters = taskStatusFiltersData;
+  const taskPriorityFilters = taskPriorityFiltersData;
 
   function renderTaskFilters() {
     const taskFiltersContainer = document.getElementById("task-filters");
@@ -91,8 +91,8 @@
   const normalBtn =
     "border border-violet-200/60 bg-white/80 text-violet-900 hover:bg-violet-50 dark:border-blue-400/20 dark:bg-blue-500/5 dark:text-slate-200 dark:hover:bg-blue-400/10";
 
-  const quadrantFilters = window.quadrantFilters;
-  const statusFilters = window.statusFilters;
+  const quadrantFilters = quadrantFiltersData;
+  const statusFilters = statusFiltersData;
 
   function crearFiltroHTML(filter, type) {
     const typeClass =
@@ -149,7 +149,7 @@
     renderFiltros();
   }
 
-  window.addEventListener("DOMContentLoaded", () => {
+  addEventListener("DOMContentLoaded", () => {
     setTheme(getPreferredTheme());
     initThemeToggle();
 
@@ -181,13 +181,13 @@
     }
 
     try {
-      window.RidersApp?.init?.();
+      RidersApp?.init?.();
     } catch (err) {
       console.error("startup:RidersApp.init failed", err);
     }
 
     try {
-      window.TaskApp?.init?.();
+      TaskApp?.init?.();
     } catch (err) {
       console.error("startup:TaskApp.init failed", err);
     }
@@ -231,8 +231,8 @@
     }
 
     updateInfoVisibility();
-    window.addEventListener("scroll", updateInfoVisibility, { passive: true });
-    window.addEventListener("resize", updateInfoVisibility);
+    addEventListener("scroll", updateInfoVisibility, { passive: true });
+    addEventListener("resize", updateInfoVisibility);
   });
 })();
 

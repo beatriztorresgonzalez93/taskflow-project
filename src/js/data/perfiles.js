@@ -1,6 +1,6 @@
 // Dataset principal de perfiles/jinetes.
 // Cada objeto contiene datos funcionales (estado/filtros/busqueda) y de presentacion.
-window.perfiles = [
+const perfilesData = [
   {
     id: "jinete-violet",
     searchTarget: "violet violet sorrengail tairn andarna",
