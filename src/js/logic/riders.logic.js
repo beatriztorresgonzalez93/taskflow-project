@@ -207,5 +207,6 @@ const RidersApp = {
   },
 };
 
-// `RidersApp` queda disponible como binding global léxico al cargarse este script.
+// Exponemos una referencia estable para `startup.js` entre scripts clásicos.
+globalThis.RidersApp = RidersApp;
 

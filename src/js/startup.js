@@ -181,13 +181,13 @@
     }
 
     try {
-      RidersApp?.init?.();
+      globalThis.RidersApp?.init?.();
     } catch (err) {
       console.error("startup:RidersApp.init failed", err);
     }
 
     try {
-      TaskApp?.init?.();
+      globalThis.TaskApp?.init?.();
     } catch (err) {
       console.error("startup:TaskApp.init failed", err);
     }

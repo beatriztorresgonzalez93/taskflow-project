@@ -538,5 +538,7 @@
     },
   };
 
+  // Exponemos una referencia estable para `startup.js` entre scripts clásicos.
+  globalThis.TaskApp = TaskApp;
 })();
 
